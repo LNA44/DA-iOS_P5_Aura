@@ -6,7 +6,7 @@
 //
 
 import Vapor
-
+//reçu via HTTP
 struct AuthenticationResponse: Content {
     let token: String
 }

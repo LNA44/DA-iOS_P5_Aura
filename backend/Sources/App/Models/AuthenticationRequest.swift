@@ -6,7 +6,7 @@
 //
 
 import Vapor
-
+//envoyé via HTTP
 struct AuthenticationRequest: Content {
     let username: String
     let password: String

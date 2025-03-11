@@ -12,7 +12,7 @@ import Vapor
 
 
 
-
+//routes utilisées pour accéder des données via l'API
 
 func routes(_ app: Application) throws {
     app.get { req async in

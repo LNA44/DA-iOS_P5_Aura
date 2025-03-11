@@ -6,7 +6,7 @@
 //
 
 import Vapor
-
+//reçu via HTTP
 struct AccountResponse: Content {
     let currentBalance: Decimal
     let transactions: [Transaction]
