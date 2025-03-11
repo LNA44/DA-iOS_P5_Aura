@@ -9,8 +9,13 @@ import SwiftUI
 
 @main
 struct AuraApp: App {
-    @StateObject var viewModel = AppViewModel()
-    
+	//@StateObject var viewModel = AppViewModel(repository: AuraRepository())
+	@StateObject private var viewModel: AppViewModel //new
+	
+	init() { //new
+		_viewModel = StateObject(wrappedValue: AppViewModel(repository: AuraService()))
+	}
+	
     var body: some Scene {
         WindowGroup {
             Group {
