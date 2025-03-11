@@ -8,16 +8,14 @@
 import SwiftUI
 
 struct AuthenticationView: View {
-    
+	@ObservedObject var viewModel: AuthenticationViewModel
     @State private var username: String = ""
     @State private var password: String = ""
+	//var prompt : String
     
     let gradientStart = Color(hex: "#94A684").opacity(0.7)
     let gradientEnd = Color(hex: "#94A684").opacity(0.0) // Fades to transparent
-
-    @ObservedObject var viewModel: AuthenticationViewModel
-
-    
+	
     var body: some View {
         
         ZStack {
@@ -35,18 +33,12 @@ struct AuthenticationView: View {
                             .font(.largeTitle)
                             .fontWeight(.semibold)
                         
-                        TextField("Adresse email", text: $viewModel.username)
-                            .padding()
-                            .background(Color(UIColor.secondarySystemBackground))
-                            .cornerRadius(8)
+						EntryField(placeHolder: "Email Adress", field: $viewModel.username, isSecure: false, prompt:viewModel.emailPrompt)
                             .autocapitalization(.none)
                             .keyboardType(.emailAddress)
                             .disableAutocorrection(true)
-                        
-                        SecureField("Mot de passe", text: $viewModel.password)
-                            .padding()
-                            .background(Color(UIColor.secondarySystemBackground))
-                            .cornerRadius(8)
+						
+						EntryField(placeHolder: "Password", field: $viewModel.password, isSecure: true, prompt:viewModel.passwordPrompt)
                         
                         Button(action: {
                             // Handle authentication logic here
@@ -56,9 +48,12 @@ struct AuthenticationView: View {
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity)
                                 .padding()
-                                .background(Color.black) // You can also change this to your pastel green color
+								.background(Color(hex: "#94A684"))
                                 .cornerRadius(8)
-                        }
+                        }.opacity(viewModel.isSignUpComplete ? 1 : 0.6)
+						//1 if true else 0.6
+					   .disabled(!viewModel.isSignUpComplete)
+			   //désactive : plus d'interaction possible
                     }
                     .padding(.horizontal, 40)
                 }
@@ -69,8 +64,8 @@ struct AuthenticationView: View {
     
 }
 
-#Preview {
-    AuthenticationView(viewModel: AuthenticationViewModel({
+//#Preview {
+//    AuthenticationView(viewModel: AuthenticationViewModel({
         
-    }))
-}
+//    }))
+//}

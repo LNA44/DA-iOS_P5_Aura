@@ -9,6 +9,7 @@ import SwiftUI
 
 extension View {
     func endEditing(_ force: Bool) {
-        UIApplication.shared.windows.forEach { $0.endEditing(force)}
+		guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene else { return }
+				scene.windows.forEach { $0.endEditing(true) }
     }
 }

@@ -12,7 +12,7 @@ class MoneyTransferViewModel: ObservableObject {
     @Published var amount: String = ""
     @Published var transferMessage: String = ""
     
-    func sendMoney() {
+    func sendMoney() { //utilisée qd on clique sur bouton envoyer argent
         // Logic to send money - for now, we're just setting a success message.
         // You can later integrate actual logic.
         if !recipient.isEmpty && !amount.isEmpty {
