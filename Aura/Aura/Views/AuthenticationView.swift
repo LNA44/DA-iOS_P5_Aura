@@ -42,7 +42,9 @@ struct AuthenticationView: View {
                         
                         Button(action: {
                             // Handle authentication logic here
-                            viewModel.login()
+							Task {
+								await viewModel.login()
+							}
                         }) {
                             Text("Se connecter")
                                 .foregroundColor(.white)

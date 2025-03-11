@@ -11,23 +11,51 @@ class AuthenticationViewModel: ObservableObject {
 	//MARK: -Properties
     @Published var username: String = ""
     @Published var password: String = ""
-    
-    let onLoginSucceed: (() -> ()) 
+	@Published var errorMessage: String? = nil
+	
+	private let repository: AuraService
+	
+    let onLoginSucceed: (() -> ())
     
 	//MARK: -Initialisation
-    init(_ callback: @escaping () -> ()) {
-        self.onLoginSucceed = callback
+	init(repository: AuraService, _ callback: @escaping () -> ()) {
+		self.repository = repository
+		self.onLoginSucceed = callback
     }
     
 	//MARK: -Validation functions
-    func login() {
-        print("login with \(username) and \(password)")
-        onLoginSucceed()
+    @MainActor
+	func login() async {
+		do {
+			let token = try await repository.login(username: username, password: password)
+			print("login with \(username) and \(password)")
+			print(token)
+			self.onLoginSucceed()
+			return
+		} catch {
+			if let loginError = error as? AuraService.LoginError {
+				switch loginError {
+				case .badURL :
+					errorMessage = "URL invalide"
+				case .noData :
+					errorMessage = "Aucune donnée reçue"
+				case .requestFailed :
+					errorMessage = "Erreur de requête"
+				case .encodingError :
+					errorMessage = "Erreur d'encodage"
+				case .serverError :
+					errorMessage = "Erreur serveur"
+				case .decodingError :
+					errorMessage = "Erreur de décodage"
+				}
+				print("Erreur inconnue : \(errorMessage ?? "Aucune information sur l'erreur")") //si errorMessage = nil -> "aucune info"
+			}
+		}
     }
 	
 	func isPasswordValid() -> Bool {
 		// criterias here : http://regexlib.com
-		let passwordTest = NSPredicate(format: "SELF MATCHES %@","^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{4,8}$" )
+		let passwordTest = NSPredicate(format: "SELF MATCHES %@","^(?=.*[0-9]+.*)(?=.*[a-zA-Z]+.*)[0-9a-zA-Z]{6,}$" )
 		//self matches pr utliser des regex
 		return passwordTest.evaluate(with: password)
 	}
@@ -56,7 +84,7 @@ class AuthenticationViewModel: ObservableObject {
 	
 	var passwordPrompt: String {
 		if !isPasswordValid() {
-			return "Must be between 4 and 8 characters, must include at least one upper case letter, one lower case letter, and one numeric digit "
+			return "Password must contain at least one letter, at least one number, and be longer than six charaters. "
 		}
 		return ""
 	}
