@@ -11,54 +11,44 @@ struct AllTransactionsView: View {
 	@ObservedObject var viewModel: AllTransactionsViewModel
 	
 	var body: some View {
-		ScrollView {
-			VStack(spacing: 20) {
-				// Large Header displaying total amount
-				VStack(spacing: 10) {
-					Text("Your Balance")
-						.font(.headline)
-					Text(viewModel.formattedAmount(value: viewModel.totalAmount))
-						.font(.system(size: 60, weight: .bold))
-						.foregroundColor(Color(hex: "#94A684")) // Using the green color you provided
-					Image(systemName: "eurosign.circle.fill")
-						.resizable()
-						.scaledToFit()
-						.frame(height: 80)
-						.foregroundColor(Color(hex: "#94A684"))
-				}
-				.padding(.top)
+		VStack(spacing: 20) {
+			// Large Header displaying total amount
+			VStack(spacing: 10) {
+				Text("Your Balance")
+					.font(.headline)
+				Text(viewModel.formattedAmount(value: viewModel.totalAmount))
+					.font(.system(size: 60, weight: .bold))
+					.foregroundColor(Color(hex: "#94A684")) // Using the green color you provided
+				Image(systemName: "eurosign.circle.fill")
+					.resizable()
+					.scaledToFit()
+					.frame(height: 80)
+					.foregroundColor(Color(hex: "#94A684"))
+			}
+			.padding(.top)
+			
+			// Display recent transactions
+			VStack(alignment: .leading) {
+				Text("Recent Transactions")
+					.font(.headline)
+					.padding([.horizontal])
 				
-				// Display recent transactions
-				VStack(alignment: .leading, spacing: 10) {
-					Text("Recent Transactions")
-						.font(.headline)
-						.padding([.horizontal])
-					ForEach(viewModel.totalTransactions, id: \.id) { transaction in
-						HStack {
-							Image(systemName: transaction.value >= 0 ? "arrow.up.right.circle.fill" : "arrow.down.left.circle.fill")
-								.foregroundColor(transaction.value >= 0 ? .green : .red)
-							Text(transaction.label)
-							Spacer()
-							Text(viewModel.formattedAmount(value:transaction.value))
-								.fontWeight(.bold)
-								.foregroundColor(transaction.value >= 0 ? .green : .red)
-						}
-						.padding()
-						.background(Color.gray.opacity(0.1))
-						.cornerRadius(8)
-						.padding([.horizontal])
-						
-					}
-				}
-				
-				Spacer()
+				List {
+						ForEach(viewModel.totalTransactions, id: \.id) { transaction in
+							HStack {
+								RawAllTransactionsView(viewModel: AllTransactionsViewModel(), transaction: transaction) //On passe transaction de l'itération à la propriété transaction de la sous vue
+							}
+						}.listRowSeparator(.hidden)
+						.listRowInsets(EdgeInsets(top:5, leading:15, bottom: 5, trailing: 15))
+				}.listStyle(.plain)
 			}
-			.onTapGesture {
-				self.endEditing(true)  // This will dismiss the keyboard when tapping outside
-			}
-			.task{
-				await viewModel.fetchTransactions()
-			}
+			Spacer()
+		}
+		.onTapGesture {
+			self.endEditing(true)  // This will dismiss the keyboard when tapping outside
+		}
+		.task{
+			await viewModel.fetchTransactions()
 		}
 	}
 }

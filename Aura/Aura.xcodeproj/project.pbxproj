@@ -32,6 +32,7 @@
 				Views/AuthenticationView.swift,
 				Views/EntryField.swift,
 				Views/MoneyTransferView.swift,
+				Views/RawAllTransactionsView.swift,
 			);
 			target = 53D418772AC7099A0070ADB1 /* Aura */;
 		};
