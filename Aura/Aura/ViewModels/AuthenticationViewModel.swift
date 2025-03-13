@@ -27,9 +27,9 @@ class AuthenticationViewModel: ObservableObject {
     @MainActor
 	func login() async {
 		do {
-			let token = try await repository.login(username: username, password: password)
+			AuraService.token = try await repository.login(username: username, password: password)
 			print("login with \(username) and \(password)")
-			print(token)
+			print(AuraService.token ?? "Aucun token reçu") //affiche token ou texte
 			self.onLoginSucceed()
 			return
 		} catch {
