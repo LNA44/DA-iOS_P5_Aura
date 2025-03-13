@@ -1,16 +1,15 @@
 //
-//  AccountDetailViewModel.swift
+//  AnnTransactionsViewModel.swift
 //  Aura
 //
-//  Created by Vincent Saluzzo on 29/09/2023.
+//  Created by Ordinateur elena on 13/03/2025.
 //
 
 import Foundation
-
-class AccountDetailViewModel: ObservableObject {
+class AllTransactionsViewModel: ObservableObject {
 	@Published var totalAmount: Double = 0.0
 	@Published var totalTransactions: [Transaction] = []
-    @Published var recentTransactions: [Transaction] = []
+	@Published var recentTransactions: [Transaction] = []
 	@Published var isLoading: Bool = false
 	@Published var networkError: String? = nil
 	private let repository: AuraService
