@@ -33,6 +33,7 @@ struct AccountDetailView: View {
 					Text("Recent Transactions")
 						.font(.headline)
 						.padding([.horizontal])
+					
 					ForEach(viewModel.recentTransactions, id: \.id) { transaction in
 						HStack {
 							Image(systemName: transaction.value >= 0 ? "arrow.up.right.circle.fill" : "arrow.down.left.circle.fill")
