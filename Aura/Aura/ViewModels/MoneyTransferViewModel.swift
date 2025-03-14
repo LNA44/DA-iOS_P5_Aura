@@ -8,17 +8,84 @@
 import Foundation
 
 class MoneyTransferViewModel: ObservableObject {
-    @Published var recipient: String = ""
-    @Published var amount: String = ""
+	//MARK: -Properties
+	private var repository: AuraService
+	@Published var recipient: String = ""
+	@Published var amount: Decimal = Decimal(0.0)
     @Published var transferMessage: String = ""
-    
-    func sendMoney() { //utilisée qd on clique sur bouton envoyer argent
-        // Logic to send money - for now, we're just setting a success message.
-        // You can later integrate actual logic.
-        if !recipient.isEmpty && !amount.isEmpty {
-            transferMessage = "Successfully transferred \(amount) to \(recipient)"
-        } else {
-            transferMessage = "Please enter recipient and amount."
-        }
+	@Published var errorMessage: String? = ""
+	@Published var amountString: String = ""
+   
+	//MARK: -Initialisation
+	init(repository: AuraService) {
+		self.repository = repository
+	}
+	
+	//MARK: -Validation functions
+   @MainActor
+	func sendMoney() async { //utilisée qd on clique sur bouton envoyer argent
+		do {
+			convertAmount(amountString: amountString)
+			try await repository.sendTransfer(recipient: recipient, amount: amount)
+			transferMessage = "Successfully transferred \(amount) to \(recipient)"
+			recipient = "" //remise à 0 après transfert
+			amountString = ""
+			return
+		} catch {
+			if let TransferError = error as? AuraService.TransferError {
+				switch TransferError {
+				case .badURL :
+					errorMessage = "URL invalide"
+				case .dataNotEmpty :
+					errorMessage = "Les données devraient être vides"
+				case .requestFailed :
+					errorMessage = "Erreur de requête"
+				case .encodingError :
+					errorMessage = "Erreur d'encodage"
+				case .serverError :
+					errorMessage = "Erreur serveur"
+				}
+				transferMessage = "Please enter recipient and amount."
+				print("Erreur inconnue : \(error.localizedDescription)")
+			}
+		}
     }
+	
+	func isPhoneOrEmailValid() -> Bool {
+		// criterias here : http://regexlib.com
+		let phoneRegex = "^(?:(?:\\+|00)33[\\s.-]{0,3}(?:\\(0\\)[\\s.-]{0,3})?|0)[1-9](?:[\\s.-]?\\d{2}){4}$"
+		let emailRegex = "^([0-9a-zA-Z]([-.\\w]*[0-9a-zA-Z])*@(([0-9a-zA-Z])+([-\\w]*[0-9a-zA-Z])*\\.)+[a-zA-Z]{2,9})$"
+		let phoneOrEmailTest = NSPredicate(format: "SELF MATCHES %@",phoneRegex, emailRegex ) //même regex que celui du backend
+		//self matches pr utliser des regex
+		return phoneOrEmailTest.evaluate(with: recipient)
+	}
+	
+	func isAmountValid() -> Bool {
+		// criterias here : http://regexlib.com
+		let amountTest = NSPredicate(format: "SELF MATCHES %@","^\\d+(?:\\.\\d{0,2})?$") //self matches pr utliser des regex
+		return amountTest.evaluate(with: amountString)
+	}
+	//MARK: -Validation prompt strings
+	
+	var phoneOrEmailPrompt: String {
+		if !isPhoneOrEmailValid() {
+			return "Enter a valid phone number or email address"
+		}
+		return ""
+	}
+	
+	var amountPrompt: String {
+		if amountString == "0.00" || !isAmountValid(){
+			return "Enter a valid amount with 2 decimals maximum"
+		}
+		return ""
+	}
+	
+	func convertAmount(amountString: String) {
+		if let decimalAmount = Decimal(string: amountString) {
+			self.amount = decimalAmount
+		} else {
+			self.amount = Decimal(0.0)
+		}
+	}
 }

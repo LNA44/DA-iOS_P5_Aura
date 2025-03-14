@@ -23,6 +23,14 @@ struct AuraService {
 		case decodingError
 	}
 	
+	enum TransferError: Error {
+		case badURL
+		case dataNotEmpty
+		case requestFailed(String)
+		case encodingError
+		case serverError(Int)
+	}
+	
 	init(data: Data? = nil, response: URLResponse? = nil) { //pour ne ps avoir à les init dans AuraApp
 		self.data = data
 		self.response = response
@@ -72,9 +80,9 @@ struct AuraService {
 		return token
 	}
 	
-	func fetchAccountDetails() async throws -> (currentBalance:Double,transactions: [Transaction]) {
+	func fetchAccountDetails() async throws -> (currentBalance:Decimal,transactions: [Transaction]) {
 		guard let baseURL = URL(string: baseURLString) else {
-			throw URLError(.badURL) // Erreur si l’URL est invalide
+			throw LoginError.badURL // Erreur si l’URL est invalide
 		}
 		let endpoint = baseURL.appendingPathComponent("/account")
 		//création de la requête
@@ -100,5 +108,42 @@ struct AuraService {
 			throw LoginError.decodingError
 		}
 		return (accountResponse.currentBalance, accountResponse.transactions.map(Transaction.init)) //mapper pour avoir objet Transaction avec un id
+	}
+	
+	func sendTransfer(recipient: String, amount: Decimal) async throws -> Void {
+		guard let baseURL = URL(string: baseURLString) else {
+			throw TransferError.badURL // Erreur si l’URL est invalide
+		}
+		
+		let endpoint = baseURL.appendingPathComponent("/account/transfer")
+		//body de la requete
+		let parameters: [String: Any] = [
+			"recipient": recipient,
+			"amount": amount
+		]
+
+		//conversion en JSON
+		guard let jsonData = try? JSONSerialization.data(withJSONObject: parameters, options: []) else {
+			throw TransferError.encodingError
+		}
+		//création de la requête
+		var request = URLRequest(url: endpoint)
+		request.httpMethod = "POST"
+		request.setValue(AuraService.token, forHTTPHeaderField: "token") //header
+		request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+		request.httpBody = jsonData
+		
+		//lancement appel réseau
+		let (data, response) = try await URLSession.shared.data(for: request)
+		
+		if !data.isEmpty {//data est non optionnel dc pas de guard let
+			throw TransferError.dataNotEmpty
+		}
+		guard let httpResponse = response as? HTTPURLResponse else { //response peut etre de type URLResponse et non HTTPURLResponse donc vérif
+			throw TransferError.requestFailed("Réponse du serveur invalide")
+		}
+		guard httpResponse.statusCode == 200 else {
+			throw TransferError.serverError(httpResponse.statusCode)
+		}
 	}
 }

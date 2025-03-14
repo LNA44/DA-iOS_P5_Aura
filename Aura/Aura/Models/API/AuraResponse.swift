@@ -13,11 +13,11 @@ struct AuthentificationData {
 }
 struct AccountResponse: Codable {
 	let transactions: [Transaction]
-	let currentBalance: Double
+	let currentBalance: Decimal
 	
 	//MARK: - Transaction
 	struct Transaction: Codable {
-		let value: Double
+		let value: Decimal
 		let label: String
 	}
 }
