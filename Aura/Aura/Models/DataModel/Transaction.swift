@@ -9,7 +9,7 @@ import Foundation
 //modèle interne à l'app
 struct Transaction: Identifiable, Hashable {
 	var id = UUID() //utile pour ForEach
-	let value: Double
+	let value: Decimal
 	let label: String
 	
 	//MARK: - Init

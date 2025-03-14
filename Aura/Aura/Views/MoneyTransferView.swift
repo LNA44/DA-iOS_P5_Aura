@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MoneyTransferView: View {
-    @ObservedObject var viewModel = MoneyTransferViewModel()
+	@ObservedObject var viewModel = MoneyTransferViewModel(repository: AuraService())
 
         @State private var animationScale: CGFloat = 1.0
 
@@ -35,24 +35,23 @@ struct MoneyTransferView: View {
                 VStack(alignment: .leading) {
                     Text("Recipient (Email or Phone)")
                         .font(.headline)
-                    TextField("Enter recipient's info", text: $viewModel.recipient)
-                        .padding()
-                        .background(Color.gray.opacity(0.2))
-                        .cornerRadius(8)
-                        .keyboardType(.emailAddress)
+                   
+					EntryField(placeHolder: "Enter recipient's info", field: $viewModel.recipient, isSecure: false, prompt: viewModel.phoneOrEmailPrompt )
+						.keyboardType(.emailAddress)
                 }
                 
                 VStack(alignment: .leading) {
                     Text("Amount (€)")
                         .font(.headline)
-                    TextField("0.00", text: $viewModel.amount)
-                        .padding()
-                        .background(Color.gray.opacity(0.2))
-                        .cornerRadius(8)
-                        .keyboardType(.decimalPad)
+                  
+					EntryFieldDouble(placeHolder: "0.00", field: $viewModel.amountString, isSecure: false, prompt: viewModel.amountPrompt )
+						.keyboardType(.decimalPad)
                 }
 
-                Button(action: viewModel.sendMoney) {
+				Button(action:{
+					Task {//car fonction async interdite dans views
+						await viewModel.sendMoney() }
+				}) {
                     HStack {
                         Image(systemName: "arrow.right.circle.fill")
                         Text("Send")

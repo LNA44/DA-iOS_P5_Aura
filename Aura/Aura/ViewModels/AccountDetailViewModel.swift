@@ -8,7 +8,7 @@
 import Foundation
 
 class AccountDetailViewModel: ObservableObject {
-	@Published var totalAmount: Double = 0.0
+	@Published var totalAmount: Decimal = 0.0
 	@Published var totalTransactions: [Transaction] = []
     @Published var recentTransactions: [Transaction] = []
 	@Published var isLoading: Bool = false
@@ -39,13 +39,16 @@ class AccountDetailViewModel: ObservableObject {
 		}
 	}
 	
-	func formattedAmount(value: Double) -> String { //pour éviter les 0 inutiles à l'affichage
+	func formattedAmount(value: Decimal) -> String { //pour éviter les 0 inutiles à l'affichage
 			let formatter = NumberFormatter()
 			formatter.numberStyle = .decimal
 			formatter.minimumFractionDigits = 0
 			formatter.maximumFractionDigits = 2
 			
-			if let formattedValue = formatter.string(from: NSNumber(value: value)) {
+		// Convertir le Decimal en NSNumber
+			let nsNumber = NSDecimalNumber(decimal: value)
+		
+			if let formattedValue = formatter.string(from: nsNumber) {
 				return formattedValue
 			}
 			return "N/A"  // Valeur par défaut si la transformation échoue

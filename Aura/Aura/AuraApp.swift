@@ -20,7 +20,7 @@ struct AuraApp: App {
         WindowGroup {
             Group {
                 if viewModel.isLogged {
-                    TabView {
+                    TabView { //barre en bas de l'écran
                         AccountDetailView(viewModel: viewModel.accountDetailViewModel)
                             .tabItem {
                                 Image(systemName: "person.crop.circle")
