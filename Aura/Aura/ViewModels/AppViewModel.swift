@@ -22,6 +22,14 @@ class AppViewModel: ObservableObject {
     }
     
     var accountDetailViewModel: AccountDetailViewModel {
-        return AccountDetailViewModel()
+		return AccountDetailViewModel(repository:repository)
     }
+	
+	var allTransactionsViewModel: AllTransactionsViewModel {
+		return AllTransactionsViewModel(repository:repository)
+	}
+	
+	var moneyTransferViewModel: MoneyTransferViewModel {
+		return MoneyTransferViewModel(repository:repository)
+	}
 }

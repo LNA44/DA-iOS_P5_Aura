@@ -30,6 +30,7 @@ class MoneyTransferViewModel: ObservableObject {
 			transferMessage = "Successfully transferred \(amount) to \(recipient)"
 			recipient = "" //remise à 0 après transfert
 			amountString = ""
+			amount = Decimal(0.0)
 			return
 		} catch {
 			if let TransferError = error as? AuraService.TransferError {
@@ -55,9 +56,10 @@ class MoneyTransferViewModel: ObservableObject {
 		// criterias here : http://regexlib.com
 		let phoneRegex = "^(?:(?:\\+|00)33[\\s.-]{0,3}(?:\\(0\\)[\\s.-]{0,3})?|0)[1-9](?:[\\s.-]?\\d{2}){4}$"
 		let emailRegex = "^([0-9a-zA-Z]([-.\\w]*[0-9a-zA-Z])*@(([0-9a-zA-Z])+([-\\w]*[0-9a-zA-Z])*\\.)+[a-zA-Z]{2,9})$"
-		let phoneOrEmailTest = NSPredicate(format: "SELF MATCHES %@",phoneRegex, emailRegex ) //même regex que celui du backend
-		//self matches pr utliser des regex
-		return phoneOrEmailTest.evaluate(with: recipient)
+		let phoneTest = NSPredicate(format: "SELF MATCHES %@", phoneRegex)
+		let emailTest = NSPredicate(format: "SELF MATCHES %@", emailRegex)		//self matches pr utliser des regex
+		return phoneTest.evaluate(with: recipient) || emailTest.evaluate(with: recipient)
+
 	}
 	
 	func isAmountValid() -> Bool {
@@ -75,7 +77,7 @@ class MoneyTransferViewModel: ObservableObject {
 	}
 	
 	var amountPrompt: String {
-		if amountString == "0.00" || !isAmountValid(){
+		if amountString == "0.00" || !isAmountValid() {
 			return "Enter a valid amount with 2 decimals maximum"
 		}
 		return ""

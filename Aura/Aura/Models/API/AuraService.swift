@@ -12,7 +12,8 @@ struct AuraService {
 	let data: Data?
 	let response: URLResponse?
 	static var token: String? //propriété de classe car n'est modifié qu'une fois
-	private let baseURLString = "http://127.0.0.1:8080/"
+	private let baseURLString = "http://127.0.0.1:8080"
+	private let executeDataRequest: (URLRequest) async throws -> (Data, URLResponse) // permet d'utiliser un mock
 	
 	enum LoginError: Error {
 		case badURL
@@ -31,9 +32,10 @@ struct AuraService {
 		case serverError(Int)
 	}
 	
-	init(data: Data? = nil, response: URLResponse? = nil) { //pour ne ps avoir à les init dans AuraApp
+	init(data: Data? = nil, response: URLResponse? = nil, executeDataRequest: @escaping (URLRequest) async throws -> (Data, URLResponse) = URLSession.shared.data(for:)) { //pour ne ps avoir à les init dans AuraApp
 		self.data = data
 		self.response = response
+		self.executeDataRequest = executeDataRequest
 	}
 	
 	func login(username: String, password: String) async throws -> String { //mutating : fonction modifie propriété de classe (token)
@@ -58,7 +60,7 @@ struct AuraService {
 		request.httpBody = jsonData
 		
 		//lancement appel réseau
-		let (data, response) = try await URLSession.shared.data(for: request)
+		let (data, response) = try await executeDataRequest(request)
 		
 		if data.isEmpty {//data est non optionnel dc pas de guard let
 			throw LoginError.noData
@@ -81,6 +83,7 @@ struct AuraService {
 	}
 	
 	func fetchAccountDetails() async throws -> (currentBalance:Decimal,transactions: [Transaction]) {
+
 		guard let baseURL = URL(string: baseURLString) else {
 			throw LoginError.badURL // Erreur si l’URL est invalide
 		}
@@ -89,10 +92,10 @@ struct AuraService {
 		var request = URLRequest(url: endpoint)
 		request.httpMethod = "GET"
 		request.setValue(AuraService.token, forHTTPHeaderField: "token") //header
-		
+
 		//lancement appel réseau
-		let (data, response) = try await URLSession.shared.data(for: request)
-		
+		let (data, response) = try await executeDataRequest(request)
+				
 		if data.isEmpty {//data est non optionnel dc pas de guard let
 			throw LoginError.noData
 		}
@@ -134,9 +137,9 @@ struct AuraService {
 		request.httpBody = jsonData
 		
 		//lancement appel réseau
-		let (data, response) = try await URLSession.shared.data(for: request)
-		
-		if !data.isEmpty {//data est non optionnel dc pas de guard let
+		let (data, response) = try await executeDataRequest(request)
+
+		if !data.isEmpty { //data est non optionnel dc pas de guard let
 			throw TransferError.dataNotEmpty
 		}
 		guard let httpResponse = response as? HTTPURLResponse else { //response peut etre de type URLResponse et non HTTPURLResponse donc vérif

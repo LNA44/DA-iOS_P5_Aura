@@ -15,7 +15,7 @@ class AccountDetailViewModel: ObservableObject {
 	@Published var networkError: String? = nil
 	private let repository: AuraService
 	
-	init(repository: AuraService = AuraService()) {
+	init(repository: AuraService) {
 		self.repository = repository
 	}
 	@MainActor
@@ -26,7 +26,7 @@ class AccountDetailViewModel: ObservableObject {
 		}
 		isLoading = true
 		do {
-			let (totalAmount,totalTransactions) = try await AuraService().fetchAccountDetails()
+			let (totalAmount,totalTransactions) = try await repository.fetchAccountDetails()
 			self.totalAmount = totalAmount
 				self.totalTransactions = totalTransactions
 				self.isLoading = false

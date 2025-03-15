@@ -52,7 +52,7 @@ struct AccountDetailView: View {
 					}
 				}
 				//Remplacement du bouton par un navigationlink
-				NavigationLink (destination: AllTransactionsView(viewModel: AllTransactionsViewModel())) {
+				NavigationLink (destination: AllTransactionsView(viewModel: AllTransactionsViewModel(repository: AuraService()))) {
 					HStack {
 						Image(systemName: "list.bullet")
 						Text("See Transaction Details")
@@ -74,6 +74,6 @@ struct AccountDetailView: View {
 	}
 }
 
-#Preview {
-    AccountDetailView(viewModel: AccountDetailViewModel())
-}
+//#Preview {
+//	AccountDetailView(viewModel: AccountDetailViewModel(repository: ))
+//}

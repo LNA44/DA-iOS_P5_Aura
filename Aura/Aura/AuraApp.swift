@@ -13,7 +13,7 @@ struct AuraApp: App {
 	@StateObject private var viewModel: AppViewModel //new
 	
 	init() { //new
-		_viewModel = StateObject(wrappedValue: AppViewModel(repository: AuraService()))
+		_viewModel = StateObject(wrappedValue: AppViewModel(repository: AuraService()))//création instance AuraService transmise à viewModel
 	}
 	
     var body: some Scene {
@@ -27,7 +27,7 @@ struct AuraApp: App {
                                 Text("Account")
                             }
                         
-                        MoneyTransferView()
+						MoneyTransferView(viewModel: MoneyTransferViewModel(repository: AuraService()))
                             .tabItem {
                                 Image(systemName: "arrow.right.arrow.left.circle")
                                 Text("Transfer")
