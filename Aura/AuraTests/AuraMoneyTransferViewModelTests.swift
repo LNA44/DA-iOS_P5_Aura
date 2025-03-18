@@ -39,34 +39,58 @@ final class AuraMoneyTransferViewModelTests: XCTestCase {
 		//Then
 		XCTAssertEqual(viewModel.errorMessage, "Les données devraient être vides")
 	}
-
-}
-/*func sendMoney() async { //utilisée qd on clique sur bouton envoyer argent
-	do {
-		convertAmount(amountString: amountString)
-		try await repository.sendTransfer(recipient: recipient, amount: amount)
-		transferMessage = "Successfully transferred \(amount) to \(recipient)"
-		recipient = "" //remise à 0 après transfert
-		amountString = ""
-		return
-	} catch {
-		if let TransferError = error as? AuraService.TransferError {
-			switch TransferError {
-			case .badURL :
-				errorMessage = "URL invalide"
-			case .dataNotEmpty :
-				errorMessage = "Les données devraient être vides"
-			case .requestFailed :
-				errorMessage = "Erreur de requête"
-			case .encodingError :
-				errorMessage = "Erreur d'encodage"
-			case .serverError :
-				errorMessage = "Erreur serveur"
-			}
-			transferMessage = "Please enter recipient and amount."
-			print("Erreur inconnue : \(error.localizedDescription)")
-		}
+	
+	func testIsPhoneOrEmailValidWithPhoneSuccess() {
+		//Given
+		viewModel.recipient = "+33767070707"
+		//When
+		let isPhoneOrEmailValid = viewModel.isPhoneOrEmailValid()
+		//Then
+		XCTAssertTrue(isPhoneOrEmailValid)
 	}
- 
+	
+	func testIsPhoneOrEmailValidWithEmailSuccess() {
+		//Given
+		viewModel.recipient = "e@gmail.com"
+		//When
+		let isPhoneOrEmailValid = viewModel.isPhoneOrEmailValid()
+		//Then
+		XCTAssertTrue(isPhoneOrEmailValid)
+	}
+	
+	func testIsPhoneOrEmailValidFail() {
+		//Given
+		viewModel.recipient = "+3307"
+		//When
+		let isPhoneOrEmailValid = viewModel.isPhoneOrEmailValid()
+		//Then
+		XCTAssertFalse(isPhoneOrEmailValid)
+	}
+
+	func testConvertAmountSuccess() {
+		//Given
+		viewModel.amountString = "100"
+		//When
+		viewModel.convertAmount(amountString: viewModel.amountString)
+		//Then
+		XCTAssertEqual(viewModel.amount, Decimal(100))
+	}
+	
+	func testConvertAmountFail() {
+		//Given
+		viewModel.amountString = "abc"
+		//When
+		viewModel.convertAmount(amountString: viewModel.amountString)
+		//Then
+		XCTAssertEqual(viewModel.amount, Decimal(0.0))
+	}
+	
 }
- */
+/*func convertAmount(amountString: String) {
+	if let decimalAmount = Decimal(string: amountString) {
+		self.amount = decimalAmount
+	} else {
+		self.amount = Decimal(0.0)
+	}
+}
+*/

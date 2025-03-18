@@ -47,7 +47,6 @@ final class AuraAuthenticationViewModelTests: XCTestCase {
 		XCTAssertEqual(viewModel.errorMessage, "Erreur serveur")
 		XCTAssertNil(AuraService.token)
 	}
-	
 	//Utile?
 	func testIsPasswordValidSuccess() {
 		//Given

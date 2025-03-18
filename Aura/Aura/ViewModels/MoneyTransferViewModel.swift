@@ -59,7 +59,6 @@ class MoneyTransferViewModel: ObservableObject {
 		let phoneTest = NSPredicate(format: "SELF MATCHES %@", phoneRegex)
 		let emailTest = NSPredicate(format: "SELF MATCHES %@", emailRegex)		//self matches pr utliser des regex
 		return phoneTest.evaluate(with: recipient) || emailTest.evaluate(with: recipient)
-
 	}
 	
 	func isAmountValid() -> Bool {
