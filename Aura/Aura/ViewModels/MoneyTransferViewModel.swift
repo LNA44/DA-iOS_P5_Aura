@@ -41,8 +41,6 @@ class MoneyTransferViewModel: ObservableObject {
 					errorMessage = "Les données devraient être vides"
 				case .requestFailed :
 					errorMessage = "Erreur de requête"
-				case .encodingError :
-					errorMessage = "Erreur d'encodage"
 				case .serverError :
 					errorMessage = "Erreur serveur"
 				}

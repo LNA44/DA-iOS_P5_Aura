@@ -13,7 +13,7 @@ class AuthenticationViewModel: ObservableObject {
     @Published var password: String = ""
 	@Published var errorMessage: String? = nil
 	
-	private let repository: AuraService
+	private var repository: AuraService
 	
     let onLoginSucceed: (() -> ())
     
@@ -41,8 +41,6 @@ class AuthenticationViewModel: ObservableObject {
 					errorMessage = "Aucune donnée reçue"
 				case .requestFailed :
 					errorMessage = "Erreur de requête"
-				case .encodingError :
-					errorMessage = "Erreur d'encodage"
 				case .serverError :
 					errorMessage = "Erreur serveur"
 				case .decodingError :

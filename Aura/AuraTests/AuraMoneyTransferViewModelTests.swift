@@ -13,31 +13,70 @@ final class AuraMoneyTransferViewModelTests: XCTestCase {
 	var dataMock = DataMoneyTransferMock()
 	var repository: AuraService!
 	
-    override func setUpWithError() throws {
+	override func setUpWithError() throws {
 		repository = AuraService(executeDataRequest: dataMock.executeRequestMock)
 		viewModel = MoneyTransferViewModel(repository: repository)
-	AuraService.token = "93D2C537-FA4A-448C-90A9-6058CF26DB29"
+		AuraService.token = "93D2C537-FA4A-448C-90A9-6058CF26DB29"
 	}
-
+	
 	func testSendMoneySuccess() async {
 		//Given
+		dataMock.response = 1
 		viewModel.recipient = "+33767070707"
 		viewModel.amountString = "100"
 		//When
 		await viewModel.sendMoney()
 		//Then
 		XCTAssertEqual(viewModel.errorMessage, "")
+		XCTAssertEqual(viewModel.recipient, "")
+		XCTAssertEqual(viewModel.amountString, "")
+		XCTAssertEqual(viewModel.amount, Decimal(0.0))
 	}
-    
-	func testSendMoneyFail() async {
+	
+	func testSendMoneyBadURLFail() async {
 		//Given
-		dataMock.validResponse = false
+		repository = AuraService(baseURLString: "", executeDataRequest: dataMock.executeRequestMock)
+		viewModel = MoneyTransferViewModel(repository: repository)
+		dataMock.response = 2
+		viewModel.recipient = "+33767070707"
+		viewModel.amountString = "20"
+		//When
+		await viewModel.sendMoney()
+		//Then
+		XCTAssertEqual(viewModel.errorMessage, "URL invalide")
+	}
+	
+	func testSendMoneyDataNotEmptyFail() async {
+		//Given
+		dataMock.response = 3
 		viewModel.recipient = "+33767070707"
 		viewModel.amountString = "20"
 		//When
 		await viewModel.sendMoney()
 		//Then
 		XCTAssertEqual(viewModel.errorMessage, "Les données devraient être vides")
+	}
+	
+	func testSendMoneyRequestFail() async {
+		//Given
+		dataMock.response = 4
+		viewModel.recipient = "+33767070707"
+		viewModel.amountString = "20"
+		//When
+		await viewModel.sendMoney()
+		//Then
+		XCTAssertEqual(viewModel.errorMessage, "Erreur de requête")
+	}
+	
+	func testSendMoneyServerFail() async {
+		//Given
+		dataMock.response = 5
+		viewModel.recipient = "+33767070707"
+		viewModel.amountString = "20"
+		//When
+		await viewModel.sendMoney()
+		//Then
+		XCTAssertEqual(viewModel.errorMessage, "Erreur serveur")
 	}
 	
 	func testIsPhoneOrEmailValidWithPhoneSuccess() {
@@ -66,7 +105,7 @@ final class AuraMoneyTransferViewModelTests: XCTestCase {
 		//Then
 		XCTAssertFalse(isPhoneOrEmailValid)
 	}
-
+	
 	func testConvertAmountSuccess() {
 		//Given
 		viewModel.amountString = "100"
@@ -85,12 +124,49 @@ final class AuraMoneyTransferViewModelTests: XCTestCase {
 		XCTAssertEqual(viewModel.amount, Decimal(0.0))
 	}
 	
-}
-/*func convertAmount(amountString: String) {
-	if let decimalAmount = Decimal(string: amountString) {
-		self.amount = decimalAmount
-	} else {
-		self.amount = Decimal(0.0)
+	func testIsAmountValidSuccess() {
+		//Given
+		viewModel.amountString = "100"
+		//When
+		let isAmountValid = viewModel.isAmountValid()
+		//Then
+		XCTAssertTrue(isAmountValid)
+	}
+	
+	func testPhoneOrEmailPromptSuccess() {
+		//Given
+		viewModel.recipient = "+33767070707"
+		//When
+		let prompt = viewModel.phoneOrEmailPrompt
+		//Then
+		XCTAssertEqual(prompt, "")
+	}
+	
+	func testPhoneOrEmailPromptFail() {
+		//Given
+		viewModel.recipient = "+337"
+		//When
+		let prompt = viewModel.phoneOrEmailPrompt
+		//Then
+		XCTAssertEqual(prompt, "Enter a valid phone number or email address")
+	}
+	
+	func testamountPromptSuccess() {
+		//Given
+		viewModel.amountString = "100"
+		//When
+		let prompt = viewModel.amountPrompt
+		//Then
+		XCTAssertEqual(prompt, "")
+	}
+	
+	func testamountPromptFail() {
+		//Given
+		viewModel.amountString = "0.00"
+		//When
+		let prompt = viewModel.amountPrompt
+		//Then
+		XCTAssertEqual(prompt, "Enter a valid amount with 2 decimals maximum")
 	}
 }
-*/
+

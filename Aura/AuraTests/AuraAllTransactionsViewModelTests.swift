@@ -15,10 +15,10 @@ final class AuraAllTransactionsViewModelTests: XCTestCase {
 	var repository: AuraService!
 	
 	override func setUp() {
-			repository = AuraService(executeDataRequest: dataMock.executeRequestMock)
-			viewModel = AllTransactionsViewModel(repository: repository)
+		repository = AuraService(executeDataRequest: dataMock.executeRequestMock)
+		viewModel = AllTransactionsViewModel(repository: repository)
 		AuraService.token = "93D2C537-FA4A-448C-90A9-6058CF26DB29"
-		}
+	}
 	
 	func testFetchTransactionsSuccess() async {
 		//Given
@@ -44,6 +44,20 @@ final class AuraAllTransactionsViewModelTests: XCTestCase {
 		XCTAssertEqual(viewModel.totalAmount, 0.00)
 		XCTAssertEqual(viewModel.totalTransactions, [])
 		XCTAssertEqual(viewModel.recentTransactions.count, 0)
+	}
+	
+	func testFetchTransactionsFailInvalidToken() async {
+		//Given
+		dataMock.validResponse = true
+		viewModel.isLoading = false
+		AuraService.token = nil
+		//When
+		await viewModel.fetchTransactions()
+		//Then
+		XCTAssertFalse(viewModel.isLoading)
+		XCTAssertEqual(viewModel.totalAmount, 0)
+		XCTAssertEqual(viewModel.totalTransactions, [])
+		XCTAssertEqual(viewModel.recentTransactions, [])
 	}
 	
 	func testFormattedAmountSuccess() {

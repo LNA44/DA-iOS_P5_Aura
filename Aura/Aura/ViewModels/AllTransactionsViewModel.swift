@@ -28,13 +28,13 @@ class AllTransactionsViewModel: ObservableObject {
 		do {
 			let (totalAmount,totalTransactions) = try await repository.fetchAccountDetails()
 			self.totalAmount = totalAmount
-				self.totalTransactions = totalTransactions
-				self.isLoading = false
+			self.totalTransactions = totalTransactions
+			self.isLoading = false
 			let recentTransactions = Array(totalTransactions.reversed().prefix(3)) //récupère les 3 dernières transactions
 			self.recentTransactions = recentTransactions
 		} catch {
-				self.isLoading = false
-				self.networkError = "Error fetching transactions: \(error.localizedDescription)"
+			self.isLoading = false
+			self.networkError = "Error fetching transactions: \(error.localizedDescription)"
 			print(self.networkError ?? "No error")
 		}
 	}

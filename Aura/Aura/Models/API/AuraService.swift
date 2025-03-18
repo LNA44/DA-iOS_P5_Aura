@@ -12,14 +12,14 @@ struct AuraService {
 	let data: Data?
 	let response: URLResponse?
 	static var token: String? //propriété de classe car n'est modifié qu'une fois
-	private let baseURLString = "http://127.0.0.1:8080"
+	private let baseURLString: String
 	private let executeDataRequest: (URLRequest) async throws -> (Data, URLResponse) // permet d'utiliser un mock
+	var jsonData: Data?
 	
 	enum LoginError: Error {
 		case badURL
 		case noData
 		case requestFailed(String)
-		case encodingError
 		case serverError(Int)
 		case decodingError
 	}
@@ -28,17 +28,18 @@ struct AuraService {
 		case badURL
 		case dataNotEmpty
 		case requestFailed(String)
-		case encodingError
 		case serverError(Int)
 	}
 	
-	init(data: Data? = nil, response: URLResponse? = nil, executeDataRequest: @escaping (URLRequest) async throws -> (Data, URLResponse) = URLSession.shared.data(for:)) { //pour ne ps avoir à les init dans AuraApp
+	init(data: Data? = nil, response: URLResponse? = nil, baseURLString: String = "http://127.0.0.1:8080",
+		 executeDataRequest: @escaping (URLRequest) async throws -> (Data, URLResponse) = URLSession.shared.data(for:)) { //pour ne ps avoir à les init dans AuraApp
 		self.data = data
 		self.response = response
+		self.baseURLString = baseURLString
 		self.executeDataRequest = executeDataRequest
 	}
 	
-	func login(username: String, password: String) async throws -> String { //mutating : fonction modifie propriété de classe (token)
+	mutating func login(username: String, password: String) async throws -> String { //mutating : fonction modifie propriété de classe (jsonData)
 		guard let baseURL = URL(string: baseURLString) else {
 			throw LoginError.badURL
 		}
@@ -49,9 +50,12 @@ struct AuraService {
 			"username": username,
 			"password": password
 		]
+		
 		//conversion en JSON
-		guard let jsonData = try? JSONSerialization.data(withJSONObject: parameters, options: []) else {
-			throw LoginError.encodingError
+		do {
+			jsonData = try JSONSerialization.data(withJSONObject: parameters, options: [])
+		} catch let error as NSError {
+			print("erreur de sérialisation JSON : \(error.localizedDescription)")
 		}
 		//création de la requête
 		var request = URLRequest(url: endpoint)
@@ -113,7 +117,7 @@ struct AuraService {
 		return (accountResponse.currentBalance, accountResponse.transactions.map(Transaction.init)) //mapper pour avoir objet Transaction avec un id
 	}
 	
-	func sendTransfer(recipient: String, amount: Decimal) async throws -> Void {
+	mutating func sendTransfer(recipient: String, amount: Decimal) async throws -> Void {
 		guard let baseURL = URL(string: baseURLString) else {
 			throw TransferError.badURL // Erreur si l’URL est invalide
 		}
@@ -126,8 +130,10 @@ struct AuraService {
 		]
 
 		//conversion en JSON
-		guard let jsonData = try? JSONSerialization.data(withJSONObject: parameters, options: []) else {
-			throw TransferError.encodingError
+		do {
+			jsonData = try JSONSerialization.data(withJSONObject: parameters, options: [])
+		} catch let error as NSError {
+			print("erreur de sérialisation JSON : \(error.localizedDescription)")
 		}
 		//création de la requête
 		var request = URLRequest(url: endpoint)

@@ -11,7 +11,7 @@ import XCTest
 final class DataMoneyTransferMock {
 	
 	//MARK: -Properties
-	var validResponse: Bool = true
+	var response: Int = 0
 	
 	//MARK: -Init
 	init() {}
@@ -19,20 +19,41 @@ final class DataMoneyTransferMock {
 	//MARK: -Methods
 	
 	func executeRequestMock(request: URLRequest) async throws -> (Data, URLResponse) {
-		if validResponse {
+		if response == 1 {
 			return try await validMockResponse(request: request)
+		}else if response == 2 {
+			return try await validMockResponse(request: request)
+		} else if response == 3 {
+			return try await invalidMockResponseDataNotEmptyError(request: request)
+		} else if response == 4 {
+			return try await invalidMockResponseRequestError(request: request)
+		} else if response == 5 {
+			return try await invalidMockResponseServerError(request: request)
 		} else {
-			return try await invalidMockResponse(request: request)
+			fatalError("Pas de response correcte définie")
 		}
 	}
 	
-	func validMockResponse(request: URLRequest) async throws -> (Data, URLResponse) {
+	private func validMockResponse(request: URLRequest) async throws -> (Data, URLResponse) {
 		let data = Data()
 		let response = HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!
 		return (data, response)
 	}
-	private func invalidMockResponse(request: URLRequest) async throws -> (Data, URLResponse) {
-		let invalidData = "[]".data(using: .utf8)!
+	
+	private func invalidMockResponseDataNotEmptyError(request: URLRequest) async throws -> (Data, URLResponse) {
+		let invalidData = "invalidJSON".data(using: .utf8)!
+		let response = HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!
+		return (invalidData, response)
+	}
+	
+	private func invalidMockResponseRequestError(request: URLRequest) async throws -> (Data, URLResponse) {
+		let invalidData = Data()
+		let response = URLResponse(url: request.url!, mimeType: nil, expectedContentLength: 0, textEncodingName: nil)
+		return (invalidData, response)
+	}
+	
+	private func invalidMockResponseServerError(request: URLRequest) async throws -> (Data, URLResponse) {
+		let invalidData = Data()
 		let response = HTTPURLResponse(url: request.url!, statusCode: 500, httpVersion: nil, headerFields: nil)!
 		return (invalidData, response)
 	}

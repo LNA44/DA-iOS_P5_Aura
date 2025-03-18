@@ -30,7 +30,7 @@ final class DataAllTransactionsMock {
 		transaction3 = AccountResponse.Transaction(value: -700, label: "Achat d'une mmontre")
 		transaction4 = AccountResponse.Transaction(value: 10000, label: "Salaire")
 		transaction5 = AccountResponse.Transaction(value: 3000, label: "Revenu appartements")
-				
+		
 		currentBalance = 12345.67
 		
 		accountResponseMock = AccountResponse(transactions: [transaction1, transaction2, transaction3, transaction4, transaction5], currentBalance: currentBalance)
