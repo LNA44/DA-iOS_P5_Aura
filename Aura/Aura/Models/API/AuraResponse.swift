@@ -7,7 +7,7 @@
 
 import Foundation
 //données API après parsing
-struct AuthentificationData {
+struct AuraResponse: Encodable {
 	let username: String
 	let password: String
 }

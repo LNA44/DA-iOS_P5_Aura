@@ -27,13 +27,10 @@ struct AccountDetailView: View {
 						.foregroundColor(Color(hex: "#94A684"))
 				}
 				.padding(.top)
-				
-				// Display recent transactions
 				VStack(alignment: .leading, spacing: 10) {
 					Text("Recent Transactions")
 						.font(.headline)
 						.padding([.horizontal])
-					
 					ForEach(viewModel.recentTransactions, id: \.id) { transaction in
 						HStack {
 							Image(systemName: transaction.value >= 0 ? "arrow.up.right.circle.fill" : "arrow.down.left.circle.fill")
@@ -52,7 +49,7 @@ struct AccountDetailView: View {
 					}
 				}
 				//Remplacement du bouton par un navigationlink
-				NavigationLink (destination: AllTransactionsView(viewModel: AllTransactionsViewModel())) {
+				NavigationLink (destination: AllTransactionsView(viewModel: AllTransactionsViewModel(repository: AuraService()))) {
 					HStack {
 						Image(systemName: "list.bullet")
 						Text("See Transaction Details")
@@ -74,6 +71,6 @@ struct AccountDetailView: View {
 	}
 }
 
-#Preview {
-    AccountDetailView(viewModel: AccountDetailViewModel())
-}
+//#Preview {
+//	AccountDetailView(viewModel: AccountDetailViewModel(repository: ))
+//}

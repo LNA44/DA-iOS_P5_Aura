@@ -26,19 +26,17 @@ struct AllTransactionsView: View {
 					.foregroundColor(Color(hex: "#94A684"))
 			}
 			.padding(.top)
-			
-			// Display recent transactions
 			VStack(alignment: .leading) {
 				Text("Recent Transactions")
 					.font(.headline)
 					.padding([.horizontal])
 				
 				List {
-						ForEach(viewModel.totalTransactions, id: \.id) { transaction in
-							HStack {
-								RawAllTransactionsView(viewModel: AllTransactionsViewModel(), transaction: transaction) //On passe transaction de l'itération à la propriété transaction de la sous vue
-							}
-						}.listRowSeparator(.hidden)
+					ForEach(viewModel.totalTransactions, id: \.id) { transaction in
+						HStack {
+							RawAllTransactionsView(viewModel: AllTransactionsViewModel(repository: AuraService()), transaction: transaction) // Passe transaction de l'itération à la propriété transaction de la sous vue
+						}
+					}.listRowSeparator(.hidden)
 						.listRowInsets(EdgeInsets(top:5, leading:15, bottom: 5, trailing: 15))
 				}.listStyle(.plain)
 			}
@@ -53,6 +51,6 @@ struct AllTransactionsView: View {
 	}
 }
 
-#Preview {
-	AllTransactionsView(viewModel: AllTransactionsViewModel())
-}
+//#Preview {
+//	AllTransactionsView(viewModel: AllTransactionsViewModel(repository: AuraService))
+//}
