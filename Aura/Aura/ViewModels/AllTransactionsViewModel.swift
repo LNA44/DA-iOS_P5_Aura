@@ -7,17 +7,39 @@
 
 import Foundation
 class AllTransactionsViewModel: ObservableObject {
+	//MARK: -Private properties
+	private let repository: AuraService
+	
+	//MARK: -Initialisation
+	init(repository: AuraService) {
+		self.repository = repository
+	}
+	
+	//MARK: -Outputs
 	@Published var totalAmount: Decimal = 0.0
 	@Published var totalTransactions: [Transaction] = []
 	@Published var recentTransactions: [Transaction] = []
 	@Published var isLoading: Bool = false
 	@Published var networkError: String? = nil
-	private let repository: AuraService
 	
-	init(repository: AuraService) {
-		self.repository = repository
+	func formattedAmount(value: Decimal?) -> String { //pour éviter les 0 inutiles à l'affichage
+		guard let unwrappedValue = value else {
+			return "Invalid value"
+		}
+		
+		let formatter = NumberFormatter()
+		formatter.numberStyle = .decimal
+		formatter.minimumFractionDigits = 0
+		formatter.maximumFractionDigits = 2
+		formatter.locale = Locale(identifier: "fr_FR") //conventions régionales pour séparateur milliers et séparateur décimal 
+		
+		// Convertir le Decimal en NSNumber
+		let nsNumber = NSDecimalNumber(decimal: unwrappedValue)
+		let formattedValue = formatter.string(from: nsNumber) ?? "N/A" //retourne un optionnel
+		return formattedValue
 	}
 	
+	//MARK: -Inputs
 	@MainActor
 	func fetchTransactions() async {
 		guard AuraService.token != nil else {
@@ -37,22 +59,5 @@ class AllTransactionsViewModel: ObservableObject {
 			self.networkError = "Error fetching transactions: \(error.localizedDescription)"
 			print(self.networkError ?? "No error")
 		}
-	}
-	
-	func formattedAmount(value: Decimal?) -> String { //pour éviter les 0 inutiles à l'affichage
-		guard let unwrappedValue = value else {
-				return "Invalid value"
-			}
-		
-		let formatter = NumberFormatter()
-		formatter.numberStyle = .decimal
-		formatter.minimumFractionDigits = 0
-		formatter.maximumFractionDigits = 2
-		formatter.locale = Locale(identifier: "fr_FR") //conventions régionales pour séparateur milliers et séparateur décimal 
-		
-		// Convertir le Decimal en NSNumber
-		let nsNumber = NSDecimalNumber(decimal: unwrappedValue)
-		let formattedValue = formatter.string(from: nsNumber) ?? "N/A" //retourne un optionnel
-		return formattedValue
 	}
 }

@@ -27,13 +27,10 @@ struct AccountDetailView: View {
 						.foregroundColor(Color(hex: "#94A684"))
 				}
 				.padding(.top)
-				
-				// Display recent transactions
 				VStack(alignment: .leading, spacing: 10) {
 					Text("Recent Transactions")
 						.font(.headline)
 						.padding([.horizontal])
-					
 					ForEach(viewModel.recentTransactions, id: \.id) { transaction in
 						HStack {
 							Image(systemName: transaction.value >= 0 ? "arrow.up.right.circle.fill" : "arrow.down.left.circle.fill")

@@ -8,7 +8,7 @@
 import XCTest
 @testable import Aura
 
-final class DataMock {
+final class DataAuthenticationMock {
 	
 	//MARK: -Properties
 	let tokenMock: String

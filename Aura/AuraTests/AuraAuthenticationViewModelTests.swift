@@ -10,7 +10,7 @@ import XCTest
 
 final class AuraAuthenticationViewModelTests: XCTestCase {
 	var viewModel: AuthenticationViewModel!
-	var dataMock = DataMock()
+	var dataMock = DataAuthenticationMock()
 	var repository: AuraService!
 	var callback: () -> Void = {}
 	
@@ -160,7 +160,6 @@ final class AuraAuthenticationViewModelTests: XCTestCase {
 	func testEmailPromptSuccess() {
 		//Given
 		viewModel.username = "test@aura.app"
-		viewModel.isEmailValid()
 		//When
 		let prompt = viewModel.emailPrompt
 		//Then
@@ -170,7 +169,6 @@ final class AuraAuthenticationViewModelTests: XCTestCase {
 	func testPasswordPromptSuccess() {
 		//Given
 		viewModel.password = "test123"
-		viewModel.isPasswordValid()
 		//when
 		let prompt = viewModel.passwordPrompt
 		//Then

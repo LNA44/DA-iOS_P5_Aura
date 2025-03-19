@@ -42,7 +42,6 @@
 				Views/AllTransactionsView.swift,
 				Views/AuthenticationView.swift,
 				Views/EntryField.swift,
-				Views/EntryFieldDouble.swift,
 				Views/MoneyTransferView.swift,
 				Views/RawAllTransactionsView.swift,
 			);

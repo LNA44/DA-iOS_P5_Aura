@@ -9,16 +9,15 @@ import SwiftUI
 
 @main
 struct AuraApp: App {
-	//@StateObject var viewModel = AppViewModel(repository: AuraRepository())
-	@StateObject private var viewModel: AppViewModel //new
+	@StateObject private var viewModel: AppViewModel 
 	
-	init() { //new
+	init() {
 		_viewModel = StateObject(wrappedValue: AppViewModel(repository: AuraService()))//création instance AuraService transmise à viewModel
 	}
 	
     var body: some Scene {
         WindowGroup {
-            Group {
+            Group { //n'ajoute pas de contraintes visuelles
                 if viewModel.isLogged {
                     TabView { //barre en bas de l'écran
                         AccountDetailView(viewModel: viewModel.accountDetailViewModel)

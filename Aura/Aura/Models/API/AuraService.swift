@@ -11,7 +11,7 @@ import Foundation
 struct AuraService {
 	let data: Data?
 	let response: URLResponse?
-	static var token: String? //propriété de classe car n'est modifié qu'une fois
+	static var token: String? //propriété de type car n'est modifié qu'une fois
 	private let baseURLString: String
 	private let executeDataRequest: (URLRequest) async throws -> (Data, URLResponse) // permet d'utiliser un mock
 	var jsonData: Data?
@@ -39,7 +39,7 @@ struct AuraService {
 		self.executeDataRequest = executeDataRequest
 	}
 	
-	mutating func login(username: String, password: String) async throws -> String { //mutating : fonction modifie propriété de classe (jsonData)
+	mutating func login(username: String, password: String) async throws -> String { //mutating : fonction modifie propriété d'instance (jsonData)
 		guard let baseURL = URL(string: baseURLString) else {
 			throw LoginError.badURL
 		}
@@ -86,10 +86,9 @@ struct AuraService {
 		return token
 	}
 	
-	func fetchAccountDetails() async throws -> (currentBalance:Decimal,transactions: [Transaction]) {
-
+	func fetchAccountDetails() async throws -> (currentBalance: Decimal,transactions: [Transaction]) {
 		guard let baseURL = URL(string: baseURLString) else {
-			throw LoginError.badURL // Erreur si l’URL est invalide
+			throw LoginError.badURL
 		}
 		let endpoint = baseURL.appendingPathComponent("/account")
 		//création de la requête
