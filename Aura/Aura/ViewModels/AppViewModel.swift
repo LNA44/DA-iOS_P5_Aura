@@ -20,20 +20,20 @@ class AppViewModel: ObservableObject {
 	
 	//MARK: - Computed properties
 	var authenticationViewModel: AuthenticationViewModel {
-		return AuthenticationViewModel(repository: repository) { [weak self] in
+		return AuthenticationViewModel(keychain: AuraKeyChainService.shared, repository: repository) { [weak self] in
 			self?.isLogged = true
 		}
 	}
 	
 	var accountDetailViewModel: AccountDetailViewModel {
-		return AccountDetailViewModel(repository:repository)
+		return AccountDetailViewModel(keychain: AuraKeyChainService.shared, repository:repository)
 	}
 	
 	var allTransactionsViewModel: AllTransactionsViewModel {
-		return AllTransactionsViewModel(repository:repository)
+		return AllTransactionsViewModel(keychain: AuraKeyChainService.shared, repository:repository)
 	}
 	
 	var moneyTransferViewModel: MoneyTransferViewModel {
-		return MoneyTransferViewModel(repository:repository)
+		return MoneyTransferViewModel(keychain: AuraKeyChainService.shared, repository:repository)
 	}
 }

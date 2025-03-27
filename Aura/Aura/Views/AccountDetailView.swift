@@ -49,7 +49,7 @@ struct AccountDetailView: View {
 					}
 				}
 				//Remplacement du bouton par un navigationlink
-				NavigationLink (destination: AllTransactionsView(viewModel: AllTransactionsViewModel(repository: AuraService()))) {
+				NavigationLink (destination: AllTransactionsView(viewModel: AllTransactionsViewModel(keychain: AuraKeyChainService.shared, repository: AuraService(keychain: AuraKeyChainService.shared)))) {
 					HStack {
 						Image(systemName: "list.bullet")
 						Text("See Transaction Details")
@@ -67,10 +67,13 @@ struct AccountDetailView: View {
 			.task{
 				await viewModel.fetchTransactions()
 			}
+			.alert(isPresented: $viewModel.showAlert) {
+				Alert(title: Text("Erreur"), message: Text(viewModel.errorMessage ?? ""), dismissButton: .default(Text("OK")))
+			}
 		}
 	}
 }
 
 //#Preview {
-//	AccountDetailView(viewModel: AccountDetailViewModel(repository: ))
+//	AccountDetailView(viewModel: AccountDetailViewModel(repository: AuraService()))
 //}

@@ -16,7 +16,6 @@ struct AuthenticationView: View {
 	let gradientEnd = Color(hex: "#94A684").opacity(0.0) // Fades to transparent
 	
 	var body: some View {
-		
 		ZStack {
 			// Background gradient
 			LinearGradient(gradient: Gradient(colors: [gradientStart, gradientEnd]), startPoint: .top, endPoint: .bottomLeading)
@@ -55,11 +54,12 @@ struct AuthenticationView: View {
 		.onTapGesture {
 			self.endEditing(true)  // This will dismiss the keyboard when tapping outside
 		}
-	}	
+		.alert(isPresented: $viewModel.showAlert) {
+			Alert(title: Text("Erreur"), message: Text(viewModel.errorMessage ?? ""), dismissButton: .default(Text("OK")))
+		}
+	}
 }
 
 //#Preview {
-//    AuthenticationView(viewModel: AuthenticationViewModel({
-        
-//    }))
+//	AuthenticationView(viewModel: AuthenticationViewModel(repository: AuraService()))
 //}

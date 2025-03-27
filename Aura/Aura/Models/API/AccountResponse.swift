@@ -1,16 +1,11 @@
 //
-//  Model.swift
+//  AccountResponse.swift
 //  Aura
 //
-//  Created by Ordinateur elena on 10/03/2025.
+//  Created by Ordinateur elena on 21/03/2025.
 //
 
 import Foundation
-//données API après parsing
-struct AuraResponse: Encodable {
-	let username: String
-	let password: String
-}
 struct AccountResponse: Codable {
 	let transactions: [Transaction]
 	let currentBalance: Decimal

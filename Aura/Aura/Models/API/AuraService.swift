@@ -11,13 +11,22 @@ import Foundation
 struct AuraService {
 	let data: Data?
 	let response: URLResponse?
-	static var token: String? //propriété de type car n'est modifié qu'une fois
+	var token: String?
 	private let baseURLString: String
 	private let executeDataRequest: (URLRequest) async throws -> (Data, URLResponse) // permet d'utiliser un mock
-	var jsonData: Data?
+	private let keychain: KeyChainServiceProtocol //permet d'utiliser un mock
 	
-	enum LoginError: Error {
+	enum LoginError: Error, Equatable {
 		case badURL
+		case noData
+		case requestFailed(String)
+		case serverError(Int)
+		case decodingError
+	}
+	
+	enum fetchAccountDetailsError: Error {
+		case badURL
+		case missingToken
 		case noData
 		case requestFailed(String)
 		case serverError(Int)
@@ -26,20 +35,22 @@ struct AuraService {
 	
 	enum TransferError: Error {
 		case badURL
+		case missingToken
 		case dataNotEmpty
 		case requestFailed(String)
 		case serverError(Int)
 	}
 	
 	init(data: Data? = nil, response: URLResponse? = nil, baseURLString: String = "http://127.0.0.1:8080",
-		 executeDataRequest: @escaping (URLRequest) async throws -> (Data, URLResponse) = URLSession.shared.data(for:)) { //pour ne ps avoir à les init dans AuraApp
+		 executeDataRequest: @escaping (URLRequest) async throws -> (Data, URLResponse) = URLSession.shared.data(for:), keychain: KeyChainServiceProtocol) {
 		self.data = data
 		self.response = response
 		self.baseURLString = baseURLString
 		self.executeDataRequest = executeDataRequest
+		self.keychain = keychain
 	}
 	
-	mutating func login(username: String, password: String) async throws -> String { //mutating : fonction modifie propriété d'instance (jsonData)
+	func login(username: String, password: String) async throws -> String {
 		guard let baseURL = URL(string: baseURLString) else {
 			throw LoginError.badURL
 		}
@@ -52,11 +63,8 @@ struct AuraService {
 		]
 		
 		//conversion en JSON
-		do {
-			jsonData = try JSONSerialization.data(withJSONObject: parameters, options: [])
-		} catch let error as NSError {
-			print("erreur de sérialisation JSON : \(error.localizedDescription)")
-		}
+		let jsonData = try JSONSerialization.data(withJSONObject: parameters, options: [])
+		
 		//création de la requête
 		var request = URLRequest(url: endpoint)
 		request.httpMethod = "POST"
@@ -82,43 +90,50 @@ struct AuraService {
 			throw LoginError.decodingError
 		}
 		//Stockage du token
-		AuraService.token = token
+		keychain.storeToken(token: token, key: "authToken")
+		//AuraService.token = token
 		return token
 	}
 	
 	func fetchAccountDetails() async throws -> (currentBalance: Decimal,transactions: [Transaction]) {
 		guard let baseURL = URL(string: baseURLString) else {
-			throw LoginError.badURL
+			throw fetchAccountDetailsError.badURL
 		}
 		let endpoint = baseURL.appendingPathComponent("/account")
+		
 		//création de la requête
 		var request = URLRequest(url: endpoint)
 		request.httpMethod = "GET"
-		request.setValue(AuraService.token, forHTTPHeaderField: "token") //header
-
+		
+		//Récupération du token
+		guard let token = keychain.retrieveToken(key: "authToken") else {
+			throw fetchAccountDetailsError.missingToken
+		}
+		request.setValue(token, forHTTPHeaderField: "token")//header
+		
 		//lancement appel réseau
 		let (data, response) = try await executeDataRequest(request)
-				
+		
 		if data.isEmpty {//data est non optionnel dc pas de guard let
-			throw LoginError.noData
+			throw fetchAccountDetailsError.noData
 		}
 		guard let httpResponse = response as? HTTPURLResponse else { //response peut etre de type URLResponse et non HTTPURLResponse donc vérif
-			throw LoginError.requestFailed("Réponse du serveur invalide")
+			throw fetchAccountDetailsError.requestFailed("Réponse du serveur invalide")
 		}
 		guard httpResponse.statusCode == 200 else {
-			throw LoginError.serverError(httpResponse.statusCode)
+			throw fetchAccountDetailsError.serverError(httpResponse.statusCode)
 		}
-
+		
 		//décodage du JSON
 		guard let accountResponse = try? JSONDecoder().decode(AccountResponse.self, from: data) else {
-			throw LoginError.decodingError
+			throw fetchAccountDetailsError.decodingError
 		}
-		return (accountResponse.currentBalance, accountResponse.transactions.map(Transaction.init)) //mapper pour avoir objet Transaction avec un id
+		return (accountResponse.currentBalance, accountResponse.transactions.map(Transaction.init)) //mapper pour avoir objet Transaction avec un id utile pour ForEach
 	}
 	
-	mutating func sendTransfer(recipient: String, amount: Decimal) async throws -> Void {
+	func transferMoney(recipient: String, amount: Decimal) async throws -> Void {
 		guard let baseURL = URL(string: baseURLString) else {
-			throw TransferError.badURL // Erreur si l’URL est invalide
+			throw TransferError.badURL 
 		}
 		
 		let endpoint = baseURL.appendingPathComponent("/account/transfer")
@@ -127,23 +142,26 @@ struct AuraService {
 			"recipient": recipient,
 			"amount": amount
 		]
-
+		
 		//conversion en JSON
-		do {
-			jsonData = try JSONSerialization.data(withJSONObject: parameters, options: [])
-		} catch let error as NSError {
-			print("erreur de sérialisation JSON : \(error.localizedDescription)")
-		}
+		let jsonData = try JSONSerialization.data(withJSONObject: parameters, options: [])
+		
 		//création de la requête
 		var request = URLRequest(url: endpoint)
 		request.httpMethod = "POST"
-		request.setValue(AuraService.token, forHTTPHeaderField: "token") //header
+		
+		//Récupération du token
+		guard let token = keychain.retrieveToken(key: "authToken") else {
+			throw TransferError.missingToken
+		}
+		request.setValue(token, forHTTPHeaderField: "token") //header
+		
 		request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 		request.httpBody = jsonData
 		
 		//lancement appel réseau
 		let (data, response) = try await executeDataRequest(request)
-
+		
 		if !data.isEmpty { //data est non optionnel dc pas de guard let
 			throw TransferError.dataNotEmpty
 		}

@@ -27,7 +27,8 @@
 			membershipExceptions = (
 				Assets.xcassets,
 				AuraApp.swift,
-				Models/API/AuraResponse.swift,
+				Models/API/AccountResponse.swift,
+				Models/API/AuraKeyChainService.swift,
 				Models/API/AuraService.swift,
 				Models/DataModel/Transaction.swift,
 				"Preview Content/Preview Assets.xcassets",

@@ -1,31 +1,28 @@
 //
-//  DataMock.swift
+//  AuraServiceMock.swift
 //  AuraTests
 //
-//  Created by Ordinateur elena on 14/03/2025.
+//  Created by Ordinateur elena on 25/03/2025.
 //
 
 import XCTest
 @testable import Aura
-
-final class DataAuthenticationMock {
+final class AuraServiceLoginMock {
 	
 	//MARK: -Properties
 	let tokenMock: String
+	var username: String
+	var password: String
 	var response: Int = 0
-	var parameters: [String: Any] = [
-		"username": "test@aura.app",
-		"password": "test123",
-		"invalidObject": { return "This is a function" }
-	]
 	
 	//MARK: -Init
 	init() {
+		username = "test@aura.com"
+		password = "test123"
 		tokenMock = "93D2C537-FA4A-448C-90A9-6058CF26DB29"
 	}
 	
 	//MARK: -Methods
-	
 	func executeRequestMock(request: URLRequest) async throws -> (Data, URLResponse) {
 		print("executeRequestMock utilisé")
 		if response == 1 {

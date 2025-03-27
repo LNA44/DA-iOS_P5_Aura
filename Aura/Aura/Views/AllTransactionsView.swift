@@ -34,7 +34,7 @@ struct AllTransactionsView: View {
 				List {
 					ForEach(viewModel.totalTransactions, id: \.id) { transaction in
 						HStack {
-							RawAllTransactionsView(viewModel: AllTransactionsViewModel(repository: AuraService()), transaction: transaction) // Passe transaction de l'itération à la propriété transaction de la sous vue
+							RawAllTransactionsView(viewModel: AllTransactionsViewModel(keychain: AuraKeyChainService.shared, repository: AuraService(keychain: AuraKeyChainService.shared)), transaction: transaction) // Passe transaction de l'itération à la propriété transaction de la sous vue
 						}
 					}.listRowSeparator(.hidden)
 						.listRowInsets(EdgeInsets(top:5, leading:15, bottom: 5, trailing: 15))
@@ -48,9 +48,12 @@ struct AllTransactionsView: View {
 		.task{
 			await viewModel.fetchTransactions()
 		}
+		.alert(isPresented: $viewModel.showAlert) {
+			Alert(title: Text("Erreur"), message: Text(viewModel.errorMessage ?? ""), dismissButton: .default(Text("OK")))
+		}
 	}
 }
 
 //#Preview {
-//	AllTransactionsView(viewModel: AllTransactionsViewModel(repository: AuraService))
+//	AllTransactionsView(viewModel: AllTransactionsViewModel(repository: AuraService()))
 //}

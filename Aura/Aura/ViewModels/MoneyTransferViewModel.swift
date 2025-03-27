@@ -9,11 +9,12 @@ import Foundation
 
 class MoneyTransferViewModel: ObservableObject {
 	//MARK: -Private properties
+	private let keychain: KeyChainServiceProtocol
 	private var repository: AuraService
 	
-	
 	//MARK: -Initialisation
-	init(repository: AuraService) {
+	init(keychain: KeyChainServiceProtocol, repository: AuraService) {
+		self.keychain = keychain
 		self.repository = repository
 	}
 	
@@ -23,6 +24,7 @@ class MoneyTransferViewModel: ObservableObject {
 	@Published var transferMessage: String = ""
 	@Published var errorMessage: String? = ""
 	@Published var amountString: String = ""
+	@Published var showAlert: Bool = false
 	
 	var phoneOrEmailPrompt: String {
 		if !isPhoneOrEmailValid() {
@@ -43,7 +45,7 @@ class MoneyTransferViewModel: ObservableObject {
 	func sendMoney() async { //utilisée qd on clique sur bouton envoyer argent
 		do {
 			convertAmount(amountString: amountString)
-			try await repository.sendTransfer(recipient: recipient, amount: amount)
+			try await repository.transferMoney(recipient: recipient, amount: amount)
 			transferMessage = "Successfully transferred \(amount) to \(recipient)"
 			recipient = "" //remise à 0 après transfert
 			amountString = ""
@@ -54,6 +56,8 @@ class MoneyTransferViewModel: ObservableObject {
 				switch TransferError {
 				case .badURL :
 					errorMessage = "URL invalide"
+				case .missingToken :
+					errorMessage = "Token manquant"
 				case .dataNotEmpty :
 					errorMessage = "Les données devraient être vides"
 				case .requestFailed :
@@ -61,20 +65,18 @@ class MoneyTransferViewModel: ObservableObject {
 				case .serverError :
 					errorMessage = "Erreur serveur"
 				}
-				print("error : \(TransferError.self)")
+				showAlert = true
 				transferMessage = "Please enter recipient and amount."
-			} else {
-				print("Erreur inconnue : \(error.localizedDescription)")
-			}
+			} 
 		}
 	}
 	
 	func isPhoneOrEmailValid() -> Bool {
 		// criterias here : http://regexlib.com
 		let phoneRegex = "^(?:(?:\\+|00)33[\\s.-]{0,3}(?:\\(0\\)[\\s.-]{0,3})?|0)[1-9](?:[\\s.-]?\\d{2}){4}$"
-		//commence par +, 00 ou 0, puis 33
-		//séparateurs : espace, point ou tiret. De 0 à 3 séparateurs entre indicatif du pays et numéro
-		// numéro : premier chiffre: de 1 à 9, par groupe de 2 chiffres, avec 4 occurrences
+		/*commence par +, 00 ou 0, puis 33
+		séparateurs : espace, point ou tiret. De 0 à 3 séparateurs entre indicatif du pays et numéro
+		numéro : premier chiffre: de 1 à 9, par groupe de 2 chiffres, avec 4 occurrences*/
 		let emailRegex = "^([0-9a-zA-Z]([-.\\w]*[0-9a-zA-Z])*@(([0-9a-zA-Z])+([-\\w]*[0-9a-zA-Z])*\\.)+[a-zA-Z]{2,9})$"
 		//idem que AuthenticationViewModel
 		let phoneTest = NSPredicate(format: "SELF MATCHES %@", phoneRegex)

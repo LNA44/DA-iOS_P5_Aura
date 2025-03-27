@@ -8,12 +8,10 @@
 import XCTest
 @testable import Aura
 
-final class DataAllTransactionsMock {
+final class AuraAccountDetailsMock {
 	
 	//MARK: -Properties
-	//let tokenMock: String
-	var isLoading: Bool = false
-	var validResponse: Bool = true
+	var response: Int = 0
 	var currentBalance: Decimal
 	let accountResponseMock: AccountResponse
 	let transaction1: AccountResponse.Transaction
@@ -24,7 +22,6 @@ final class DataAllTransactionsMock {
 	
 	//MARK: -Init
 	init() {
-		//tokenMock = "93D2C537-FA4A-448C-90A9-6058CF26DB29"
 		transaction1 = AccountResponse.Transaction(value: -50, label: "Achat de maillot de foot")
 		transaction2 = AccountResponse.Transaction(value: -1000, label: "Achat d'un vélo")
 		transaction3 = AccountResponse.Transaction(value: -700, label: "Achat d'une mmontre")
@@ -44,8 +41,20 @@ final class DataAllTransactionsMock {
 	}
 	
 	func executeRequestMock(request: URLRequest) async throws -> (Data, URLResponse) {
-		if validResponse {
+		if response == 1 {
 			return try await validMockResponse(request: request)
+		} else if response == 2 {
+			return try await validMockResponse(request: request)
+		} else if response == 3 {
+			return try await validMockResponse(request: request)
+		} else if response == 4 {
+			return try await invalidMockResponseNoDataError(request: request)
+		} else if response == 5 {
+			return try await invalidMockResponseRequestFailedError(request: request)
+		} else if response == 6 {
+			return try await invalidMockResponseServerError(request: request)
+		} else if response == 7 {
+			return try await invalidMockResponseDecodingError(request: request)
 		} else {
 			return try await invalidMockResponse(request: request)
 		}
@@ -60,6 +69,30 @@ final class DataAllTransactionsMock {
 	private func invalidMockResponse(request: URLRequest) async throws -> (Data, URLResponse) {
 		let invalidData = "invalidJSON".data(using: .utf8)!
 		let response = HTTPURLResponse(url: request.url!, statusCode: 500, httpVersion: nil, headerFields: nil)!
+		return (invalidData, response)
+	}
+	
+	private func invalidMockResponseNoDataError(request: URLRequest) async throws -> (Data, URLResponse) {
+		let noData = Data()
+		let response = HTTPURLResponse(url: request.url!, statusCode: 500, httpVersion: nil, headerFields: nil)!
+		return (noData, response)
+	}
+	
+	private func invalidMockResponseRequestFailedError(request: URLRequest) async throws -> (Data, URLResponse) {
+		let invalidData = "invalidJSON".data(using: .utf8)!
+		let response = URLResponse(url: request.url!, mimeType: nil, expectedContentLength: 0, textEncodingName: nil)
+		return (invalidData, response)
+	}
+	
+	private func invalidMockResponseServerError(request: URLRequest) async throws -> (Data, URLResponse) {
+		let data = try encodeData(AuraResponseTypeMock : accountResponseMock)
+		let response = HTTPURLResponse(url: request.url!, statusCode: 500, httpVersion: nil, headerFields: nil)!
+		return (data, response)
+	}
+	
+	private func invalidMockResponseDecodingError(request: URLRequest) async throws -> (Data, URLResponse) {
+		let invalidData = "balance: 1234567890".data(using: .utf8)!
+		let response = HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!
 		return (invalidData, response)
 	}
 }

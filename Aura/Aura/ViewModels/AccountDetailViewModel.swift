@@ -10,9 +10,11 @@ import Foundation
 class AccountDetailViewModel: ObservableObject {
 	//MARK: -Private properties
 	private let repository: AuraService
+	private let keychain: KeyChainServiceProtocol
 	
 	//MARK: -Initialisation
-	init(repository: AuraService) {
+	init(keychain: KeyChainServiceProtocol, repository: AuraService) {
+		self.keychain = keychain
 		self.repository = repository
 	}
 	
@@ -20,43 +22,52 @@ class AccountDetailViewModel: ObservableObject {
 	@Published var totalAmount: Decimal = 0.0
 	@Published var totalTransactions: [Transaction] = []
 	@Published var recentTransactions: [Transaction] = []
-	@Published var isLoading: Bool = false
-	@Published var networkError: String? = nil
+	@Published var errorMessage: String? = ""
+	@Published var showAlert: Bool = false
 	
-	func formattedAmount(value: Decimal) -> String { //pour éviter les 0 inutiles à l'affichage
-		let formatter = NumberFormatter() //formater les nombres selon convention locale
-		formatter.numberStyle = .decimal //format nombre décimal
-		formatter.minimumFractionDigits = 0 // pas de décimales affichées si partie décimale nulle
-		formatter.maximumFractionDigits = 2 // max 2 décimales affichées
-		
-		// Convertir le Decimal en NSNumber
-		let nsNumber = NSDecimalNumber(decimal: value) //conversion en NSNumber (nécessaire pour NumberFormatter)
-		
-		if let formattedValue = formatter.string(from: nsNumber) { //conversion en String
-			return formattedValue
+	func formattedAmount(value: Decimal?) -> String { //pour éviter les 0 inutiles à l'affichage
+		guard let unwrappedValue = value else {
+			return "Invalid value"
 		}
-		return "N/A"  // Valeur par défaut si la transformation échoue
+		
+		let formatter = NumberFormatter()
+		formatter.numberStyle = .decimal
+		formatter.minimumFractionDigits = 0
+		formatter.maximumFractionDigits = 2
+		formatter.locale = Locale(identifier: "fr_FR") //conventions régionales pour séparateur milliers et séparateur décimal
+		
+		let nsNumber = NSDecimalNumber(decimal: unwrappedValue) // convertit le Decimal en NSNumber
+		let formattedValue = formatter.string(from: nsNumber) ?? "N/A" //retourne un optionnel
+		return formattedValue
 	}
 	
 	//MARK: -Inputs
 	@MainActor
 	func fetchTransactions() async {
-		guard AuraService.token != nil else {
-			print("Le token est invalide ou absent.")
-			return
-		}
-		isLoading = true
 		do {
 			let (totalAmount,totalTransactions) = try await repository.fetchAccountDetails()
 			self.totalAmount = totalAmount
 			self.totalTransactions = totalTransactions
-			self.isLoading = false
 			let recentTransactions = Array(totalTransactions.reversed().prefix(3)) //récupère les 3 dernières transactions
 			self.recentTransactions = recentTransactions
 		} catch {
-			self.isLoading = false
-			self.networkError = "Error fetching transactions: \(error.localizedDescription)"
-			print(self.networkError ?? "No error")
+			if let TransactionsError = error as? AuraService.fetchAccountDetailsError {
+				switch TransactionsError {
+				case .badURL :
+					errorMessage = "URL invalide"
+				case .missingToken :
+					errorMessage = "Token manquant"
+				case .noData :
+					errorMessage = "Aucune donnée reçue"
+				case .requestFailed :
+					errorMessage = "Erreur de requête"
+				case .serverError :
+					errorMessage = "Erreur serveur"
+				case .decodingError :
+					errorMessage = "Erreur de décodage"
+				}
+				showAlert = true
+			}
 		}
 	}
 }

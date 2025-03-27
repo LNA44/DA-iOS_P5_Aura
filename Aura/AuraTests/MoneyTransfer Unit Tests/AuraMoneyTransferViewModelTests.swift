@@ -12,11 +12,16 @@ final class AuraMoneyTransferViewModelTests: XCTestCase {
 	var viewModel: MoneyTransferViewModel!
 	var dataMock = DataMoneyTransferMock()
 	var repository: AuraService!
+	let keychain = AuraKeyChainServiceMock()
 	
 	override func setUpWithError() throws {
-		repository = AuraService(executeDataRequest: dataMock.executeRequestMock)
-		viewModel = MoneyTransferViewModel(repository: repository)
-		AuraService.token = "93D2C537-FA4A-448C-90A9-6058CF26DB29"
+		repository = AuraService(executeDataRequest: dataMock.executeRequestMock, keychain: keychain)
+		viewModel = MoneyTransferViewModel(keychain: keychain, repository: repository)
+		keychain.storeToken(token: "93D2C537-FA4A-448C-90A9-6058CF26DB29", key: "authToken")
+	}
+	
+	override func tearDown() {
+		keychain.removeToken(key: "authToken")
 	}
 	
 	func testSendMoneySuccess() async {
@@ -35,8 +40,8 @@ final class AuraMoneyTransferViewModelTests: XCTestCase {
 	
 	func testSendMoneyBadURLFail() async {
 		//Given
-		repository = AuraService(baseURLString: "", executeDataRequest: dataMock.executeRequestMock)
-		viewModel = MoneyTransferViewModel(repository: repository)
+		repository = AuraService(baseURLString: "", executeDataRequest: dataMock.executeRequestMock, keychain: keychain)
+		viewModel = MoneyTransferViewModel(keychain: keychain, repository: repository)
 		dataMock.response = 2
 		viewModel.recipient = "+33767070707"
 		viewModel.amountString = "20"
@@ -46,9 +51,21 @@ final class AuraMoneyTransferViewModelTests: XCTestCase {
 		XCTAssertEqual(viewModel.errorMessage, "URL invalide")
 	}
 	
+	func testSendMoneyMissingTokenFail() async {
+		//Given
+		keychain.removeToken(key: "authToken")
+		dataMock.response = 3
+		viewModel.recipient = "+33767070707"
+		viewModel.amountString = "20"
+		//When
+		await viewModel.sendMoney()
+		//Then
+		XCTAssertEqual(viewModel.errorMessage, "Token manquant")
+	}
+	
 	func testSendMoneyDataNotEmptyFail() async {
 		//Given
-		dataMock.response = 3
+		dataMock.response = 4
 		viewModel.recipient = "+33767070707"
 		viewModel.amountString = "20"
 		//When
@@ -59,7 +76,7 @@ final class AuraMoneyTransferViewModelTests: XCTestCase {
 	
 	func testSendMoneyRequestFail() async {
 		//Given
-		dataMock.response = 4
+		dataMock.response = 5
 		viewModel.recipient = "+33767070707"
 		viewModel.amountString = "20"
 		//When
@@ -70,7 +87,7 @@ final class AuraMoneyTransferViewModelTests: XCTestCase {
 	
 	func testSendMoneyServerFail() async {
 		//Given
-		dataMock.response = 5
+		dataMock.response = 6
 		viewModel.recipient = "+33767070707"
 		viewModel.amountString = "20"
 		//When
@@ -169,4 +186,3 @@ final class AuraMoneyTransferViewModelTests: XCTestCase {
 		XCTAssertEqual(prompt, "Enter a valid amount with 2 decimals maximum")
 	}
 }
-

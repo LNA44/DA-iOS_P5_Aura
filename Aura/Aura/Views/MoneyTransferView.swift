@@ -43,7 +43,8 @@ struct MoneyTransferView: View {
 			}
 			Button(action:{
 				Task {//car fonction async interdite dans views
-					await viewModel.sendMoney() }
+					await viewModel.sendMoney()
+				}
 			}) {
 				HStack {
 					Image(systemName: "arrow.right.circle.fill")
@@ -66,10 +67,13 @@ struct MoneyTransferView: View {
 		.onTapGesture {
 			self.endEditing(true)  // This will dismiss the keyboard when tapping outside
 		}
+		.alert(isPresented: $viewModel.showAlert) {
+			Alert(title: Text("Erreur"), message: Text(viewModel.errorMessage ?? ""), dismissButton: .default(Text("OK")))
+		}
 	}
 }
 
 
 //#Preview {
-//    MoneyTransferView()
+//	MoneyTransferView(viewModel: MoneyTransferViewModel(repository: AuraService()))
 //}

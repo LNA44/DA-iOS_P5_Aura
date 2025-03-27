@@ -9,18 +9,19 @@ import Foundation
 class AllTransactionsViewModel: ObservableObject {
 	//MARK: -Private properties
 	private let repository: AuraService
+	private let keychain: KeyChainServiceProtocol
 	
 	//MARK: -Initialisation
-	init(repository: AuraService) {
+	init(keychain: KeyChainServiceProtocol, repository: AuraService) {
+		self.keychain = keychain
 		self.repository = repository
 	}
 	
 	//MARK: -Outputs
 	@Published var totalAmount: Decimal = 0.0
 	@Published var totalTransactions: [Transaction] = []
-	@Published var recentTransactions: [Transaction] = []
-	@Published var isLoading: Bool = false
-	@Published var networkError: String? = nil
+	@Published var errorMessage: String? = ""
+	@Published var showAlert: Bool = false
 	
 	func formattedAmount(value: Decimal?) -> String { //pour éviter les 0 inutiles à l'affichage
 		guard let unwrappedValue = value else {
@@ -42,22 +43,28 @@ class AllTransactionsViewModel: ObservableObject {
 	//MARK: -Inputs
 	@MainActor
 	func fetchTransactions() async {
-		guard AuraService.token != nil else {
-			print("Le token est invalide ou absent.")
-			return
-		}
-		isLoading = true
 		do {
 			let (totalAmount,totalTransactions) = try await repository.fetchAccountDetails()
 			self.totalAmount = totalAmount
 			self.totalTransactions = totalTransactions
-			self.isLoading = false
-			let recentTransactions = Array(totalTransactions.reversed().prefix(3)) //récupère les 3 dernières transactions
-			self.recentTransactions = recentTransactions
 		} catch {
-			self.isLoading = false
-			self.networkError = "Error fetching transactions: \(error.localizedDescription)"
-			print(self.networkError ?? "No error")
+			if let TransactionsError = error as? AuraService.fetchAccountDetailsError {
+				switch TransactionsError {
+				case .badURL :
+					errorMessage = "URL invalide"
+				case .missingToken :
+					errorMessage = "Token manquant"
+				case .noData :
+					errorMessage = "Aucune donnée reçue"
+				case .requestFailed :
+					errorMessage = "Erreur de requête"
+				case .serverError :
+					errorMessage = "Erreur serveur"
+				case .decodingError :
+					errorMessage = "Erreur de décodage"
+				}
+				showAlert = true
+			}
 		}
 	}
 }
