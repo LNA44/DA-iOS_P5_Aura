@@ -8,10 +8,10 @@
 import XCTest
 @testable import Aura
 
-final class AuraAllTransactionsViewModelTests: XCTestCase {
+final class AuraAccoutnDetailViewModelTests: XCTestCase {
 	
 	var viewModel: AccountDetailViewModel!
-	var dataMock = AuraAccountDetailsMock()
+	var dataMock = AuraAccountDetailMock()
 	var repository: AuraService!
 	let keychain = AuraKeyChainServiceMock()
 	

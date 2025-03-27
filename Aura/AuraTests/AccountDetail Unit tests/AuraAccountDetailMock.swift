@@ -8,7 +8,7 @@
 import XCTest
 @testable import Aura
 
-final class AuraAccountDetailsMock {
+final class AuraAccountDetailMock {
 	
 	//MARK: -Properties
 	var response: Int = 0
