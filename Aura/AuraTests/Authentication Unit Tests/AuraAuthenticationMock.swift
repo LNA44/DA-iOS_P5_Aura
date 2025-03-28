@@ -48,9 +48,7 @@ final class DataAuthenticationMock {
 	
 	private func validMockResponse(request: URLRequest) async throws -> (Data, URLResponse) {
 		let tokenDictionnary = ["token": tokenMock]
-		print("token utilisé : \(tokenMock)")
 		let data = try JSONEncoder().encode(tokenDictionnary)
-		print("token encodé : \(data)")
 		let response = HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!
 		return (data, response)
 	}
@@ -62,7 +60,8 @@ final class DataAuthenticationMock {
 	}
 	
 	private func invalidMockResponseRequestFailedError(request: URLRequest) async throws -> (Data, URLResponse) {
-		let invalidData = "invalidJSON".data(using: .utf8)!
+		let tokenDictionnary = ["token": tokenMock]
+		let invalidData = try JSONEncoder().encode(tokenDictionnary)
 		let response = URLResponse(url: request.url!, mimeType: nil, expectedContentLength: 0, textEncodingName: nil)
 		return (invalidData, response)
 	}

@@ -91,7 +91,6 @@ struct AuraService {
 		}
 		//Stockage du token
 		keychain.storeToken(token: token, key: "authToken")
-		//AuraService.token = token
 		return token
 	}
 	
@@ -137,6 +136,7 @@ struct AuraService {
 		}
 		
 		let endpoint = baseURL.appendingPathComponent("/account/transfer")
+		
 		//body de la requete
 		let parameters: [String: Any] = [
 			"recipient": recipient,

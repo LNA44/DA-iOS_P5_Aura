@@ -9,7 +9,7 @@ import SwiftUI
 
 @main
 struct AuraApp: App {
-	@Environment(\.scenePhase) private var scenePhase  // Observer l'état de l'application (foreground, background, inactive)
+	@Environment(\.scenePhase) private var scenePhase  // Observe l'état de l'application (foreground, background, inactive)
 	@StateObject private var viewModel: AppViewModel
 	private let keychain = AuraKeyChainService.shared
 	

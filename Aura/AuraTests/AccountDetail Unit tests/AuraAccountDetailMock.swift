@@ -79,7 +79,7 @@ final class AuraAccountDetailMock {
 	}
 	
 	private func invalidMockResponseRequestFailedError(request: URLRequest) async throws -> (Data, URLResponse) {
-		let invalidData = "invalidJSON".data(using: .utf8)!
+		let invalidData = try encodeData(AuraResponseTypeMock : accountResponseMock)
 		let response = URLResponse(url: request.url!, mimeType: nil, expectedContentLength: 0, textEncodingName: nil)
 		return (invalidData, response)
 	}

@@ -16,9 +16,10 @@ protocol KeyChainServiceProtocol {
 
 //Gère le token en le cryptant
 class AuraKeyChainService: ObservableObject, KeyChainServiceProtocol {
-	static let shared = AuraKeyChainService()
+	static let shared = AuraKeyChainService() //création instance partagée singleton
 	
-	private init() {}
+	private init() {} //évite la création d'une autre instance
+	
 	func storeToken(token: String, key: String) { //Crée un token
 		let data = token.data(using: .utf8)! //keychain attend des Data
 		let query: [String: Any] = [ //Dictionnaire
