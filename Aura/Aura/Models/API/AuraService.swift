@@ -19,8 +19,8 @@ struct AuraService {
 	enum LoginError: Error, Equatable {
 		case badURL
 		case noData
-		case requestFailed(String)
-		case serverError(Int)
+		case requestFailed
+		case serverError
 		case decodingError
 	}
 	
@@ -28,8 +28,8 @@ struct AuraService {
 		case badURL
 		case missingToken
 		case noData
-		case requestFailed(String)
-		case serverError(Int)
+		case requestFailed
+		case serverError
 		case decodingError
 	}
 	
@@ -37,8 +37,8 @@ struct AuraService {
 		case badURL
 		case missingToken
 		case dataNotEmpty
-		case requestFailed(String)
-		case serverError(Int)
+		case requestFailed
+		case serverError
 	}
 	
 	init(data: Data? = nil, response: URLResponse? = nil, baseURLString: String = "http://127.0.0.1:8080",
@@ -78,10 +78,10 @@ struct AuraService {
 			throw LoginError.noData
 		}
 		guard let httpResponse = response as? HTTPURLResponse else { //response peut etre de type URLResponse et non HTTPURLResponse donc vérif
-			throw LoginError.requestFailed("Réponse du serveur invalide")
+			throw LoginError.requestFailed
 		}
 		guard httpResponse.statusCode == 200 else {
-			throw LoginError.serverError(httpResponse.statusCode)
+			throw LoginError.serverError
 		}
 		
 		//décodage du JSON
@@ -117,10 +117,10 @@ struct AuraService {
 			throw fetchAccountDetailsError.noData
 		}
 		guard let httpResponse = response as? HTTPURLResponse else { //response peut etre de type URLResponse et non HTTPURLResponse donc vérif
-			throw fetchAccountDetailsError.requestFailed("Réponse du serveur invalide")
+			throw fetchAccountDetailsError.requestFailed
 		}
 		guard httpResponse.statusCode == 200 else {
-			throw fetchAccountDetailsError.serverError(httpResponse.statusCode)
+			throw fetchAccountDetailsError.serverError
 		}
 		
 		//décodage du JSON
@@ -166,10 +166,10 @@ struct AuraService {
 			throw TransferError.dataNotEmpty
 		}
 		guard let httpResponse = response as? HTTPURLResponse else { //response peut etre de type URLResponse et non HTTPURLResponse donc vérif
-			throw TransferError.requestFailed("Réponse du serveur invalide")
+			throw TransferError.requestFailed
 		}
 		guard httpResponse.statusCode == 200 else {
-			throw TransferError.serverError(httpResponse.statusCode)
+			throw TransferError.serverError
 		}
 	}
 }

@@ -8,7 +8,7 @@
 import XCTest
 @testable import Aura
 
-final class AuraAccoutnDetailViewModelTests: XCTestCase {
+final class AuraAccountDetailViewModelTests: XCTestCase {
 	
 	var viewModel: AccountDetailViewModel!
 	var dataMock = AuraAccountDetailMock()
