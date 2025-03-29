@@ -24,6 +24,7 @@ struct EntryField: View {
 			}.padding()
 				.background(Color(UIColor.secondarySystemBackground))
 				.cornerRadius(8)
+			
 			Text(prompt)
 				.font(.caption)
 		}

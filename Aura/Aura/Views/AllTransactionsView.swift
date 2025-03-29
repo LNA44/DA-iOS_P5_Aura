@@ -16,9 +16,11 @@ struct AllTransactionsView: View {
 			VStack(spacing: 10) {
 				Text("Your Balance")
 					.font(.headline)
+				
 				Text(viewModel.formattedAmount(value: viewModel.totalAmount))
 					.font(.system(size: 60, weight: .bold))
 					.foregroundColor(Color(hex: "#94A684")) // Using the green color you provided
+				
 				Image(systemName: "eurosign.circle.fill")
 					.resizable()
 					.scaledToFit()
@@ -36,9 +38,11 @@ struct AllTransactionsView: View {
 						HStack {
 							RawAllTransactionsView(viewModel: AllTransactionsViewModel(keychain: AuraKeyChainService.shared, repository: AuraService(keychain: AuraKeyChainService.shared)), transaction: transaction) // Passe transaction de l'itération à la propriété transaction de la sous vue
 						}
-					}.listRowSeparator(.hidden)
-						.listRowInsets(EdgeInsets(top:5, leading:15, bottom: 5, trailing: 15))
-				}.listStyle(.plain)
+					}
+					.listRowSeparator(.hidden)
+					.listRowInsets(EdgeInsets(top:5, leading:15, bottom: 5, trailing: 15))
+				}
+				.listStyle(.plain)
 			}
 			Spacer()
 		}

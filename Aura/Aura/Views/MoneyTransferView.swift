@@ -29,18 +29,23 @@ struct MoneyTransferView: View {
 			Text("Send Money!")
 				.font(.largeTitle)
 				.fontWeight(.heavy)
+			
 			VStack(alignment: .leading) {
 				Text("Recipient (Email or Phone)")
 					.font(.headline)
+				
 				EntryField(placeHolder: "Enter recipient's info", field: $viewModel.recipient, isSecure: false, prompt: viewModel.phoneOrEmailPrompt )
 					.keyboardType(.emailAddress)
 			}
+			
 			VStack(alignment: .leading) {
 				Text("Amount (€)")
 					.font(.headline)
+				
 				EntryField(placeHolder: "0.00", field: $viewModel.amountString, isSecure: false, prompt: viewModel.amountPrompt )
 					.keyboardType(.decimalPad)
 			}
+			
 			Button(action:{
 				Task {//car fonction async interdite dans views
 					await viewModel.sendMoney()

@@ -25,14 +25,18 @@ struct AuthenticationView: View {
 					.resizable()
 					.scaledToFit()
 					.frame(width: 50, height: 50)
+				
 				Text("Welcome !")
 					.font(.largeTitle)
 					.fontWeight(.semibold)
+				
 				EntryField(placeHolder: "Email Adress", field: $viewModel.username, isSecure: false, prompt:viewModel.emailPrompt)
 					.autocapitalization(.none)
 					.keyboardType(.emailAddress)
 					.disableAutocorrection(true)
+				
 				EntryField(placeHolder: "Password", field: $viewModel.password, isSecure: true, prompt:viewModel.passwordPrompt)
+				
 				Button(action: {
 					Task {
 						await viewModel.login()
@@ -44,9 +48,10 @@ struct AuthenticationView: View {
 						.padding()
 						.background(Color(hex: "#94A684"))
 						.cornerRadius(8)
-				}.opacity(viewModel.isSignUpComplete ? 1 : 0.6)
+				}
+				.opacity(viewModel.isSignUpComplete ? 1 : 0.6)
 				//1 if true else 0.6
-					.disabled(!viewModel.isSignUpComplete)
+				.disabled(!viewModel.isSignUpComplete)
 				//désactive : plus d'interaction possible
 			}
 			.padding(.horizontal, 40)
