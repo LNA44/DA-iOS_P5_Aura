@@ -50,7 +50,7 @@ struct AuraService {
 		self.keychain = keychain
 	}
 	
-	func login(username: String, password: String) async throws -> String {
+	func login(username: String, password: String) async throws {
 		guard let baseURL = URL(string: baseURLString) else {
 			throw LoginError.badURL
 		}
@@ -91,7 +91,6 @@ struct AuraService {
 		}
 		//Stockage du token
 		keychain.storeToken(token: token, key: "authToken")
-		return token
 	}
 	
 	func fetchAccountDetails() async throws -> (currentBalance: Decimal,transactions: [Transaction]) {
