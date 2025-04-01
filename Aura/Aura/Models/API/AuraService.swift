@@ -77,8 +77,8 @@ struct AuraService {
 		if data.isEmpty {//data est non optionnel dc pas de guard let
 			throw LoginError.noData
 		}
-		guard let httpResponse = response as? HTTPURLResponse else { //response peut etre de type URLResponse et non HTTPURLResponse donc vérif
-			throw LoginError.requestFailed
+		guard let httpResponse = response as? HTTPURLResponse else { // cast renvoie un optionnel
+			throw LoginError.requestFailed //response peut etre de type URLResponse et non HTTPURLResponse donc vérif
 		}
 		guard httpResponse.statusCode == 200 else {
 			throw LoginError.serverError
@@ -108,12 +108,12 @@ struct AuraService {
 		guard let token = keychain.retrieveToken(key: "authToken") else {
 			throw fetchAccountDetailsError.missingToken
 		}
-		request.setValue(token, forHTTPHeaderField: "token")//header
+		request.setValue(token, forHTTPHeaderField: "token") //header
 		
 		//lancement appel réseau
 		let (data, response) = try await executeDataRequest(request)
 		
-		if data.isEmpty {//data est non optionnel dc pas de guard let
+		if data.isEmpty { //data est non optionnel dc pas de guard let
 			throw fetchAccountDetailsError.noData
 		}
 		guard let httpResponse = response as? HTTPURLResponse else { //response peut etre de type URLResponse et non HTTPURLResponse donc vérif

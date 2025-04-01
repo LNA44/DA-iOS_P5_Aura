@@ -34,9 +34,9 @@ final class AuraServiceLoginTests: XCTestCase {
 		//When & Then
 		do {
 			_ = try await repository.login(username: dataMock.username, password: dataMock.password)
-			XCTFail("This should fail to load")
 		} catch {
-		} //Si aucun retour alors test OK
+			XCTAssertEqual(error as? AuraService.LoginError, AuraService.LoginError.badURL)
+		}
 	}
 	
 	func testLoginNoDataErrorOccurs() async throws {
@@ -45,8 +45,8 @@ final class AuraServiceLoginTests: XCTestCase {
 		//When & Then
 		do {
 			_ = try await repository.login(username: dataMock.username, password: dataMock.password)
-			XCTFail("This should fail to load")
 		} catch {
+			XCTAssertEqual(error as? AuraService.LoginError, AuraService.LoginError.noData)
 		}
 	}
 	
@@ -56,8 +56,8 @@ final class AuraServiceLoginTests: XCTestCase {
 		//When & Then
 		do {
 			_ = try await repository.login(username: dataMock.username, password: dataMock.password)
-			XCTFail("This should fail to load")
 		} catch {
+			XCTAssertEqual(error as? AuraService.LoginError, AuraService.LoginError.requestFailed)
 		}
 	}
 	
@@ -67,8 +67,8 @@ final class AuraServiceLoginTests: XCTestCase {
 		//When & Then
 		do {
 			_ = try await repository.login(username: dataMock.username, password: dataMock.password)
-			XCTFail("This should fail to load")
 		} catch {
+			XCTAssertEqual(error as? AuraService.LoginError, AuraService.LoginError.serverError)
 		}
 	}
 	
@@ -78,8 +78,8 @@ final class AuraServiceLoginTests: XCTestCase {
 		//When & Then
 		do {
 			_ = try await repository.login(username: dataMock.username, password: dataMock.password)
-			XCTFail("This should fail to load")
 		} catch {
+			XCTAssertEqual(error as? AuraService.LoginError, AuraService.LoginError.decodingError)
 		}
 	}
 }

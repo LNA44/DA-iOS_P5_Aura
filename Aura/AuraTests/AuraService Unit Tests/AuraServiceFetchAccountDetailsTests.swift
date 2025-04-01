@@ -45,8 +45,8 @@ final class AuraServiceFetchAccountDetailsTests: XCTestCase {
 		//When & Then
 		do {
 			_ = try await repository.fetchAccountDetails()
-			XCTFail("Should not fetch data without token ")
 		} catch {
+			XCTAssertEqual(error as? AuraService.fetchAccountDetailsError, AuraService.fetchAccountDetailsError.badURL)
 		}
 	}
 	
@@ -57,8 +57,8 @@ final class AuraServiceFetchAccountDetailsTests: XCTestCase {
 		//When & Then
 		do {
 			_ = try await repository.fetchAccountDetails()
-			XCTFail("Should not fetch data without token ")
 		} catch {
+			XCTAssertEqual(error as? AuraService.fetchAccountDetailsError, AuraService.fetchAccountDetailsError.missingToken)
 		}
 	}
 	
@@ -68,8 +68,8 @@ final class AuraServiceFetchAccountDetailsTests: XCTestCase {
 		//When & Then
 		do {
 			_ = try await repository.fetchAccountDetails()
-			XCTFail("Should not fetch data ")
 		} catch {
+			XCTAssertEqual(error as? AuraService.fetchAccountDetailsError, AuraService.fetchAccountDetailsError.noData)
 		}
 	}
 	
@@ -79,8 +79,8 @@ final class AuraServiceFetchAccountDetailsTests: XCTestCase {
 		//When & Then
 		do {
 			_ = try await repository.fetchAccountDetails()
-			XCTFail("Should not fetch data ")
 		} catch {
+			XCTAssertEqual(error as? AuraService.fetchAccountDetailsError, AuraService.fetchAccountDetailsError.requestFailed)
 		}
 	}
 	
@@ -90,8 +90,8 @@ final class AuraServiceFetchAccountDetailsTests: XCTestCase {
 		//When & Then
 		do {
 			_ = try await repository.fetchAccountDetails()
-			XCTFail("Should not fetch data ")
 		} catch {
+			XCTAssertEqual(error as? AuraService.fetchAccountDetailsError, AuraService.fetchAccountDetailsError.serverError)
 		}
 	}
 	
@@ -101,8 +101,8 @@ final class AuraServiceFetchAccountDetailsTests: XCTestCase {
 		//When & Then
 		do {
 			_ = try await repository.fetchAccountDetails()
-			XCTFail("Should not fetch data ")
 		} catch {
+			XCTAssertEqual(error as? AuraService.fetchAccountDetailsError, AuraService.fetchAccountDetailsError.decodingError)
 		}
 	}
 }

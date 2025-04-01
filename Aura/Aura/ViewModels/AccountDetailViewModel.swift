@@ -25,21 +25,26 @@ class AccountDetailViewModel: ObservableObject {
 	@Published var errorMessage: String? = ""
 	@Published var showAlert: Bool = false
 	
-	func formattedAmount(value: Decimal?) -> String { //pour éviter les 0 inutiles à l'affichage
-		guard let unwrappedValue = value else {
-			return "Invalid value"
+	var formatClosure: (NSDecimalNumber) -> String? = { number in
+			let formatter = NumberFormatter()
+			formatter.numberStyle = .decimal
+			formatter.minimumFractionDigits = 0
+			formatter.maximumFractionDigits = 2
+			formatter.locale = Locale(identifier: "fr_FR")
+			return formatter.string(from: number)
 		}
-		
-		let formatter = NumberFormatter()
-		formatter.numberStyle = .decimal
-		formatter.minimumFractionDigits = 0
-		formatter.maximumFractionDigits = 2
-		formatter.locale = Locale(identifier: "fr_FR") //conventions régionales pour séparateur milliers et séparateur décimal
-		
-		let nsNumber = NSDecimalNumber(decimal: unwrappedValue) // convertit le Decimal en NSNumber
-		let formattedValue = formatter.string(from: nsNumber) ?? "N/A" //retourne un optionnel
-		return formattedValue
-	}
+	
+	func formattedAmount(value: Decimal?) -> String {
+			guard let unwrappedValue = value else {
+				return "Invalid value"
+			}
+			
+			let nsNumber = NSDecimalNumber(decimal: unwrappedValue)
+			guard let formattedValue = formatClosure(nsNumber) else {
+				return "Formatting error"
+			}
+			return formattedValue
+		}
 	
 	//MARK: -Inputs
 	@MainActor

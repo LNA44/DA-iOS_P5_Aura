@@ -24,7 +24,7 @@ final class AuraAccountDetailMock {
 	init() {
 		transaction1 = AccountResponse.Transaction(value: -50, label: "Achat de maillot de foot")
 		transaction2 = AccountResponse.Transaction(value: -1000, label: "Achat d'un vélo")
-		transaction3 = AccountResponse.Transaction(value: -700, label: "Achat d'une mmontre")
+		transaction3 = AccountResponse.Transaction(value: -700, label: "Achat d'une montre")
 		transaction4 = AccountResponse.Transaction(value: 10000, label: "Salaire")
 		transaction5 = AccountResponse.Transaction(value: 3000, label: "Revenu appartements")
 		

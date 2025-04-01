@@ -42,8 +42,8 @@ final class AuraServiceSendTransferTests: XCTestCase {
 		//When
 		do {
 			_ = try await repository.transferMoney(recipient: dataMock.recipient, amount: dataMock.amount)
-			XCTFail("Should not send money")
 		} catch {
+			XCTAssertEqual(error as? AuraService.TransferError, AuraService.TransferError.badURL)
 		}
 	}
 	
@@ -54,8 +54,8 @@ final class AuraServiceSendTransferTests: XCTestCase {
 		//When
 		do {
 			_ = try await repository.transferMoney(recipient: dataMock.recipient, amount: dataMock.amount)
-			XCTFail("Should not send money")
 		} catch {
+			XCTAssertEqual(error as? AuraService.TransferError, AuraService.TransferError.missingToken)
 		}
 	}
 	
@@ -65,8 +65,8 @@ final class AuraServiceSendTransferTests: XCTestCase {
 		//When
 		do {
 			_ = try await repository.transferMoney(recipient: dataMock.recipient, amount: dataMock.amount)
-			XCTFail("Should not send money")
 		} catch {
+			XCTAssertEqual(error as? AuraService.TransferError, AuraService.TransferError.dataNotEmpty)
 		}
 	}
 	
@@ -76,8 +76,8 @@ final class AuraServiceSendTransferTests: XCTestCase {
 		//When
 		do {
 			_ = try await repository.transferMoney(recipient: dataMock.recipient, amount: dataMock.amount)
-			XCTFail("Should not send money")
 		} catch {
+			XCTAssertEqual(error as? AuraService.TransferError, AuraService.TransferError.requestFailed)
 		}
 	}
 	
@@ -87,8 +87,8 @@ final class AuraServiceSendTransferTests: XCTestCase {
 		//When
 		do {
 			_ = try await repository.transferMoney(recipient: dataMock.recipient, amount: dataMock.amount)
-			XCTFail("Should not send money")
 		} catch {
+			XCTAssertEqual(error as? AuraService.TransferError, AuraService.TransferError.serverError)
 		}
 	}
 }

@@ -117,14 +117,21 @@ final class AuraAccountDetailViewModelTests: XCTestCase {
 		//Given
 		let value = Decimal(string: "12345.6789") //renvoie un optionnel
 		//When
-		let formattedValue = viewModel.formattedAmount(value: value!)
+		let formattedValue = viewModel.formattedAmount(value: value)
 		//Then
-		XCTAssertEqual(formattedValue, "12\u{202F}345,68") //u{202F}= espace insécable automatiquement ajouté par la locale francais entre lesmilliers
+		XCTAssertEqual(formattedValue, "12\u{202F}345,68") //u{202F} = espace insécable automatiquement ajouté par la locale francaise entre les milliers
 	}
 	
 	func testFormattedAmountFail() {
 		let value: Decimal? = nil
 		let formattedValue = viewModel.formattedAmount(value: value)
 		XCTAssertEqual(formattedValue, "Invalid value")
+	}
+	
+	func testErrorFormatting() {
+		let value = Decimal(string: "12345.6789")
+		viewModel.formatClosure = { _ in return nil } //closure prend un paramètre qui retourne nil
+		let formatted = viewModel.formattedAmount(value: value)
+		XCTAssertEqual(formatted, "Formatting error")
 	}
 }
