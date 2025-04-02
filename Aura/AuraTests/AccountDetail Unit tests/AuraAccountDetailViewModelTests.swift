@@ -7,6 +7,7 @@
 
 import XCTest
 @testable import Aura
+import SharedMocks
 
 final class AuraAccountDetailViewModelTests: XCTestCase {
 	

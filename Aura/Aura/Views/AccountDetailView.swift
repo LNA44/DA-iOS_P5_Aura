@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SharedMocks
 
 struct AccountDetailView: View {
 	@ObservedObject var viewModel: AccountDetailViewModel
@@ -84,6 +85,6 @@ struct AccountDetailView: View {
 	}
 }
 
-//#Preview {
-//	AccountDetailView(viewModel: AccountDetailViewModel(repository: AuraService()))
-//}
+#Preview {
+	AccountDetailView(viewModel: AccountDetailViewModel(repository: AuraService(keychain: AuraKeyChainServiceMock())))
+}

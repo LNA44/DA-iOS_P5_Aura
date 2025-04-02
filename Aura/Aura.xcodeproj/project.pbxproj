@@ -6,7 +6,28 @@
 	objectVersion = 70;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		F356CB372D9D2E3E00D41E39 /* SharedMocks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F356CB222D9D2E3E00D41E39 /* SharedMocks.framework */; };
+		F356CB382D9D2E3E00D41E39 /* SharedMocks.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F356CB222D9D2E3E00D41E39 /* SharedMocks.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F356CB432D9D2E6B00D41E39 /* SharedMocks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F356CB222D9D2E3E00D41E39 /* SharedMocks.framework */; };
+		F356CB442D9D2E6B00D41E39 /* SharedMocks.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F356CB222D9D2E3E00D41E39 /* SharedMocks.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
+		F356CB352D9D2E3E00D41E39 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 53D418702AC7099A0070ADB1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F356CB212D9D2E3E00D41E39;
+			remoteInfo = SharedMocks;
+		};
+		F356CB452D9D2E6B00D41E39 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 53D418702AC7099A0070ADB1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F356CB212D9D2E3E00D41E39;
+			remoteInfo = SharedMocks;
+		};
 		F399B9BD2D8489EC003B15BA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 53D418702AC7099A0070ADB1 /* Project object */;
@@ -16,12 +37,59 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		F356CB3D2D9D2E3E00D41E39 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				F356CB382D9D2E3E00D41E39 /* SharedMocks.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F356CB472D9D2E6B00D41E39 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				F356CB442D9D2E6B00D41E39 /* SharedMocks.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		53D418782AC7099A0070ADB1 /* Aura.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Aura.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F356CB222D9D2E3E00D41E39 /* SharedMocks.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SharedMocks.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F399B9B92D8489EC003B15BA /* AuraTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AuraTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		F356CB412D9D2E5A00D41E39 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				AuraKeyChainServiceMock.swift,
+			);
+			target = F399B9B82D8489EC003B15BA /* AuraTests */;
+		};
+		F356CB422D9D2E5A00D41E39 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				AuraKeyChainServiceMock.swift,
+			);
+			target = F356CB212D9D2E3E00D41E39 /* SharedMocks */;
+		};
+		F356CB492D9D30D400D41E39 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				AuraKeyChainServiceMock.swift,
+			);
+			target = 53D418772AC7099A0070ADB1 /* Aura */;
+		};
 		F3735A182D7EEA4800895096 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -51,12 +119,21 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		F356CB232D9D2E3E00D41E39 /* SharedMocks */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (F356CB492D9D30D400D41E39 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, F356CB412D9D2E5A00D41E39 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, F356CB422D9D2E5A00D41E39 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = SharedMocks; sourceTree = "<group>"; };
 		F3735A0B2D7EEA4800895096 /* Aura */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (F3735A182D7EEA4800895096 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Aura; sourceTree = "<group>"; };
 		F399B9BA2D8489EC003B15BA /* AuraTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = AuraTests; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		53D418752AC7099A0070ADB1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F356CB372D9D2E3E00D41E39 /* SharedMocks.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F356CB1F2D9D2E3E00D41E39 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -67,6 +144,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F356CB432D9D2E6B00D41E39 /* SharedMocks.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +156,8 @@
 			children = (
 				F3735A0B2D7EEA4800895096 /* Aura */,
 				F399B9BA2D8489EC003B15BA /* AuraTests */,
+				F356CB232D9D2E3E00D41E39 /* SharedMocks */,
+				F356CB172D9D2B2100D41E39 /* Frameworks */,
 				53D418792AC7099A0070ADB1 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -87,11 +167,29 @@
 			children = (
 				53D418782AC7099A0070ADB1 /* Aura.app */,
 				F399B9B92D8489EC003B15BA /* AuraTests.xctest */,
+				F356CB222D9D2E3E00D41E39 /* SharedMocks.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
+		F356CB172D9D2B2100D41E39 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		F356CB1D2D9D2E3E00D41E39 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
 		53D418772AC7099A0070ADB1 /* Aura */ = {
@@ -101,15 +199,40 @@
 				53D418742AC7099A0070ADB1 /* Sources */,
 				53D418752AC7099A0070ADB1 /* Frameworks */,
 				53D418762AC7099A0070ADB1 /* Resources */,
+				F356CB3D2D9D2E3E00D41E39 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				F356CB362D9D2E3E00D41E39 /* PBXTargetDependency */,
 			);
 			name = Aura;
 			productName = Aura;
 			productReference = 53D418782AC7099A0070ADB1 /* Aura.app */;
 			productType = "com.apple.product-type.application";
+		};
+		F356CB212D9D2E3E00D41E39 /* SharedMocks */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F356CB392D9D2E3E00D41E39 /* Build configuration list for PBXNativeTarget "SharedMocks" */;
+			buildPhases = (
+				F356CB1D2D9D2E3E00D41E39 /* Headers */,
+				F356CB1E2D9D2E3E00D41E39 /* Sources */,
+				F356CB1F2D9D2E3E00D41E39 /* Frameworks */,
+				F356CB202D9D2E3E00D41E39 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				F356CB232D9D2E3E00D41E39 /* SharedMocks */,
+			);
+			name = SharedMocks;
+			packageProductDependencies = (
+			);
+			productName = SharedMocks;
+			productReference = F356CB222D9D2E3E00D41E39 /* SharedMocks.framework */;
+			productType = "com.apple.product-type.framework";
 		};
 		F399B9B82D8489EC003B15BA /* AuraTests */ = {
 			isa = PBXNativeTarget;
@@ -118,11 +241,13 @@
 				F399B9B52D8489EC003B15BA /* Sources */,
 				F399B9B62D8489EC003B15BA /* Frameworks */,
 				F399B9B72D8489EC003B15BA /* Resources */,
+				F356CB472D9D2E6B00D41E39 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				F399B9BE2D8489EC003B15BA /* PBXTargetDependency */,
+				F356CB462D9D2E6B00D41E39 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				F399B9BA2D8489EC003B15BA /* AuraTests */,
@@ -147,6 +272,9 @@
 					53D418772AC7099A0070ADB1 = {
 						CreatedOnToolsVersion = 15.0;
 					};
+					F356CB212D9D2E3E00D41E39 = {
+						CreatedOnToolsVersion = 16.2;
+					};
 					F399B9B82D8489EC003B15BA = {
 						CreatedOnToolsVersion = 16.2;
 						LastSwiftMigration = 1620;
@@ -169,12 +297,20 @@
 			targets = (
 				53D418772AC7099A0070ADB1 /* Aura */,
 				F399B9B82D8489EC003B15BA /* AuraTests */,
+				F356CB212D9D2E3E00D41E39 /* SharedMocks */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		53D418762AC7099A0070ADB1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F356CB202D9D2E3E00D41E39 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -198,6 +334,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F356CB1E2D9D2E3E00D41E39 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F399B9B52D8489EC003B15BA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -208,6 +351,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		F356CB362D9D2E3E00D41E39 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F356CB212D9D2E3E00D41E39 /* SharedMocks */;
+			targetProxy = F356CB352D9D2E3E00D41E39 /* PBXContainerItemProxy */;
+		};
+		F356CB462D9D2E6B00D41E39 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F356CB212D9D2E3E00D41E39 /* SharedMocks */;
+			targetProxy = F356CB452D9D2E6B00D41E39 /* PBXContainerItemProxy */;
+		};
 		F399B9BE2D8489EC003B15BA /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 53D418772AC7099A0070ADB1 /* Aura */;
@@ -391,6 +544,76 @@
 			};
 			name = Release;
 		};
+		F356CB3A2D9D2E3E00D41E39 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = com.bougaranhelena.SharedMocks;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		F356CB3B2D9D2E3E00D41E39 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = com.bougaranhelena.SharedMocks;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 		F399B9BF2D8489EC003B15BA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -447,6 +670,15 @@
 			buildConfigurations = (
 				53D418872AC7099B0070ADB1 /* Debug */,
 				53D418882AC7099B0070ADB1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F356CB392D9D2E3E00D41E39 /* Build configuration list for PBXNativeTarget "SharedMocks" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F356CB3A2D9D2E3E00D41E39 /* Debug */,
+				F356CB3B2D9D2E3E00D41E39 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

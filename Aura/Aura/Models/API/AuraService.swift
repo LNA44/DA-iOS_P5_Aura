@@ -11,7 +11,6 @@ import Foundation
 struct AuraService {
 	let data: Data?
 	let response: URLResponse?
-	//var token: String?
 	private let baseURLString: String
 	private let executeDataRequest: (URLRequest) async throws -> (Data, URLResponse) // permet d'utiliser un mock
 	private let keychain: KeyChainServiceProtocol //permet d'utiliser un mock
