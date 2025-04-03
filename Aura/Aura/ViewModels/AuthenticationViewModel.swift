@@ -25,7 +25,7 @@ class AuthenticationViewModel: ObservableObject {
 	let onLoginSucceed: (() -> ())
 	
 	var isSignUpComplete: Bool {
-		if !isPasswordValid() || !isEmailValid(){ 
+		if !isPasswordValid() || !isEmailValid() {
 			return false
 		}
 		return true

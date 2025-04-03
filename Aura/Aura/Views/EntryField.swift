@@ -11,7 +11,7 @@ struct EntryField: View {
 	var placeHolder: String
 	@Binding var field: String
 	var isSecure: Bool
-	var prompt : String
+	var prompt: String
 	
 	var body: some View {
 		VStack(alignment:.leading) {
