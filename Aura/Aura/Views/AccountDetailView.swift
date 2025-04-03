@@ -89,7 +89,7 @@ struct AccountDetailView: View {
 	AccountDetailView(viewModel: AccountDetailViewModel(repository: AuraService(keychain: AuraKeyChainServiceMock())))
 }
 */
-struct AccountDetailView_Previews: PreviewProvider {
+/*struct AccountDetailView_Previews: PreviewProvider {
 	static var previews: some View {
 
 		let keychain = AuraKeyChainServiceMock()
@@ -104,4 +104,4 @@ struct AccountDetailView_Previews: PreviewProvider {
 
 		return AccountDetailView(viewModel: viewModel)
 	}
-}
+}*/

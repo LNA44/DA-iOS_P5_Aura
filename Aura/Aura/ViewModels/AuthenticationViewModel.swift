@@ -49,8 +49,7 @@ class AuthenticationViewModel: ObservableObject {
 	@MainActor
 	func login() async {
 		do {
-			let token = try await repository.login(username: username, password: password)
-			print("✅ Login réussi : \(token)")
+			_ = try await repository.login(username: username, password: password)
 			print("login with \(username) and \(password)")
 			self.onLoginSucceed() //exécute la closure du callback
 		} catch {
