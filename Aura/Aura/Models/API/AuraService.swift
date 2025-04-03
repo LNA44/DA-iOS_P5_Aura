@@ -23,7 +23,7 @@ struct AuraService {
 		case decodingError
 	}
 	
-	enum fetchAccountDetailsError: Error {
+	enum FetchAccountDetailsError: Error {
 		case badURL
 		case missingToken
 		case noData
@@ -94,7 +94,7 @@ struct AuraService {
 	
 	func fetchAccountDetails() async throws -> (currentBalance: Decimal,transactions: [Transaction]) {
 		guard let baseURL = URL(string: baseURLString) else {
-			throw fetchAccountDetailsError.badURL
+			throw FetchAccountDetailsError.badURL
 		}
 		let endpoint = baseURL.appendingPathComponent("/account")
 		
@@ -104,7 +104,7 @@ struct AuraService {
 		
 		//Récupération du token
 		guard let token = keychain.retrieveToken(key: "authToken") else {
-			throw fetchAccountDetailsError.missingToken
+			throw FetchAccountDetailsError.missingToken
 		}
 		request.setValue(token, forHTTPHeaderField: "token") //header
 		
@@ -112,18 +112,18 @@ struct AuraService {
 		let (data, response) = try await executeDataRequest(request)
 		
 		if data.isEmpty { //data est non optionnel dc pas de guard let
-			throw fetchAccountDetailsError.noData
+			throw FetchAccountDetailsError.noData
 		}
 		guard let httpResponse = response as? HTTPURLResponse else { //response peut etre de type URLResponse et non HTTPURLResponse donc vérif
-			throw fetchAccountDetailsError.requestFailed
+			throw FetchAccountDetailsError.requestFailed
 		}
 		guard httpResponse.statusCode == 200 else {
-			throw fetchAccountDetailsError.serverError
+			throw FetchAccountDetailsError.serverError
 		}
 		
 		//décodage du JSON
 		guard let accountResponse = try? JSONDecoder().decode(AccountResponse.self, from: data) else {
-			throw fetchAccountDetailsError.decodingError
+			throw FetchAccountDetailsError.decodingError
 		}
 		return (accountResponse.currentBalance, accountResponse.transactions.map(Transaction.init)) //mapper pour avoir objet Transaction avec un id utile pour ForEach
 	}

@@ -9,12 +9,10 @@ import Foundation
 
 class MoneyTransferViewModel: ObservableObject {
 	//MARK: -Private properties
-	private let keychain: KeyChainServiceProtocol
 	private var repository: AuraService
 	
 	//MARK: -Initialisation
-	init(keychain: KeyChainServiceProtocol, repository: AuraService) {
-		self.keychain = keychain
+	init(repository: AuraService) {
 		self.repository = repository
 	}
 	

@@ -9,11 +9,9 @@ import Foundation
 class AllTransactionsViewModel: ObservableObject {
 	//MARK: -Private properties
 	private let repository: AuraService
-	private let keychain: KeyChainServiceProtocol
 	
 	//MARK: -Initialisation
-	init(keychain: KeyChainServiceProtocol, repository: AuraService) {
-		self.keychain = keychain
+	init(repository: AuraService) {
 		self.repository = repository
 	}
 	
@@ -48,7 +46,7 @@ class AllTransactionsViewModel: ObservableObject {
 			self.totalAmount = totalAmount
 			self.totalTransactions = totalTransactions
 		} catch {
-			if let TransactionsError = error as? AuraService.fetchAccountDetailsError {
+			if let TransactionsError = error as? AuraService.FetchAccountDetailsError {
 				switch TransactionsError {
 				case .badURL :
 					errorMessage = "URL invalide"

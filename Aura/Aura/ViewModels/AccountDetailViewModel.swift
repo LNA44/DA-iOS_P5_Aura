@@ -10,11 +10,9 @@ import Foundation
 class AccountDetailViewModel: ObservableObject {
 	//MARK: -Private properties
 	private let repository: AuraService
-	private let keychain: KeyChainServiceProtocol
 	
 	//MARK: -Initialisation
-	init(keychain: KeyChainServiceProtocol, repository: AuraService) {
-		self.keychain = keychain
+	init(repository: AuraService) {
 		self.repository = repository
 	}
 	
@@ -56,7 +54,7 @@ class AccountDetailViewModel: ObservableObject {
 			let recentTransactions = Array(totalTransactions.reversed().prefix(3)) //récupère les 3 dernières transactions
 			self.recentTransactions = recentTransactions
 		} catch {
-			if let TransactionsError = error as? AuraService.fetchAccountDetailsError {
+			if let TransactionsError = error as? AuraService.FetchAccountDetailsError {
 				switch TransactionsError {
 				case .badURL :
 					errorMessage = "URL invalide"

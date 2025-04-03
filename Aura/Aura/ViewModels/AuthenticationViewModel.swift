@@ -9,12 +9,10 @@ import Foundation
 
 class AuthenticationViewModel: ObservableObject {
 	//MARK: -Private properties
-	private let keychain: KeyChainServiceProtocol
 	private var repository: AuraService
 	
 	//MARK: -Initialisation
-	init(keychain: KeyChainServiceProtocol, repository: AuraService, _ callback: @escaping () -> ()) {
-		self.keychain = keychain
+	init(repository: AuraService, _ callback: @escaping () -> ()) {
 		self.repository = repository
 		self.onLoginSucceed = callback //callback : permet ds AppViewModel isLogged = True une fois connexion OK
 	}
@@ -50,16 +48,12 @@ class AuthenticationViewModel: ObservableObject {
 	//MARK: -Inputs
 	@MainActor
 	func login() async {
-		print("🔄 login() appelé")
 		do {
 			let token = try await repository.login(username: username, password: password)
 			print("✅ Login réussi : \(token)")
 			print("login with \(username) and \(password)")
-			print(token) 
 			self.onLoginSucceed() //exécute la closure du callback
-			return
 		} catch {
-			print("Erreur détectée dans login() : \(error)")
 			if let loginError = error as? AuraService.LoginError {
 				switch loginError {
 				case .badURL :
