@@ -11,11 +11,12 @@ import SwiftUI
 struct AuraApp: App {
 	@Environment(\.scenePhase) private var scenePhase  // Observe l'état de l'application (foreground, background, inactive)
 	@StateObject private var viewModel: AppViewModel
-	private let keychain = AuraKeyChainService.shared
+	private let keychain = AuraKeyChainService()
 	
 	init() {
 		keychain.removeToken(key: "authToken") //supprime les anciens tokens au lancement de l'app
-		_viewModel = StateObject(wrappedValue: AppViewModel(repository: AuraService(keychain: AuraKeyChainService.shared)))
+	let repository = AuraRepository(keychain: keychain)
+		_viewModel = StateObject(wrappedValue: AppViewModel(repository: repository))
 	}
 	
 	var body: some Scene {
@@ -42,10 +43,11 @@ struct AuraApp: App {
 			}
 			.accentColor(Color(hex: "#94A684"))
 			.animation(.easeInOut(duration: 0.5), value: UUID())
-		}.onChange(of: scenePhase) { newPhase in 
+		}
+		.onChange(of: scenePhase) { newPhase in
 			if newPhase == .background {
 				// Supprime le token lorsque l'app passe en arrière-plan
-				AuraKeyChainService.shared.removeToken(key: "authToken")
+				keychain.removeToken(key: "authToken")
 				viewModel.isLogged = false
 			}
 		}

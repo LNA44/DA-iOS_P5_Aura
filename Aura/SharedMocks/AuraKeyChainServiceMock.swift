@@ -8,7 +8,7 @@ import Foundation
 //import XCTest
 //@testable import Aura
 
-public class AuraKeyChainServiceMock: KeyChainServiceProtocol {
+public class AuraKeyChainServiceMock {
 	public var storedToken: String?
 	
 	public func storeToken(token: String, key: String) {

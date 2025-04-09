@@ -8,22 +8,21 @@
 import Security
 import Foundation
 
-protocol KeyChainServiceProtocol {
+/*protocol KeyChainServiceProtocol {
 	func storeToken(token: String, key: String)
 	func retrieveToken(key: String) -> String?
 	func removeToken(key: String)
-}
+}*/
 
 //Gère le token en le cryptant
-class AuraKeyChainService: ObservableObject, KeyChainServiceProtocol {
-	static let shared = AuraKeyChainService() //création instance partagée singleton
+class AuraKeyChainService: ObservableObject {
 	
-	private init() {} //évite la création d'une autre instance
+	init() {}
 	
 	func storeToken(token: String, key: String) { //Crée un token
 		let data = token.data(using: .utf8)! //keychain attend des Data
-		let query: [String: Any] = [ //Dictionnaire
-			kSecClass as String: kSecClassGenericPassword, //type mot de passe générique
+		let query: [String: Any] = [ //Dictionnaire de paramètres
+			kSecClass as String: kSecClassGenericPassword, //type d'élément : mot de passe générique
 			kSecAttrAccount as String: key,
 			kSecValueData as String: data
 		]
@@ -42,7 +41,7 @@ class AuraKeyChainService: ObservableObject, KeyChainServiceProtocol {
 		guard status == errSecSuccess, let data = item as? Data else {//vérif du statut et du type de item
 			return nil
 		}
-		return String(data: data, encoding: .utf8)//convertit Data en String
+		return String(data: data, encoding: .utf8) //convertit Data en String
 	}
 	
 	func removeToken(key: String) { //Suppression du token

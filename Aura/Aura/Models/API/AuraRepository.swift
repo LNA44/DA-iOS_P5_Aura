@@ -8,14 +8,14 @@
 import Foundation
 //logique de récup des données depuis l'API
 
-struct AuraService {
+struct AuraRepository {
 	let data: Data?
 	let response: URLResponse?
-	private let baseURLString: String
+	//private let baseURLString: String
 	private let executeDataRequest: (URLRequest) async throws -> (Data, URLResponse) // permet d'utiliser un mock
-	private let keychain: KeyChainServiceProtocol //permet d'utiliser un mock
-	
-	enum LoginError: Error, Equatable {
+	private let keychain: AuraKeyChainService
+
+	/*enum LoginError: Error, Equatable {
 		case badURL
 		case noData
 		case requestFailed
@@ -38,40 +38,43 @@ struct AuraService {
 		case dataNotEmpty
 		case requestFailed
 		case serverError
-	}
+	}*/
 	
-	init(data: Data? = nil, response: URLResponse? = nil, baseURLString: String = "http://127.0.0.1:8080",
-		 executeDataRequest: @escaping (URLRequest) async throws -> (Data, URLResponse) = URLSession.shared.data(for:), keychain: KeyChainServiceProtocol) {
+	init(data: Data? = nil, response: URLResponse? = nil, executeDataRequest: @escaping (URLRequest) async throws -> (Data, URLResponse) = URLSession.shared.data(for:), keychain: AuraKeyChainService) {
 		self.data = data
 		self.response = response
-		self.baseURLString = baseURLString
+		//self.baseURLString = baseURLString
 		self.executeDataRequest = executeDataRequest
 		self.keychain = keychain
 	}
 	
-	func login(username: String, password: String) async throws {
-		guard let baseURL = URL(string: baseURLString) else {
+	func login(username: String, password: String, APIService: AuraAPIService) async throws {
+	/*	guard let baseURL = URL(string: baseURLString) else {
 			throw LoginError.badURL
-		}
-		let endpoint = baseURL.appendingPathComponent("/auth")
-		
+		}*/
+		//let endpoint = baseURL.appendingPathComponent("/auth")
+		//let endpoint = try AuraAPIService().createEndpoint(path: .login)
+		let endpoint = try AuraAPIService().createEndpoint(path: .login)
+
 		//body de la requete
 		let parameters: [String: Any] = [
 			"username": username,
 			"password": password
 		]
-		
+	
 		//conversion en JSON
-		let jsonData = try JSONSerialization.data(withJSONObject: parameters, options: [])
-		
+		//let jsonData = try JSONSerialization.data(withJSONObject: parameters, options: [])
+		let jsonData = AuraAPIService().serializeParameters(parameters: parameters)
 		//création de la requête
-		var request = URLRequest(url: endpoint)
+		/*var request = URLRequest(url: endpoint)
 		request.httpMethod = "POST"
 		request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-		request.httpBody = jsonData
+		request.httpBody = jsonData*/
 		
+		let request = AuraAPIService().createRequest(parametersNeeded: true, jsonData: jsonData, endpoint: endpoint, method: .post)
+
 		//lancement appel réseau
-		let (data, response) = try await executeDataRequest(request)
+		/*let (data, response) = try await AuraAPIService().fetch(request: request)
 		
 		if data.isEmpty {//data est non optionnel dc pas de guard let
 			throw LoginError.noData
@@ -87,29 +90,42 @@ struct AuraService {
 		guard let responseJSON = try? JSONDecoder().decode([String: String].self, from: data),
 			  let token = responseJSON["token"] else {
 			throw LoginError.decodingError
+		}*/
+		
+		let dict = try await APIService.fetchAndDecode([String: String].self, request: request)
+		
+		guard let dict = dict else {
+			throw APIError.noData
+		}
+		
+		guard let token = dict["token"] else {
+			throw APIError.unauthorized
 		}
 		//Stockage du token
 		keychain.storeToken(token: token, key: "authToken")
 	}
 	
-	func fetchAccountDetails() async throws -> (currentBalance: Decimal,transactions: [Transaction]) {
-		guard let baseURL = URL(string: baseURLString) else {
+	func fetchAccountDetails(APIService: AuraAPIService) async throws -> (currentBalance: Decimal,transactions: [Transaction]) {
+		/*guard let baseURL = URL(string: baseURLString) else {
 			throw FetchAccountDetailsError.badURL
 		}
-		let endpoint = baseURL.appendingPathComponent("/account")
+		let endpoint = baseURL.appendingPathComponent("/account")*/
+		/*let endpoint = try AuraAPIService().createEndpoint(path: .fetchAccountsDetails)
 		
 		//création de la requête
 		var request = URLRequest(url: endpoint)
-		request.httpMethod = "GET"
-		
+		request.httpMethod = "GET"*/
+		let endpoint = try AuraAPIService().createEndpoint(path: .fetchAccountsDetails)
+		var request = AuraAPIService().createRequest(parametersNeeded: false, jsonData: nil, endpoint: endpoint, method: .get)
+
 		//Récupération du token
 		guard let token = keychain.retrieveToken(key: "authToken") else {
-			throw FetchAccountDetailsError.missingToken
+			throw APIError.unauthorized
 		}
 		request.setValue(token, forHTTPHeaderField: "token") //header
 		
 		//lancement appel réseau
-		let (data, response) = try await executeDataRequest(request)
+		/*let (data, response) = try await executeDataRequest(request)
 		
 		if data.isEmpty { //data est non optionnel dc pas de guard let
 			throw FetchAccountDetailsError.noData
@@ -124,16 +140,24 @@ struct AuraService {
 		//décodage du JSON
 		guard let accountResponse = try? JSONDecoder().decode(AccountResponse.self, from: data) else {
 			throw FetchAccountDetailsError.decodingError
+		}*/
+		let accountResponse = try await APIService.fetchAndDecode(AccountResponse.self, request: request)
+		
+		guard let accountResponse = accountResponse else {
+			throw APIError.noData
 		}
+		
 		return (accountResponse.currentBalance, accountResponse.transactions.map(Transaction.init)) //mapper pour avoir objet Transaction avec un id utile pour ForEach
 	}
 	
-	func transferMoney(recipient: String, amount: Decimal) async throws -> Void {
-		guard let baseURL = URL(string: baseURLString) else {
-			throw TransferError.badURL 
+	func transferMoney(APIService: AuraAPIService, recipient: String, amount: Decimal) async throws -> Void {
+		/*guard let baseURL = URL(string: baseURLString) else {
+			throw TransferError.badURL
 		}
 		
-		let endpoint = baseURL.appendingPathComponent("/account/transfer")
+		let endpoint = baseURL.appendingPathComponent("/account/transfer")*/
+		let endpoint = try AuraAPIService().createEndpoint(path: .makeTransaction)
+
 		
 		//body de la requete
 		let parameters: [String: Any] = [
@@ -142,23 +166,25 @@ struct AuraService {
 		]
 		
 		//conversion en JSON
+		//let jsonData = AuraAPIService().serializeParameters(parameters: parameters)
 		let jsonData = try JSONSerialization.data(withJSONObject: parameters, options: [])
 		
 		//création de la requête
-		var request = URLRequest(url: endpoint)
-		request.httpMethod = "POST"
-		
+		/*var request = URLRequest(url: endpoint)
+		request.httpMethod = "POST"*/
+		var request = AuraAPIService().createRequest(parametersNeeded: true, jsonData: jsonData, endpoint: endpoint, method: .post)
+
 		//Récupération du token
 		guard let token = keychain.retrieveToken(key: "authToken") else {
-			throw TransferError.missingToken
+			throw APIError.unauthorized
 		}
 		request.setValue(token, forHTTPHeaderField: "token") //header
 		
-		request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-		request.httpBody = jsonData
+		//request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+		//request.httpBody = jsonData
 		
 		//lancement appel réseau
-		let (data, response) = try await executeDataRequest(request)
+		/*let (data, response) = try await executeDataRequest(request)
 		
 		if !data.isEmpty { //data est non optionnel dc pas de guard let
 			throw TransferError.dataNotEmpty
@@ -168,6 +194,7 @@ struct AuraService {
 		}
 		guard httpResponse.statusCode == 200 else {
 			throw TransferError.serverError
-		}
+		}*/
+		_ = try await APIService.fetchAndDecode(AccountResponse.self, request: request, shouldCheckEmptyData: false)
 	}
 }

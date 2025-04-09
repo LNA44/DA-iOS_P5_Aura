@@ -64,6 +64,7 @@
 
 /* Begin PBXFileReference section */
 		53D418782AC7099A0070ADB1 /* Aura.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Aura.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F319CC382DA129E5007D8628 /* AuraKeyChainServiceMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AuraKeyChainServiceMock.swift; path = SharedMocks/AuraKeyChainServiceMock.swift; sourceTree = "<group>"; };
 		F356CB222D9D2E3E00D41E39 /* SharedMocks.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SharedMocks.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F399B9B92D8489EC003B15BA /* AuraTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AuraTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -96,8 +97,10 @@
 				Assets.xcassets,
 				AuraApp.swift,
 				Models/API/AccountResponse.swift,
+				Models/API/APIError.swift,
+				Models/API/AuraAPIService.swift,
 				Models/API/AuraKeyChainService.swift,
-				Models/API/AuraService.swift,
+				Models/API/AuraRepository.swift,
 				Models/DataModel/Transaction.swift,
 				"Preview Content/Preview Assets.xcassets",
 				"Utils/Color+Extensions.swift",
@@ -154,6 +157,7 @@
 		53D4186F2AC7099A0070ADB1 = {
 			isa = PBXGroup;
 			children = (
+				F319CC382DA129E5007D8628 /* AuraKeyChainServiceMock.swift */,
 				F3735A0B2D7EEA4800895096 /* Aura */,
 				F399B9BA2D8489EC003B15BA /* AuraTests */,
 				F356CB232D9D2E3E00D41E39 /* SharedMocks */,

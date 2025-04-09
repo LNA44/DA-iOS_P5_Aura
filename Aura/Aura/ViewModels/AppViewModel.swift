@@ -10,10 +10,10 @@ import Foundation
 class AppViewModel: ObservableObject {
 	//MARK: -Properties
 	@Published var isLogged: Bool
-	private let repository: AuraService
+	private let repository: AuraRepository
 	
 	//MARK: - Initialisation
-	init(repository: AuraService) {
+	init(repository: AuraRepository) {
 		self.repository = repository
 		isLogged = false
 	}

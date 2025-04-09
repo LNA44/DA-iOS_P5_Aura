@@ -9,10 +9,11 @@ import Foundation
 
 class MoneyTransferViewModel: ObservableObject {
 	//MARK: -Private properties
-	private var repository: AuraService
+	private var repository: AuraRepository
+	private var APIService = AuraAPIService()
 	
 	//MARK: -Initialisation
-	init(repository: AuraService) {
+	init(repository: AuraRepository) {
 		self.repository = repository
 	}
 	
@@ -43,29 +44,18 @@ class MoneyTransferViewModel: ObservableObject {
 	func sendMoney() async { //utilisée qd on clique sur bouton envoyer argent
 		do {
 			convertAmount(amountString: amountString)
-			try await repository.transferMoney(recipient: recipient, amount: amount)
+			try await repository.transferMoney(APIService: APIService,recipient: recipient, amount: amount)
 			transferMessage = "Successfully transferred \(amount) to \(recipient)"
 			recipient = "" //remise à 0 après transfert
 			amountString = ""
 			amount = Decimal(0.0)
 			return
+		} catch let error as APIError {
+			errorMessage = error.errorDescription
+			showAlert = true
 		} catch {
-			if let TransferError = error as? AuraService.TransferError {
-				switch TransferError {
-				case .badURL :
-					errorMessage = "URL invalide"
-				case .missingToken :
-					errorMessage = "Token manquant"
-				case .dataNotEmpty :
-					errorMessage = "Les données devraient être vides"
-				case .requestFailed :
-					errorMessage = "Erreur de requête"
-				case .serverError :
-					errorMessage = "Erreur serveur"
-				}
-				showAlert = true
-				transferMessage = "Please enter recipient and amount."
-			} 
+			errorMessage = "Une erreur inconnue est survenue : \(error.localizedDescription)"
+			showAlert = true
 		}
 	}
 	

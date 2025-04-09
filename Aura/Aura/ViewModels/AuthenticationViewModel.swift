@@ -9,10 +9,11 @@ import Foundation
 
 class AuthenticationViewModel: ObservableObject {
 	//MARK: -Private properties
-	private var repository: AuraService
+	private var repository: AuraRepository
+	private var APIService = AuraAPIService()
 	
 	//MARK: -Initialisation
-	init(repository: AuraService, _ callback: @escaping () -> ()) {
+	init(repository: AuraRepository, _ callback: @escaping () -> ()) {
 		self.repository = repository
 		self.onLoginSucceed = callback //callback : permet ds AppViewModel isLogged = True une fois connexion OK
 	}
@@ -49,25 +50,15 @@ class AuthenticationViewModel: ObservableObject {
 	@MainActor
 	func login() async {
 		do {
-			_ = try await repository.login(username: username, password: password)
+			_ = try await repository.login(username: username, password: password, APIService: APIService)
 			print("login with \(username) and \(password)")
 			self.onLoginSucceed() //exécute la closure du callback
+		} catch let error as APIError {
+			errorMessage = error.errorDescription
+			showAlert = true
 		} catch {
-			if let loginError = error as? AuraService.LoginError {
-				switch loginError {
-				case .badURL :
-					errorMessage = "URL invalide"
-				case .noData :
-					errorMessage = "Aucune donnée reçue"
-				case .requestFailed :
-					errorMessage = "Erreur de requête"
-				case .serverError :
-					errorMessage = "Erreur serveur"
-				case .decodingError :
-					errorMessage = "Erreur de décodage"
-				}
-				showAlert = true
-			}
+			errorMessage = "Une erreur inconnue est survenue : \(error.localizedDescription)"
+			showAlert = true
 		}
 	}
 	

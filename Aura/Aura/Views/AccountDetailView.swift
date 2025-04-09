@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-//import SharedMocks
 
 struct AccountDetailView: View {
 	@ObservedObject var viewModel: AccountDetailViewModel
@@ -58,7 +57,7 @@ struct AccountDetailView: View {
 				}
 				
 				//Remplacement du bouton par un navigationlink
-				NavigationLink (destination: AllTransactionsView(viewModel: AllTransactionsViewModel(repository: AuraService(keychain: AuraKeyChainService.shared)))) {
+				NavigationLink (destination: AllTransactionsView(viewModel: AllTransactionsViewModel(repository: AuraRepository(keychain: AuraKeyChainService())))) {
 					HStack {
 						Image(systemName: "list.bullet")
 						Text("See Transaction Details")
@@ -104,4 +103,5 @@ struct AccountDetailView: View {
 
 		return AccountDetailView(viewModel: viewModel)
 	}
-}*/
+}
+*/

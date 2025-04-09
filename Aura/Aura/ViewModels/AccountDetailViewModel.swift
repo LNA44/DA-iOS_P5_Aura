@@ -9,10 +9,11 @@ import Foundation
 
 class AccountDetailViewModel: ObservableObject {
 	//MARK: -Private properties
-	private let repository: AuraService
+	private let repository: AuraRepository
+	private var APIService = AuraAPIService()
 	
 	//MARK: -Initialisation
-	init(repository: AuraService) {
+	init(repository: AuraRepository) {
 		self.repository = repository
 	}
 	
@@ -48,29 +49,17 @@ class AccountDetailViewModel: ObservableObject {
 	@MainActor
 	func fetchTransactions() async {
 		do {
-			let (totalAmount,totalTransactions) = try await repository.fetchAccountDetails()
+			let (totalAmount,totalTransactions) = try await repository.fetchAccountDetails(APIService: APIService)
 			self.totalAmount = totalAmount
 			self.totalTransactions = totalTransactions
 			let recentTransactions = Array(totalTransactions.reversed().prefix(3)) //récupère les 3 dernières transactions
 			self.recentTransactions = recentTransactions
+		} catch let error as APIError {
+			errorMessage = error.errorDescription
+			showAlert = true
 		} catch {
-			if let TransactionsError = error as? AuraService.FetchAccountDetailsError {
-				switch TransactionsError {
-				case .badURL :
-					errorMessage = "URL invalide"
-				case .missingToken :
-					errorMessage = "Token manquant"
-				case .noData :
-					errorMessage = "Aucune donnée reçue"
-				case .requestFailed :
-					errorMessage = "Erreur de requête"
-				case .serverError :
-					errorMessage = "Erreur serveur"
-				case .decodingError :
-					errorMessage = "Erreur de décodage"
-				}
-				showAlert = true
-			}
+			errorMessage = "Une erreur inconnue est survenue : \(error.localizedDescription)"
+			showAlert = true
 		}
 	}
 }
