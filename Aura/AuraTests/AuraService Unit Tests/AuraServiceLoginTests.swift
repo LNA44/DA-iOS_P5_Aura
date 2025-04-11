@@ -10,19 +10,19 @@ import XCTest
 
 final class AuraServiceLoginTests: XCTestCase {
 	var dataMock = AuraServiceLoginMock()
-	var repository: AuraService!
-	let keychain = AuraKeyChainServiceMock()
+	var repository: AuraRepository!
+	let keychain = AuraKeychainService()
 	
 	override func setUp() {
 		super.setUp()
-		repository = AuraService(executeDataRequest: dataMock.executeRequestMock, keychain: keychain)
+		repository = AuraRepository(executeDataRequest: dataMock.executeRequestMock, keychain: keychain)
 	}
 	
 	func testLoginSuccess() async throws {
 		//Given
 		dataMock.response = 1
 		//When
-		let token = try await repository.login(username: dataMock.username, password: dataMock.password)
+		let token = try await repository.login(APIService: AuraAPIService(), username: dataMock.username, password: dataMock.password)
 		//Then
 		XCTAssertEqual(token, "93D2C537-FA4A-448C-90A9-6058CF26DB29")
 	}

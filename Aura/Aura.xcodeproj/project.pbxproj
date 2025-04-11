@@ -64,33 +64,11 @@
 
 /* Begin PBXFileReference section */
 		53D418782AC7099A0070ADB1 /* Aura.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Aura.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		F319CC382DA129E5007D8628 /* AuraKeyChainServiceMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AuraKeyChainServiceMock.swift; path = SharedMocks/AuraKeyChainServiceMock.swift; sourceTree = "<group>"; };
 		F356CB222D9D2E3E00D41E39 /* SharedMocks.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SharedMocks.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F399B9B92D8489EC003B15BA /* AuraTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AuraTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		F356CB412D9D2E5A00D41E39 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				AuraKeyChainServiceMock.swift,
-			);
-			target = F399B9B82D8489EC003B15BA /* AuraTests */;
-		};
-		F356CB422D9D2E5A00D41E39 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				AuraKeyChainServiceMock.swift,
-			);
-			target = F356CB212D9D2E3E00D41E39 /* SharedMocks */;
-		};
-		F356CB492D9D30D400D41E39 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				AuraKeyChainServiceMock.swift,
-			);
-			target = 53D418772AC7099A0070ADB1 /* Aura */;
-		};
 		F3735A182D7EEA4800895096 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -99,7 +77,7 @@
 				Models/API/AccountResponse.swift,
 				Models/API/APIError.swift,
 				Models/API/AuraAPIService.swift,
-				Models/API/AuraKeyChainService.swift,
+				Models/API/AuraKeychainService.swift,
 				Models/API/AuraRepository.swift,
 				Models/DataModel/Transaction.swift,
 				"Preview Content/Preview Assets.xcassets",
@@ -122,7 +100,6 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		F356CB232D9D2E3E00D41E39 /* SharedMocks */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (F356CB492D9D30D400D41E39 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, F356CB412D9D2E5A00D41E39 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, F356CB422D9D2E5A00D41E39 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = SharedMocks; sourceTree = "<group>"; };
 		F3735A0B2D7EEA4800895096 /* Aura */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (F3735A182D7EEA4800895096 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Aura; sourceTree = "<group>"; };
 		F399B9BA2D8489EC003B15BA /* AuraTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = AuraTests; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -157,11 +134,8 @@
 		53D4186F2AC7099A0070ADB1 = {
 			isa = PBXGroup;
 			children = (
-				F319CC382DA129E5007D8628 /* AuraKeyChainServiceMock.swift */,
 				F3735A0B2D7EEA4800895096 /* Aura */,
 				F399B9BA2D8489EC003B15BA /* AuraTests */,
-				F356CB232D9D2E3E00D41E39 /* SharedMocks */,
-				F356CB172D9D2B2100D41E39 /* Frameworks */,
 				53D418792AC7099A0070ADB1 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -174,13 +148,6 @@
 				F356CB222D9D2E3E00D41E39 /* SharedMocks.framework */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		F356CB172D9D2B2100D41E39 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -227,9 +194,6 @@
 			buildRules = (
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				F356CB232D9D2E3E00D41E39 /* SharedMocks */,
 			);
 			name = SharedMocks;
 			packageProductDependencies = (

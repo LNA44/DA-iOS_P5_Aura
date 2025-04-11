@@ -11,7 +11,7 @@ import SwiftUI
 struct AuraApp: App {
 	@Environment(\.scenePhase) private var scenePhase  // Observe l'état de l'application (foreground, background, inactive)
 	@StateObject private var viewModel: AppViewModel
-	private let keychain = AuraKeyChainService()
+	private let keychain = AuraKeychainService()
 	
 	init() {
 		keychain.removeToken(key: "authToken") //supprime les anciens tokens au lancement de l'app

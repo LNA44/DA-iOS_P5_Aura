@@ -11,12 +11,12 @@ import XCTest
 final class AuraMoneyTransferViewModelTests: XCTestCase {
 	var viewModel: MoneyTransferViewModel!
 	var dataMock = DataMoneyTransferMock()
-	var repository: AuraService!
-	let keychain = AuraKeyChainServiceMock()
+	var repository: AuraRepository!
+	let keychain = AuraKeychainService()
 	
 	override func setUpWithError() throws {
-		repository = AuraService(executeDataRequest: dataMock.executeRequestMock, keychain: keychain)
-		viewModel = MoneyTransferViewModel(keychain: keychain, repository: repository)
+		repository = AuraRepository(executeDataRequest: dataMock.executeRequestMock, keychain: keychain)
+		viewModel = MoneyTransferViewModel(repository: repository)
 		keychain.storeToken(token: "93D2C537-FA4A-448C-90A9-6058CF26DB29", key: "authToken")
 	}
 	
@@ -40,8 +40,8 @@ final class AuraMoneyTransferViewModelTests: XCTestCase {
 	
 	func testSendMoneyBadURLFail() async {
 		//Given
-		repository = AuraService(baseURLString: "", executeDataRequest: dataMock.executeRequestMock, keychain: keychain)
-		viewModel = MoneyTransferViewModel(keychain: keychain, repository: repository)
+		repository = AuraRepository(baseURLString: "", executeDataRequest: dataMock.executeRequestMock, keychain: keychain)
+		viewModel = MoneyTransferViewModel(repository: repository)
 		dataMock.response = 2
 		viewModel.recipient = "+33767070707"
 		viewModel.amountString = "20"

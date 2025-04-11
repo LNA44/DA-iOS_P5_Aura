@@ -57,7 +57,7 @@ struct AccountDetailView: View {
 				}
 				
 				//Remplacement du bouton par un navigationlink
-				NavigationLink (destination: AllTransactionsView(viewModel: AllTransactionsViewModel(repository: AuraRepository(keychain: AuraKeyChainService())))) {
+				NavigationLink (destination: AllTransactionsView(viewModel: AllTransactionsViewModel(repository: AuraRepository(keychain: AuraKeychainService())))) {
 					HStack {
 						Image(systemName: "list.bullet")
 						Text("See Transaction Details")
@@ -84,24 +84,6 @@ struct AccountDetailView: View {
 	}
 }
 
-/*#Preview {
-	AccountDetailView(viewModel: AccountDetailViewModel(repository: AuraService(keychain: AuraKeyChainServiceMock())))
+#Preview {
+	AccountDetailView(viewModel: AccountDetailViewModel(repository: AuraRepository(keychain: AuraKeychainService())))
 }
-*/
-/*struct AccountDetailView_Previews: PreviewProvider {
-	static var previews: some View {
-
-		let keychain = AuraKeyChainServiceMock()
-		
-		let viewModel = AccountDetailViewModel(repository: AuraService(executeDataRequest: AuraServiceFetchAccountDetailsMock(), keychain: keychain))
-		
-		keychain.storeToken(token: "93D2C537-FA4A-448C-90A9-6058CF26DB29", key: "authToken")
-
-		defer {
-			keychain.removeToken(key: "authToken")
-		}
-
-		return AccountDetailView(viewModel: viewModel)
-	}
-}
-*/

@@ -36,7 +36,7 @@ struct AllTransactionsView: View {
 				List {
 					ForEach(viewModel.totalTransactions, id: \.id) { transaction in
 						HStack {
-							RawAllTransactionsView(viewModel: AllTransactionsViewModel(repository: AuraRepository(keychain: AuraKeyChainService())), transaction: transaction) // Passe transaction de l'itération à la propriété transaction de la sous vue
+							RawAllTransactionsView(viewModel: AllTransactionsViewModel(repository: AuraRepository(keychain: AuraKeychainService())), transaction: transaction) // Passe transaction de l'itération à la propriété transaction de la sous vue
 						}
 					}
 					.listRowSeparator(.hidden)
@@ -58,6 +58,6 @@ struct AllTransactionsView: View {
 	}
 }
 
-//#Preview {
-//	AllTransactionsView(viewModel: AllTransactionsViewModel(repository: AuraService()))
-//}
+#Preview {
+	AllTransactionsView(viewModel: AllTransactionsViewModel(repository: AuraRepository(keychain: AuraKeychainService())))
+}

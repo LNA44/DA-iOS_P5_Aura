@@ -7,18 +7,17 @@
 
 import XCTest
 @testable import Aura
-//import SharedMocks
 
 final class AuraAccountDetailViewModelTests: XCTestCase {
 	
 	var viewModel: AccountDetailViewModel!
 	var dataMock = AuraAccountDetailMock()
-	var repository: AuraService!
-	let keychain = AuraKeyChainServiceMock()
+	var repository: AuraRepository!
+	let keychain = AuraKeychainService()
 	
 	override func setUp() {
-		repository = AuraService( executeDataRequest: dataMock.executeRequestMock, keychain: keychain)
-		viewModel = AccountDetailViewModel(keychain: keychain, repository: repository)
+		repository = AuraRepository( executeDataRequest: dataMock.executeRequestMock, keychain: keychain)
+		viewModel = AccountDetailViewModel(repository: repository)
 		keychain.storeToken(token: "93D2C537-FA4A-448C-90A9-6058CF26DB29", key: "authToken")
 		dataMock.response = 0
 	}
@@ -41,8 +40,8 @@ final class AuraAccountDetailViewModelTests: XCTestCase {
 	
 	func testFetchTransactionsBadURLErrorOccurs() async {
 		//Given
-		repository = AuraService(baseURLString: "", executeDataRequest: dataMock.executeRequestMock, keychain: keychain)
-		viewModel = AccountDetailViewModel(keychain: keychain, repository: repository)
+		repository = AuraRepository(baseURLString: "", executeDataRequest: dataMock.executeRequestMock, keychain: keychain)
+		viewModel = AccountDetailViewModel(repository: repository)
 		dataMock.response = 2
 		//When
 		await viewModel.fetchTransactions()

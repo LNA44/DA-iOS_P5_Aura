@@ -8,14 +8,14 @@
 import Security
 import Foundation
 
-/*protocol KeyChainServiceProtocol {
+/*protocol KeychainServiceProtocol {
 	func storeToken(token: String, key: String)
 	func retrieveToken(key: String) -> String?
 	func removeToken(key: String)
 }*/
 
 //Gère le token en le cryptant
-class AuraKeyChainService: ObservableObject {
+class AuraKeychainService: ObservableObject {
 	
 	init() {}
 	

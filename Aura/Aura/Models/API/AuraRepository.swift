@@ -13,7 +13,8 @@ struct AuraRepository {
 	let response: URLResponse?
 	//private let baseURLString: String
 	private let executeDataRequest: (URLRequest) async throws -> (Data, URLResponse) // permet d'utiliser un mock
-	private let keychain: AuraKeyChainService
+	private let keychain: AuraKeychainService
+	private let APIService: AuraAPIService
 
 	/*enum LoginError: Error, Equatable {
 		case badURL
@@ -40,15 +41,16 @@ struct AuraRepository {
 		case serverError
 	}*/
 	
-	init(data: Data? = nil, response: URLResponse? = nil, executeDataRequest: @escaping (URLRequest) async throws -> (Data, URLResponse) = URLSession.shared.data(for:), keychain: AuraKeyChainService) {
+	init(data: Data? = nil, response: URLResponse? = nil, executeDataRequest: @escaping (URLRequest) async throws -> (Data, URLResponse) = URLSession.shared.data(for:), keychain: AuraKeychainService, APIService: AuraAPIService = AuraAPIService()) {
 		self.data = data
 		self.response = response
 		//self.baseURLString = baseURLString
 		self.executeDataRequest = executeDataRequest
 		self.keychain = keychain
+		self.APIService = APIService
 	}
 	
-	func login(username: String, password: String, APIService: AuraAPIService) async throws {
+	func login(APIService: AuraAPIService, username: String, password: String) async throws {
 	/*	guard let baseURL = URL(string: baseURLString) else {
 			throw LoginError.badURL
 		}*/

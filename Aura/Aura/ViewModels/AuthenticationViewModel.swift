@@ -50,7 +50,7 @@ class AuthenticationViewModel: ObservableObject {
 	@MainActor
 	func login() async {
 		do {
-			_ = try await repository.login(username: username, password: password, APIService: APIService)
+			_ = try await repository.login(APIService: APIService, username: username, password: password)
 			print("login with \(username) and \(password)")
 			self.onLoginSucceed() //exécute la closure du callback
 		} catch let error as APIError {
