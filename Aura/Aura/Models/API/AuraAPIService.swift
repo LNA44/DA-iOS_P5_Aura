@@ -9,8 +9,10 @@ import Foundation
 
 struct AuraAPIService {
 	
+	//MARK: -Private properties
 	private let session: URLSession
 
+	//MARK: -Initialization
 	init(session: URLSession = .shared) {
 		self.session = session
 	}

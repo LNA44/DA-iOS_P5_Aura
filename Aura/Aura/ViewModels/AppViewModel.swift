@@ -10,30 +10,34 @@ import Foundation
 class AppViewModel: ObservableObject {
 	//MARK: -Properties
 	@Published var isLogged: Bool
-	private let repository: AuraRepository
+	private let authenticationRepository: AuthenticationRepository
+	private let accountRepository: AccountRepository
+	private let moneyTransferRepository: MoneyTransferRepository
 	
 	//MARK: - Initialisation
-	init(repository: AuraRepository) {
-		self.repository = repository
+	init(authenticationRepository: AuthenticationRepository, accountRepository: AccountRepository, moneyTransferRepository: MoneyTransferRepository) {
+		self.authenticationRepository = authenticationRepository
+		self.accountRepository = accountRepository
+		self.moneyTransferRepository = moneyTransferRepository
 		isLogged = false
 	}
 	
 	//MARK: - Computed properties
 	var authenticationViewModel: AuthenticationViewModel {
-		return AuthenticationViewModel(repository: repository) { [weak self] in
+		return AuthenticationViewModel(repository: authenticationRepository) { [weak self] in
 			self?.isLogged = true
 		}
 	}
 	
 	var accountDetailViewModel: AccountDetailViewModel {
-		return AccountDetailViewModel(repository:repository)
+		return AccountDetailViewModel(repository: accountRepository)
 	}
 	
 	var allTransactionsViewModel: AllTransactionsViewModel {
-		return AllTransactionsViewModel(repository:repository)
+		return AllTransactionsViewModel(repository: accountRepository)
 	}
 	
 	var moneyTransferViewModel: MoneyTransferViewModel {
-		return MoneyTransferViewModel(repository:repository)
+		return MoneyTransferViewModel(repository: moneyTransferRepository)
 	}
 }

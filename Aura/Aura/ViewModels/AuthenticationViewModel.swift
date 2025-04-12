@@ -9,11 +9,11 @@ import Foundation
 
 class AuthenticationViewModel: ObservableObject {
 	//MARK: -Private properties
-	private var repository: AuraRepository
+	private var repository: AuthenticationRepository
 	private var APIService = AuraAPIService()
 	
 	//MARK: -Initialisation
-	init(repository: AuraRepository, _ callback: @escaping () -> ()) {
+	init(repository: AuthenticationRepository, _ callback: @escaping () -> ()) {
 		self.repository = repository
 		self.onLoginSucceed = callback //callback : permet ds AppViewModel isLogged = True une fois connexion OK
 	}

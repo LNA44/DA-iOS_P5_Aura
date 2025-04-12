@@ -5,46 +5,19 @@
 //  Created by Ordinateur elena on 10/03/2025.
 //
 
-import Foundation
+/*import Foundation
 //logique de récup des données depuis l'API
 
 struct AuraRepository {
 	let data: Data?
 	let response: URLResponse?
-	//private let baseURLString: String
-	private let executeDataRequest: (URLRequest) async throws -> (Data, URLResponse) // permet d'utiliser un mock
+	private let executeDataRequest: (URLRequest) async throws -> (Data, URLResponse)
 	private let keychain: AuraKeychainService
 	private let APIService: AuraAPIService
 
-	/*enum LoginError: Error, Equatable {
-		case badURL
-		case noData
-		case requestFailed
-		case serverError
-		case decodingError
-	}
-	
-	enum FetchAccountDetailsError: Error {
-		case badURL
-		case missingToken
-		case noData
-		case requestFailed
-		case serverError
-		case decodingError
-	}
-	
-	enum TransferError: Error {
-		case badURL
-		case missingToken
-		case dataNotEmpty
-		case requestFailed
-		case serverError
-	}*/
-	
 	init(data: Data? = nil, response: URLResponse? = nil, executeDataRequest: @escaping (URLRequest) async throws -> (Data, URLResponse) = URLSession.shared.data(for:), keychain: AuraKeychainService, APIService: AuraAPIService = AuraAPIService()) {
 		self.data = data
 		self.response = response
-		//self.baseURLString = baseURLString
 		self.executeDataRequest = executeDataRequest
 		self.keychain = keychain
 		self.APIService = APIService
@@ -200,3 +173,4 @@ struct AuraRepository {
 		_ = try await APIService.fetchAndDecode(AccountResponse.self, request: request, shouldCheckEmptyData: false)
 	}
 }
+*/

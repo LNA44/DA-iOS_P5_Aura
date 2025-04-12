@@ -11,6 +11,7 @@
 		F356CB382D9D2E3E00D41E39 /* SharedMocks.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F356CB222D9D2E3E00D41E39 /* SharedMocks.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F356CB432D9D2E6B00D41E39 /* SharedMocks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F356CB222D9D2E3E00D41E39 /* SharedMocks.framework */; };
 		F356CB442D9D2E6B00D41E39 /* SharedMocks.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F356CB222D9D2E3E00D41E39 /* SharedMocks.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F37B9B332DAA970300F20FA3 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F37B9B322DAA970300F20FA3 /* KeychainSwift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,11 +75,15 @@
 			membershipExceptions = (
 				Assets.xcassets,
 				AuraApp.swift,
+				K.swift,
+				Models/API/AccountRepository.swift,
 				Models/API/AccountResponse.swift,
 				Models/API/APIError.swift,
 				Models/API/AuraAPIService.swift,
 				Models/API/AuraKeychainService.swift,
 				Models/API/AuraRepository.swift,
+				Models/API/AuthenticationRepository.swift,
+				Models/API/MoneyTransferRepository.swift,
 				Models/DataModel/Transaction.swift,
 				"Preview Content/Preview Assets.xcassets",
 				"Utils/Color+Extensions.swift",
@@ -109,6 +114,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F37B9B332DAA970300F20FA3 /* KeychainSwift in Frameworks */,
 				F356CB372D9D2E3E00D41E39 /* SharedMocks.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -259,6 +265,9 @@
 				Base,
 			);
 			mainGroup = 53D4186F2AC7099A0070ADB1;
+			packageReferences = (
+				F37B9B312DAA970300F20FA3 /* XCRemoteSwiftPackageReference "keychain-swift" */,
+			);
 			productRefGroup = 53D418792AC7099A0070ADB1 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -661,6 +670,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		F37B9B312DAA970300F20FA3 /* XCRemoteSwiftPackageReference "keychain-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/evgenyneu/keychain-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 24.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		F37B9B322DAA970300F20FA3 /* KeychainSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F37B9B312DAA970300F20FA3 /* XCRemoteSwiftPackageReference "keychain-swift" */;
+			productName = KeychainSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 53D418702AC7099A0070ADB1 /* Project object */;
 }

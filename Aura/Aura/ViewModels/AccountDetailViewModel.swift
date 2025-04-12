@@ -9,11 +9,11 @@ import Foundation
 
 class AccountDetailViewModel: ObservableObject {
 	//MARK: -Private properties
-	private let repository: AuraRepository
+	private let repository: AccountRepository
 	private var APIService = AuraAPIService()
 	
 	//MARK: -Initialisation
-	init(repository: AuraRepository) {
+	init(repository: AccountRepository) {
 		self.repository = repository
 	}
 	

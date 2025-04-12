@@ -80,5 +80,5 @@ struct MoneyTransferView: View {
 
 
 #Preview {
-	MoneyTransferView(viewModel: MoneyTransferViewModel(repository: AuraRepository(keychain: AuraKeychainService())))
+	MoneyTransferView(viewModel: MoneyTransferViewModel(repository: MoneyTransferRepository(keychain: AuraKeychainService(), APIService: AuraAPIService())))
 }

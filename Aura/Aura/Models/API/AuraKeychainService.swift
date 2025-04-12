@@ -5,7 +5,8 @@
 //  Created by Ordinateur elena on 22/03/2025.
 //
 
-import Security
+//import Security
+import KeychainSwift
 import Foundation
 
 /*protocol KeychainServiceProtocol {
@@ -19,7 +20,7 @@ class AuraKeychainService: ObservableObject {
 	
 	init() {}
 	
-	func storeToken(token: String, key: String) { //Crée un token
+	/*func storeToken(token: String, key: String) { //Crée un token
 		let data = token.data(using: .utf8)! //keychain attend des Data
 		let query: [String: Any] = [ //Dictionnaire de paramètres
 			kSecClass as String: kSecClassGenericPassword, //type d'élément : mot de passe générique
@@ -50,5 +51,22 @@ class AuraKeychainService: ObservableObject {
 			kSecAttrAccount as String: key
 		]
 		SecItemDelete(query as CFDictionary)
+	}*/
+	
+	private let keychain = KeychainSwift()
+	
+	// Sauvegarder un token
+	func saveToken(token: String, key: String) -> Bool {
+		return keychain.set(token, forKey: key)
+	}
+	
+	// Récupérer un token
+	func getToken(key: String) -> String? {
+		return keychain.get(key)
+	}
+	
+	// Supprimer un token
+	func deleteToken(key: String) -> Bool {
+		keychain.delete(key)
 	}
 }
