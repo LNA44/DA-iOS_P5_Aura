@@ -16,7 +16,7 @@ struct AuthenticationRepository {
 		self.APIService = APIService
 	}
 	
-	func login(APIService: AuraAPIService, username: String, password: String) async throws {
+	func login(username: String, password: String) async throws {
 		let endpoint = try APIService.createEndpoint(path: .login)
 		
 		//body de la requete

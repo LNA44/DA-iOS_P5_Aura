@@ -10,7 +10,7 @@ import Foundation
 class MoneyTransferViewModel: ObservableObject {
 	//MARK: -Private properties
 	private var repository: MoneyTransferRepository
-	private var APIService = AuraAPIService()
+	//private var APIService = AuraAPIService()
 	
 	//MARK: -Initialisation
 	init(repository: MoneyTransferRepository) {
@@ -44,7 +44,7 @@ class MoneyTransferViewModel: ObservableObject {
 	func sendMoney() async { //utilisée qd on clique sur bouton envoyer argent
 		do {
 			convertAmount(amountString: amountString)
-			try await repository.transferMoney(APIService: APIService,recipient: recipient, amount: amount)
+			try await repository.transferMoney(recipient: recipient, amount: amount)
 			transferMessage = "Successfully transferred \(amount) to \(recipient)"
 			recipient = "" //remise à 0 après transfert
 			amountString = ""

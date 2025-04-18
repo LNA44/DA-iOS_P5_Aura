@@ -40,7 +40,7 @@ final class AuraAccountDetailsRepositoryUnitTests: XCTestCase {
 		_ = mockData.makeMock(for: .success)
 		//When & Then
 		do {
-			let responseJSON = try await repository.fetchAccountDetails(APIService: apiService)
+			let responseJSON = try await repository.fetchAccountDetails()
 			XCTAssertEqual(responseJSON.transactions.count, 2)
 			XCTAssertEqual(responseJSON.transactions[0].value, -56)
 			XCTAssertEqual(responseJSON.transactions[0].label, "IKEA")
@@ -58,7 +58,7 @@ final class AuraAccountDetailsRepositoryUnitTests: XCTestCase {
 		_ = mockData.makeMock(for: .unauthorizedError)
 		//When & Then
 		do {
-			_ = try await repository.fetchAccountDetails(APIService: apiService)
+			_ = try await repository.fetchAccountDetails()
 			XCTFail("An error should be thrown")
 		} catch APIError.unauthorized {
 			XCTAssertTrue(true, "Caught expected APIError.unauthorized")
@@ -72,7 +72,7 @@ final class AuraAccountDetailsRepositoryUnitTests: XCTestCase {
 		_ = mockData.makeMock(for: .noDataError)
 		//When & Then
 		do {
-			_ = try await repository.fetchAccountDetails(APIService: apiService)
+			_ = try await repository.fetchAccountDetails()
 			XCTFail("Error should have occurred")
 		} catch APIError.noData {
 			XCTAssertTrue(true, "Caught expected APIError.noData")

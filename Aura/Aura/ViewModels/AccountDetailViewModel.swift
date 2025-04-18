@@ -10,7 +10,7 @@ import Foundation
 class AccountDetailViewModel: ObservableObject {
 	//MARK: -Private properties
 	private let repository: AccountRepository
-	private var APIService = AuraAPIService()
+	//private var APIService = AuraAPIService()
 	
 	//MARK: -Initialisation
 	init(repository: AccountRepository) {
@@ -49,7 +49,7 @@ class AccountDetailViewModel: ObservableObject {
 	@MainActor
 	func fetchTransactions() async {
 		do {
-			let (totalAmount,totalTransactions) = try await repository.fetchAccountDetails(APIService: APIService)
+			let (totalAmount,totalTransactions) = try await repository.fetchAccountDetails()
 			self.totalAmount = totalAmount
 			self.totalTransactions = totalTransactions
 			let recentTransactions = Array(totalTransactions.reversed().prefix(3)) //récupère les 3 dernières transactions

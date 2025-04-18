@@ -41,7 +41,7 @@ final class AuraAuthenticationRepositoryUnitTests: XCTestCase {
 		let password = "test"
 		//When & Then
 		do {
-			_ = try await repository.login(APIService: apiService, username: username, password: password)
+			_ = try await repository.login(username: username, password: password)
 		} catch {
 			XCTFail("Should not throw an error")
 		}
@@ -54,7 +54,7 @@ final class AuraAuthenticationRepositoryUnitTests: XCTestCase {
 		let password = "test"
 		//When & Then
 		do {
-			_ = try await repository.login(APIService: apiService, username: username, password: password)
+			_ = try await repository.login(username: username, password: password)
 			XCTFail("Error should have occurred")
 		} catch APIError.noData {
 			XCTAssertTrue(true, "Caught expected APIError.noData")
@@ -70,7 +70,7 @@ final class AuraAuthenticationRepositoryUnitTests: XCTestCase {
 		let password = "test"
 		//When & Then
 		do {
-			_ = try await repository.login(APIService: apiService, username: username, password: password)
+			_ = try await repository.login(username: username, password: password)
 			XCTFail("Error should have occurred")
 		} catch APIError.unauthorized {
 			XCTAssertTrue(true, "Caught expected APIError.unauthorized")

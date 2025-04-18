@@ -15,7 +15,7 @@ struct AccountRepository {
 		self.APIService = APIService
 	}
 	
-	func fetchAccountDetails(APIService: AuraAPIService) async throws -> (currentBalance: Decimal,transactions: [Transaction]) {
+	func fetchAccountDetails() async throws -> (currentBalance: Decimal,transactions: [Transaction]) {
 		let endpoint = try APIService.createEndpoint(path: .fetchAccountsDetails)
 		var request = APIService.createRequest(jsonData: nil, endpoint: endpoint, method: .get)
 		

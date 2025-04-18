@@ -43,7 +43,7 @@ class AllTransactionsViewModel: ObservableObject {
 	@MainActor
 	func fetchTransactions() async {
 		do {
-			let (totalAmount,totalTransactions) = try await repository.fetchAccountDetails(APIService: APIService)
+			let (totalAmount,totalTransactions) = try await repository.fetchAccountDetails()
 			self.totalAmount = totalAmount
 			self.totalTransactions = totalTransactions
 		} catch let error as APIError {

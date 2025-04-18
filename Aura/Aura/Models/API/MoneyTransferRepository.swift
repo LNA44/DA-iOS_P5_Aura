@@ -15,7 +15,7 @@ struct MoneyTransferRepository {
 		self.APIService = APIService
 	}
 	
-	func transferMoney(APIService: AuraAPIService, recipient: String, amount: Decimal) async throws -> Void {
+	func transferMoney(recipient: String, amount: Decimal) async throws -> Void {
 		let endpoint = try APIService.createEndpoint(path: .makeTransaction)
 		
 		

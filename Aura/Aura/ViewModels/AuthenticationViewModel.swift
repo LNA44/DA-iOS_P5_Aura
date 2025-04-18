@@ -10,7 +10,6 @@ import Foundation
 class AuthenticationViewModel: ObservableObject {
 	//MARK: -Private properties
 	private var repository: AuthenticationRepository
-	private var APIService = AuraAPIService()
 	
 	//MARK: -Initialisation
 	init(repository: AuthenticationRepository, _ callback: @escaping () -> ()) {
@@ -50,7 +49,7 @@ class AuthenticationViewModel: ObservableObject {
 	@MainActor
 	func login() async {
 		do {
-			_ = try await repository.login(APIService: APIService, username: username, password: password)
+			_ = try await repository.login(username: username, password: password)
 			print("login with \(username) and \(password)")
 			self.onLoginSucceed() //exécute la closure du callback
 		} catch let error as APIError {

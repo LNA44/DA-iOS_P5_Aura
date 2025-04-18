@@ -42,7 +42,7 @@ final class AuraTransferMoneyRepositoryUnitTests: XCTestCase {
 		_ = mockData.makeMock(for: .success)
 		//When & Then
 		do {
-			_ = try await repository.transferMoney(APIService: apiService, recipient: recipient, amount: amount)
+			_ = try await repository.transferMoney(recipient: recipient, amount: amount)
 			XCTAssertTrue(true, "Transfer successful")
 		} catch {
 			XCTFail("Error shouldn't be thrown")
@@ -60,7 +60,7 @@ final class AuraTransferMoneyRepositoryUnitTests: XCTestCase {
 
 		//When & Then
 		do {
-			_ = try await repository.transferMoney(APIService: apiService, recipient: recipient, amount: amount)
+			_ = try await repository.transferMoney(recipient: recipient, amount: amount)
 			XCTFail("An error should be thrown")
 		} catch APIError.unauthorized {
 			XCTAssertTrue(true, "Caught expected APIError.unauthorized")
