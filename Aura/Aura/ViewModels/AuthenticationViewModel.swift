@@ -54,6 +54,9 @@ class AuthenticationViewModel: ObservableObject {
 			self.onLoginSucceed() //exécute la closure du callback
 		} catch let error as APIError {
 			errorMessage = error.errorDescription
+			print("Caught error: \(error)")
+			//print("Caught error: \(error.errorDescription)")
+			print("errorMessage: \(errorMessage ?? "Pas de message d'erreur")")
 			showAlert = true
 		} catch {
 			errorMessage = "Une erreur inconnue est survenue : \(error.localizedDescription)"

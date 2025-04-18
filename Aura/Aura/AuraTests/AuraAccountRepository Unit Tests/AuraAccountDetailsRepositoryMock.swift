@@ -31,8 +31,8 @@ final class AuraAccountDetailsRepositoryMock {
 						"label": "IKEA"
 					},
 					{
-						"label": "Starbucks",
-						"value": -10
+						"value": -10,
+						"label": "Starbucks"
 					}
 				]
 			}

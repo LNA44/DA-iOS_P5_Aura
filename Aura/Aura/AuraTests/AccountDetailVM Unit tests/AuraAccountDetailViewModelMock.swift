@@ -5,10 +5,10 @@
 //  Created by Ordinateur elena on 14/03/2025.
 //
 
-import XCTest
+/*import XCTest
 @testable import Aura
 
-final class AuraAccountDetailMock {
+final class AuraAccountDetailViewModelMock {
 	
 	//MARK: -Properties
 	var response: Int = 0
@@ -96,3 +96,4 @@ final class AuraAccountDetailMock {
 		return (invalidData, response)
 	}
 }
+*/

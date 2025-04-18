@@ -16,7 +16,7 @@ enum APIError: LocalizedError, Equatable {
 	case unauthorized
 	case decodingError
 
-	var errorDescription: String {
+	var errorDescription: String? {
 		switch self {
 		case .invalidURL:
 			return "The URL is invalid."

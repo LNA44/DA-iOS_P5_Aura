@@ -105,8 +105,9 @@
 		F37598852DB134AE00BBCFD8 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				"AuraTests/AccountDetailVM Unit tests/AuraAccountDetailMock.swift",
+				"AuraTests/AccountDetailVM Unit tests/AuraAccountDetailViewModelMock.swift",
 				"AuraTests/AccountDetailVM Unit tests/AuraAccountDetailViewModelTests.swift",
+				AuraTests/AnciensTests/AuraAuthenticationMock.swift,
 				AuraTests/AnciensTests/AuraServiceFetchAccountDetailsMock.swift,
 				AuraTests/AnciensTests/AuraServiceFetchAccountDetailsTests.swift,
 				AuraTests/AnciensTests/AuraServiceLoginMock.swift,
@@ -121,10 +122,10 @@
 				"AuraTests/AuraAuthenticationRepository Unit Tests/AuraAuthenticationRepositoryUnitTests.swift",
 				"AuraTests/AuraMoneyTransferRepository Unit Tests/AuraTransferMoneyRepositoryMock.swift",
 				"AuraTests/AuraMoneyTransferRepository Unit Tests/AuraTransferMoneyRepositoryUnitTests.swift",
-				"AuraTests/AuthenticationVM Unit Tests/AuraAuthenticationMock.swift",
+				"AuraTests/AuthenticationVM Unit Tests/AuraAuthenticationViewModelMock.swift",
 				"AuraTests/AuthenticationVM Unit Tests/AuraAuthenticationViewModelTests.swift",
 				AuraTests/MockURLProtocol.swift,
-				"AuraTests/MoneyTransferVM Unit Tests/AuraMoneyTransferMock.swift",
+				"AuraTests/MoneyTransferVM Unit Tests/AuraMoneyTransferViewModelMock.swift",
 				"AuraTests/MoneyTransferVM Unit Tests/AuraMoneyTransferViewModelTests.swift",
 			);
 			target = F399B9B82D8489EC003B15BA /* AuraTests */;

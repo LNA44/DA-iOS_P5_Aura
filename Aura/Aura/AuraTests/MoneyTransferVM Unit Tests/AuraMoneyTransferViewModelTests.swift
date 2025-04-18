@@ -5,26 +5,88 @@
 //  Created by Ordinateur elena on 15/03/2025.
 //
 
-/*import XCTest
+import XCTest
 @testable import Aura
 
 final class AuraMoneyTransferViewModelTests: XCTestCase {
-	var viewModel: MoneyTransferViewModel!
-	var dataMock = DataMoneyTransferMock()
-	var repository: AuraRepository!
+	let mockData = AuraMoneyTransferViewModelMock()
 	let keychain = AuraKeychainService()
 	
-	override func setUpWithError() throws {
-		repository = AuraRepository(executeDataRequest: dataMock.executeRequestMock, keychain: keychain)
-		viewModel = MoneyTransferViewModel(repository: repository)
-		keychain.storeToken(token: "93D2C537-FA4A-448C-90A9-6058CF26DB29", key: "authToken")
+	lazy var session: URLSession = {
+		let configuration = URLSessionConfiguration.ephemeral
+		configuration.protocolClasses = [MockURLProtocol.self]
+		return URLSession(configuration: configuration)
+	}()
+	
+	lazy var apiService: AuraAPIService = {
+		AuraAPIService(session: session)
+	}()
+	
+	lazy var repository = MoneyTransferRepository(keychain: keychain, APIService: apiService)
+	
+	lazy var viewModel = MoneyTransferViewModel(repository: repository)
+
+	override func setUp() {
+		super.setUp()
+		_ = AuraKeychainService().saveToken(token: "token", key: K.Account.tokenKey)
 	}
 	
 	override func tearDown() {
-		keychain.removeToken(key: "authToken")
+		super.tearDown()
+		_ = AuraKeychainService().deleteToken(key: K.Account.tokenKey)
 	}
 	
 	func testSendMoneySuccess() async {
+		//Given
+		_ = mockData.makeMock(for: .success)
+
+		//When
+		_ = await viewModel.sendMoney()
+		//Then
+		XCTAssertEqual(viewModel.errorMessage, "")
+	}
+	
+	func testSendMoneyUnauthorizedAPIErrorOccurs() async {
+		//Given
+		_ = keychain.deleteToken(key: K.MoneyTransfer.tokenKey)
+		
+		_ = mockData.makeMock(for: .unauthorizedAPIError)
+		//When
+		_ = await viewModel.sendMoney()
+		//Then
+		XCTAssertEqual(viewModel.errorMessage, "You are not authorized to perform this action.")
+		XCTAssertTrue(viewModel.showAlert)
+	}
+	
+	func testSendMoneyUnkownErrorOccurs() async {
+		//Given
+		_ = mockData.makeMock(for: .unknownError)
+		//When
+		_ = await viewModel.sendMoney()
+		//Then
+		XCTAssertEqual(viewModel.errorMessage, "Une erreur inconnue est survenue : \(error.localizedDescription)")
+		XCTAssertTrue(viewModel.showAlert)
+	}
+	
+/*	func sendMoney() async { //utilisée qd on clique sur bouton envoyer argent
+		do {
+			convertAmount(amountString: amountString)
+			try await repository.transferMoney(recipient: recipient, amount: amount)
+			transferMessage = "Successfully transferred \(amount) to \(recipient)"
+			recipient = "" //remise à 0 après transfert
+			amountString = ""
+			amount = Decimal(0.0)
+			return
+		} catch let error as APIError {
+			errorMessage = error.errorDescription
+			showAlert = true
+		} catch {
+			errorMessage = "Une erreur inconnue est survenue : \(error.localizedDescription)"
+			showAlert = true
+		}
+	}
+*/
+	/*func testSendMoneySuccess() async {
 		//Given
 		dataMock.response = 1
 		viewModel.recipient = "+33767070707"
@@ -95,7 +157,7 @@ final class AuraMoneyTransferViewModelTests: XCTestCase {
 		//Then
 		XCTAssertEqual(viewModel.errorMessage, "Erreur serveur")
 	}
-	
+*/
 	func testIsPhoneOrEmailValidWithPhoneSuccess() {
 		//Given
 		viewModel.recipient = "+33767070707"
@@ -186,4 +248,4 @@ final class AuraMoneyTransferViewModelTests: XCTestCase {
 		XCTAssertEqual(prompt, "Enter a valid amount with 2 decimals maximum")
 	}
 }
-*/
+
