@@ -9,6 +9,7 @@ import Foundation
 
 enum APIError: LocalizedError, Equatable {
 	case invalidURL
+	case invalidParameters
 	case invalidResponse
 	case httpError(statusCode: Int)
 	case noData
@@ -19,6 +20,8 @@ enum APIError: LocalizedError, Equatable {
 		switch self {
 		case .invalidURL:
 			return "The URL is invalid."
+		case .invalidParameters:
+			return "Invalid parameters provided."
 		case .invalidResponse: //response pas de type HTTPURLResponse
 			return "Invalid response from the server."
 		case .httpError(let statusCode):

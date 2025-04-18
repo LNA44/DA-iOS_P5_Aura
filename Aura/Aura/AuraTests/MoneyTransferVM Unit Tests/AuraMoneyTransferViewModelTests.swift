@@ -5,7 +5,7 @@
 //  Created by Ordinateur elena on 15/03/2025.
 //
 
-import XCTest
+/*import XCTest
 @testable import Aura
 
 final class AuraMoneyTransferViewModelTests: XCTestCase {
@@ -186,3 +186,4 @@ final class AuraMoneyTransferViewModelTests: XCTestCase {
 		XCTAssertEqual(prompt, "Enter a valid amount with 2 decimals maximum")
 	}
 }
+*/

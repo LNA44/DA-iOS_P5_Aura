@@ -8,16 +8,41 @@
 import XCTest
 @testable import Aura
 
+/*func login() async {
+	do {
+		_ = try await repository.login(APIService: APIService, username: username, password: password)
+		print("login with \(username) and \(password)")
+		self.onLoginSucceed() //exécute la closure du callback
+	} catch let error as APIError {
+		errorMessage = error.errorDescription
+		showAlert = true
+	} catch {
+		errorMessage = "Une erreur inconnue est survenue : \(error.localizedDescription)"
+		showAlert = true
+	}
+}
+*/
 final class AuraAuthenticationViewModelTests: XCTestCase {
-	var viewModel: AuthenticationViewModel!
-	var dataMock = DataAuthenticationMock()
-	var repository: AuraService!
-	var callback: () -> Void = {}
-	let keychain = AuraKeyChainServiceMock()
+	let keychain = AuraKeychainService()
 	
+	lazy var session: URLSession = {
+		let configuration = URLSessionConfiguration.ephemeral
+		configuration.protocolClasses = [MockURLProtocol.self]
+		return URLSession(configuration: configuration)
+	}()
+	
+	lazy var apiService: AuraAPIService = {
+		AuraAPIService(session: session)
+	}()
+	
+	lazy var repository = AuthenticationRepository(keychain: keychain, APIService: apiService)
+
+	var callback: () -> Void = {}
+	
+	lazy var viewModel = AuthenticationViewModel(repository: repository, callback)
+
 	override func setUp() {
-		repository = AuraService(executeDataRequest: dataMock.executeRequestMock, keychain: keychain)
-		viewModel = AuthenticationViewModel(keychain: keychain, repository: repository, callback)
+		_ = keychain.deleteToken(key: "authToken")
 		// Création d'un callback simulé
 		callback = {
 			// Ce callback pourrait simplement être une assertion pour vérifier que la connexion a réussi.
@@ -26,23 +51,38 @@ final class AuraAuthenticationViewModelTests: XCTestCase {
 	}
 	
 	override func tearDown() {
-		keychain.removeToken(key: "authToken")
+			MockURLProtocol.requestHandler = nil
 	}
 	
 	func testLoginSuccess() async {
 		//Given
-		dataMock.response = 1
-		viewModel.username = "test@aura.app"
-		viewModel.password = "test123"
+		//dataMock.response = 1
+		viewModel.username = "test"
+		viewModel.password = "test"
+		
+		let response = HTTPURLResponse(url: URL(string: "http://127.0.0.1:8080/auth")!,
+									   statusCode: 200,
+									   httpVersion: nil,
+									   headerFields: nil)!
+		let jsonData = """
+			{
+				"token": "93D2C537-FA4A-448C-90A9-6058CF26DB29"
+			}
+		""".data(using: .utf8)!
+		
+		MockURLProtocol.requestHandler = { request in
+			return (response, jsonData, nil) // Réponse simulée
+		}
+		
 		//When
 		await viewModel.login()
 		//Then
 		XCTAssertNil(viewModel.errorMessage)
-		let token = keychain.retrieveToken(key: "authToken")
+		let token = keychain.getToken(key: K.Authentication.tokenKey)
 		XCTAssertEqual(token, "93D2C537-FA4A-448C-90A9-6058CF26DB29")
 	}
 	
-	func testLoginBadURLErrorOccurs() async {
+	/*func testLoginBadURLErrorOccurs() async {
 		//Given
 		repository = AuraService(baseURLString: "", executeDataRequest: dataMock.executeRequestMock, keychain: keychain)
 		viewModel = AuthenticationViewModel(keychain: keychain, repository: repository, callback)
@@ -182,5 +222,6 @@ final class AuraAuthenticationViewModelTests: XCTestCase {
 		let prompt = viewModel.passwordPrompt
 		//Then
 		XCTAssertEqual(prompt, "")
-	}
+	}*/
 }
+

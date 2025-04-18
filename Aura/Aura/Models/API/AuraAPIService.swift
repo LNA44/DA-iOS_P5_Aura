@@ -32,22 +32,25 @@ struct AuraAPIService {
 	
 	//MARK: -Methods
 	func createEndpoint(path: Path) throws -> URL {
-		guard let baseURL = URL(string: "http://127.0.0.1:8080") else {
+		guard let baseURL = K.APIService.baseUrl else {
 			throw APIError.invalidURL
 		}
 		return baseURL.appendingPathComponent(path.rawValue)
 	}
 	
 	//sérialisation
-	func serializeParameters(parameters: [String: Any]) -> Data? {
+	func serializeParameters(parameters: [String: Any]) throws -> Data?  {
+		guard JSONSerialization.isValidJSONObject(parameters) else {
+			throw APIError.invalidParameters
+		}
 		return try? JSONSerialization.data(withJSONObject: parameters, options: [])
 	}
 	
 	//requête
-	func createRequest(parametersNeeded: Bool, jsonData: Data?, endpoint: URL, method: Method) -> URLRequest {
+	func createRequest(parameters: [String: Any]? = nil, jsonData: Data?, endpoint: URL, method: Method) -> URLRequest { //modif parametersNeeded -> parameters
 		var request = URLRequest(url: endpoint)
 		request.httpMethod = method.rawValue
-		if parametersNeeded {
+		if parameters != nil {
 			request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 			request.httpBody = jsonData
 			return request
@@ -57,33 +60,31 @@ struct AuraAPIService {
 	}
 	
 	//appel réseau
-	func fetch(request: URLRequest, shouldCheckEmptyData: Bool = true) async throws -> Data {
+	func fetch(request: URLRequest, allowEmptyData: Bool = false) async throws -> Data {
 		let (data, response) = try await session.data(for: request)
 		
+		if !allowEmptyData && data.isEmpty {
+			throw APIError.noData
+		}
 		guard let httpResponse = response as? HTTPURLResponse else {
 			throw APIError.invalidResponse
 		}
 		guard httpResponse.statusCode == 200 else {
 			throw APIError.httpError(statusCode: httpResponse.statusCode)
 		}
-		if shouldCheckEmptyData && data.isEmpty {
-			throw APIError.noData
-		}
+		
 		return data
 	}
 	
 	func decode<T: Decodable>(_ type: T.Type, data: Data) throws -> T? { //T est décodable
-		if data.isEmpty {
-			return nil
-		}
 		guard let responseJSON = try? JSONDecoder().decode(T.self, from: data) else { //T: plusieurs types possibles : [String, String], AccountResponse
 			throw APIError.decodingError
 		}
 		return responseJSON
 	}
 	
-	func fetchAndDecode<T: Decodable>(_ type: T.Type, request: URLRequest, shouldCheckEmptyData: Bool = true) async throws -> T? {
-		let data = try await fetch(request: request,  shouldCheckEmptyData: shouldCheckEmptyData)
+	func fetchAndDecode<T: Decodable>(_ type: T.Type, request: URLRequest, allowEmptyData: Bool = false) async throws -> T? {
+		let data = try await fetch(request: request,  allowEmptyData: allowEmptyData)
 		if data.isEmpty {
 			return nil
 		}

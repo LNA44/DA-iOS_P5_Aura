@@ -10,14 +10,14 @@ struct AccountRepository {
 	private let keychain: AuraKeychainService
 	private let APIService: AuraAPIService
 	
-	init(keychain: AuraKeychainService, APIService: AuraAPIService) {
+	init(keychain: AuraKeychainService, APIService: AuraAPIService = AuraAPIService()) {
 		self.keychain = keychain
 		self.APIService = APIService
 	}
 	
 	func fetchAccountDetails(APIService: AuraAPIService) async throws -> (currentBalance: Decimal,transactions: [Transaction]) {
-		let endpoint = try AuraAPIService().createEndpoint(path: .fetchAccountsDetails)
-		var request = AuraAPIService().createRequest(parametersNeeded: false, jsonData: nil, endpoint: endpoint, method: .get)
+		let endpoint = try APIService.createEndpoint(path: .fetchAccountsDetails)
+		var request = APIService.createRequest(jsonData: nil, endpoint: endpoint, method: .get)
 		
 		//Récupération du token
 		guard let token = keychain.getToken(key: K.Account.tokenKey) else {

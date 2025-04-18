@@ -11,22 +11,22 @@ struct AuthenticationRepository {
 	private let keychain: AuraKeychainService
 	private let APIService: AuraAPIService
 	
-	init(keychain: AuraKeychainService, APIService: AuraAPIService) {
+	init(keychain: AuraKeychainService, APIService: AuraAPIService = AuraAPIService()) {
 		self.keychain = keychain
 		self.APIService = APIService
 	}
 	
 	func login(APIService: AuraAPIService, username: String, password: String) async throws {
-		let endpoint = try AuraAPIService().createEndpoint(path: .login)
+		let endpoint = try APIService.createEndpoint(path: .login)
 		
 		//body de la requete
 		let parameters: [String: Any] = [
 			"username": username,
 			"password": password
 		]
-		let jsonData = AuraAPIService().serializeParameters(parameters: parameters)
-		let request = AuraAPIService().createRequest(parametersNeeded: true, jsonData: jsonData, endpoint: endpoint, method: .post)
-		let dict = try await APIService.fetchAndDecode([String: String].self, request: request)
+		let jsonData = try APIService.serializeParameters(parameters: parameters)
+		let request = APIService.createRequest(parameters: parameters, jsonData: jsonData, endpoint: endpoint, method: .post)
+		let dict = try await APIService.fetchAndDecode([String: String].self, request: request, allowEmptyData: true)
 		
 		guard let dict = dict else {
 			throw APIError.noData
@@ -38,5 +38,6 @@ struct AuthenticationRepository {
 		
 		//Stockage du token
 		_ = keychain.saveToken(token: token, key: K.Authentication.tokenKey)
+		print("token = \(token)")
 	}
 }

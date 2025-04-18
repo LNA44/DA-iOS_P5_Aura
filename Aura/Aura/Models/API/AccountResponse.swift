@@ -6,12 +6,12 @@
 //
 
 import Foundation
-struct AccountResponse: Codable {
+struct AccountResponse: Codable, Equatable {
 	let transactions: [Transaction]
 	let currentBalance: Decimal
 	
 	//MARK: - Transaction
-	struct Transaction: Codable {
+	struct Transaction: Codable, Equatable {
 		let value: Decimal
 		let label: String
 	}

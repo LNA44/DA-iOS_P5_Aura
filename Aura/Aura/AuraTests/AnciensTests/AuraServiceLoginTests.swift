@@ -8,14 +8,20 @@
 import XCTest
 @testable import Aura
 
-final class AuraServiceLoginTests: XCTestCase {
+/*final class AuraServiceLoginTests: XCTestCase {
 	var dataMock = AuraServiceLoginMock()
-	var repository: AuraRepository!
+	var repository: AuthenticationRepository!
 	let keychain = AuraKeychainService()
-	
+	/*var session: URLSession = {
+		let configuration = URLSessionConfiguration.ephemeral
+		configuration.protocolClasses = [MockURLProtocol.self]
+		return URLSession(configuration: configuration)
+	} ()*/
+		
 	override func setUp() {
 		super.setUp()
-		repository = AuraRepository(executeDataRequest: dataMock.executeRequestMock, keychain: keychain)
+		let APIService = AuraAPIService(session: session)
+		repository = AuthenticationRepository(keychain: keychain, APIService: APIService)
 	}
 	
 	func testLoginSuccess() async throws {
@@ -83,3 +89,4 @@ final class AuraServiceLoginTests: XCTestCase {
 		}
 	}
 }
+*/

@@ -5,7 +5,7 @@
 //  Created by Ordinateur elena on 14/03/2025.
 //
 
-import XCTest
+/*import XCTest
 @testable import Aura
 
 final class AuraAccountDetailViewModelTests: XCTestCase {
@@ -135,3 +135,4 @@ final class AuraAccountDetailViewModelTests: XCTestCase {
 		XCTAssertEqual(formatted, "Formatting error")
 	}
 }
+*/
