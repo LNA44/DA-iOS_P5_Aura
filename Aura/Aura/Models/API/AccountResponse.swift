@@ -6,6 +6,7 @@
 //
 
 import Foundation
+
 struct AccountResponse: Codable, Equatable {
 	let transactions: [Transaction]
 	let currentBalance: Decimal

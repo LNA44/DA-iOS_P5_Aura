@@ -14,11 +14,8 @@ struct RawAllTransactionsView: View {
 		HStack{
 			Image(systemName: transaction.value >= 0 ? "arrow.up.right.circle.fill" : "arrow.down.left.circle.fill")
 				.foregroundColor(transaction.value >= 0 ? .green : .red)
-			
 			Text(transaction.label)
-			
 			Spacer()
-			
 			Text(viewModel.formattedAmount(value:transaction.value))
 				.fontWeight(.bold)
 				.foregroundColor(transaction.value >= 0 ? .green : .red)

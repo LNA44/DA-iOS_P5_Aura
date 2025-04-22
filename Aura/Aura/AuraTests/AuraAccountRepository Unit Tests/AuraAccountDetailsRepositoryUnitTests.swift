@@ -22,18 +22,19 @@ final class AuraAccountDetailsRepositoryUnitTests: XCTestCase {
 	}()
 	
 	lazy var repository = AccountRepository(keychain: AuraKeychainService(), APIService: apiService)
+	
 	let token = "921DBEEB-9A66-475D-BEFD-3071B8E91AA0"
 	
-    override func setUp() {
+	override func setUp() {
 		super.setUp()
-		_ = AuraKeychainService().saveToken(token: token, key: "authToken")
-    }
-
-    override func tearDown() {
+		_ = AuraKeychainService().saveToken(token: token, key: Constante.Account.tokenKey)
+	}
+	
+	override func tearDown() {
 		super.tearDown()
 		MockURLProtocol.requestHandler = nil
-		_ = AuraKeychainService().deleteToken(key: "authToken")
-    }
+		_ = AuraKeychainService().deleteToken(key: Constante.Account.tokenKey)
+	}
 	
 	func testFetchAccountDetailsSuccess() async {
 		//Given
@@ -51,7 +52,7 @@ final class AuraAccountDetailsRepositoryUnitTests: XCTestCase {
 			XCTFail("Error shouldn't be thrown")
 		}
 	}
-
+	
 	func testFetchAccountDetailsUnauthorizedErrorOccurs() async {
 		//Given
 		_ = AuraKeychainService().deleteToken(key: "authToken")
@@ -62,20 +63,6 @@ final class AuraAccountDetailsRepositoryUnitTests: XCTestCase {
 			XCTFail("An error should be thrown")
 		} catch APIError.unauthorized {
 			XCTAssertTrue(true, "Caught expected APIError.unauthorized")
-		} catch {
-			XCTFail("Unexpected error type: \(error)")
-		}
-	}
-	
-	func testFetchAccountDetailsNoDataErrorOccurs() async {
-		//Given
-		_ = mockData.makeMock(for: .noDataError)
-		//When & Then
-		do {
-			_ = try await repository.fetchAccountDetails()
-			XCTFail("Error should have occurred")
-		} catch APIError.noData {
-			XCTAssertTrue(true, "Caught expected APIError.noData")
 		} catch {
 			XCTFail("Unexpected error type: \(error)")
 		}

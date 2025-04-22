@@ -63,6 +63,6 @@ struct AuthenticationView: View {
 }
 
 #Preview {
-	AuthenticationView(viewModel: AuthenticationViewModel(repository: AuthenticationRepository(keychain: AuraKeychainService(), APIService: AuraAPIService()), {
+	AuthenticationView(viewModel: AuthenticationViewModel(repository: AuthenticationRepository(keychain: AuraKeychainService()), {
 	}))//callback vide
 }

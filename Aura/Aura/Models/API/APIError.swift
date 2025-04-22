@@ -22,7 +22,7 @@ enum APIError: LocalizedError, Equatable {
 			return "The URL is invalid."
 		case .invalidParameters:
 			return "Invalid parameters provided."
-		case .invalidResponse: //response pas de type HTTPURLResponse
+		case .invalidResponse: //response autre type que HTTPURLResponse
 			return "Invalid response from the server."
 		case .httpError(let statusCode):
 			return "HTTP error: \(statusCode)"

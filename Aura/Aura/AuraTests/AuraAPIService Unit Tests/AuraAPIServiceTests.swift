@@ -9,7 +9,7 @@ import XCTest
 @testable import Aura
 
 final class AuraAPIServiceTests: XCTestCase {
-
+	
 	let mockData = AuraAPIServiceMock()
 	
 	lazy var session: URLSession = {
@@ -20,17 +20,17 @@ final class AuraAPIServiceTests: XCTestCase {
 	lazy var apiService: AuraAPIService = {
 		AuraAPIService(session: session)
 	}()
-		
-    override func setUp() {
+	
+	override func setUp() {
 		super.setUp()
-    }
-
-    override func tearDown() {
+	}
+	
+	override func tearDown() {
 		super.tearDown()
 		MockURLProtocol.requestHandler = nil
-		K.APIService.baseUrl = URL(string: "http://127.0.0.1:8080") // valeur par défaut
-    }
-
+		Constante.APIService.baseUrl = URL(string: "http://127.0.0.1:8080") // valeur par défaut
+	}
+	
 	func testCreateEndpointSuccess() {
 		//Given
 		let path: AuraAPIService.Path = .fetchAccountsDetails
@@ -45,7 +45,7 @@ final class AuraAPIServiceTests: XCTestCase {
 	
 	func testCreateEndpointErrorOccurs() {
 		//Given
-		K.APIService.baseUrl = nil
+		Constante.APIService.baseUrl = nil
 		let path: AuraAPIService.Path = .fetchAccountsDetails
 		//When & Then
 		do {
@@ -67,19 +67,19 @@ final class AuraAPIServiceTests: XCTestCase {
 			XCTFail("Unexpected error type: \(error)")
 		}
 	}
-   
+	
 	func testSerializeParametersErrorOccurs() {
 		let parameters: [String: Any] = ["date": Date()]
 		do {
-		let data = try apiService.serializeParameters(parameters: parameters)
-		XCTAssertNil(data)
+			let data = try apiService.serializeParameters(parameters: parameters)
+			XCTAssertNil(data)
 		} catch APIError.invalidParameters {
 			XCTAssertTrue(true, "Caught expected APIError.invalidParameters")
 		} catch {
 			XCTFail("Expected APIError.invalidParameters, got \(error)")
 		}
 	}
-
+	
 	func testCreateRequestWithoutBodySucess() {
 		//Given
 		let jsonData: Data? = nil
@@ -100,7 +100,7 @@ final class AuraAPIServiceTests: XCTestCase {
 			"recipient": "+33 6 01 02 03 04",
 			"amount": 12.4
 		]
-
+		
 		let	jsonData = try? JSONSerialization.data(withJSONObject: parameters, options: [])
 		let endpoint: URL = URL(string: "http://127.0.0.1:8080//account/transfer")!
 		let method: AuraAPIService.Method = .post
@@ -112,7 +112,7 @@ final class AuraAPIServiceTests: XCTestCase {
 		XCTAssertEqual(request.httpBody, jsonData)
 		XCTAssertEqual(request.allHTTPHeaderFields?["Content-Type"], "application/json")
 	}
-
+	
 	func testFetchWithoutBodySuccess() async {
 		//Given
 		let endpoint = URL(string: "http://127.0.0.1:8080/account")!
@@ -201,7 +201,7 @@ final class AuraAPIServiceTests: XCTestCase {
 		request.httpMethod = AuraAPIService.Method.get.rawValue
 		
 		let (_, _, _) = mockData.makeMock(for: .networkError)
-
+		
 		do {
 			_ = try await apiService.fetch(request: request)
 			XCTFail("Expected to throw network error but it succeeded")
@@ -237,11 +237,11 @@ final class AuraAPIServiceTests: XCTestCase {
 		//Given
 		let endpoint = URL(string: "http://127.0.0.1:8080/account")!
 		let expectedData = """
-						{
-							"date": Date()
-						}
-						""".data(using: .utf8)!
-
+	  {
+	   "date": Date()
+	  }
+	  """.data(using: .utf8)!
+		
 		let mockResponse = HTTPURLResponse(url: endpoint, statusCode: 200, httpVersion: nil, headerFields: nil)!
 		MockURLProtocol.requestHandler = { request in
 			return (mockResponse, expectedData, nil) // Réponse simulée
@@ -259,7 +259,7 @@ final class AuraAPIServiceTests: XCTestCase {
 			XCTFail("Unexpected error type: \(error)")
 		}
 	}
-		
+	
 	func testFetchAndDecodeWithoutBodySuccess() async {
 		//Given
 		let endpoint = URL(string: "http://127.0.0.1:8080/account")!

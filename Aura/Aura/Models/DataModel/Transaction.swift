@@ -6,6 +6,7 @@
 //
 
 import Foundation
+
 //modèle interne à l'app
 struct Transaction: Identifiable, Equatable {
 	var id = UUID() //utile pour ForEach

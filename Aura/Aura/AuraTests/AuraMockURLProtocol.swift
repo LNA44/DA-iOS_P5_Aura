@@ -11,12 +11,12 @@ final class MockURLProtocol: URLProtocol {
 	override class func canInit(with request: URLRequest) -> Bool {
 		return true
 	}
-
+	
 	override class func canonicalRequest(for request: URLRequest) -> URLRequest {
 		return request
 	}
 	
-	static var requestHandler: ((URLRequest) throws -> (URLResponse?, Data?, Error?))? //URLResponse pour pouvoir tester fun fetch avec invalidResponse
+	static var requestHandler: ((URLRequest) throws -> (URLResponse?, Data?, Error?))?
 	
 	override func startLoading() {
 		guard let handler = MockURLProtocol.requestHandler else {
@@ -35,7 +35,7 @@ final class MockURLProtocol: URLProtocol {
 			guard let unwrappedResponse = response else {
 				return
 			}
-			//Si pas d'erreur envoyer response et data
+
 			client?.urlProtocol(self, didReceive: unwrappedResponse, cacheStoragePolicy: .notAllowed)
 			
 			if let data = data {

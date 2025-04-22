@@ -12,13 +12,12 @@ struct AuraApp: App {
 	@Environment(\.scenePhase) private var scenePhase  // Observe l'état de l'application (foreground, background, inactive)
 	@StateObject private var viewModel: AppViewModel
 	private let keychain = AuraKeychainService()
-	private let APIService = AuraAPIService()
 	
 	init() {
-		_ = keychain.deleteToken(key: K.Authentication.tokenKey) //supprime les anciens tokens au lancement de l'app
-		let authenticationRepository = AuthenticationRepository(keychain: keychain, APIService: APIService)
-		let accountRepository = AccountRepository(keychain: keychain, APIService: APIService)
-		let moneyTransferRepository = MoneyTransferRepository(keychain: keychain, APIService: APIService)
+		_ = keychain.deleteToken(key: Constante.Authentication.tokenKey) //supprime les anciens tokens au lancement de l'app
+		let authenticationRepository = AuthenticationRepository(keychain: keychain)
+		let accountRepository = AccountRepository(keychain: keychain)
+		let moneyTransferRepository = MoneyTransferRepository(keychain: keychain)
 		_viewModel = StateObject(wrappedValue: AppViewModel(authenticationRepository: authenticationRepository, accountRepository: accountRepository, moneyTransferRepository: moneyTransferRepository))
 	}
 	
@@ -50,7 +49,7 @@ struct AuraApp: App {
 		.onChange(of: scenePhase) {
 			if scenePhase == .background {
 				// Supprime le token lorsque l'app passe en arrière-plan
-				_ = keychain.deleteToken(key: K.Authentication.tokenKey)
+				_ = keychain.deleteToken(key: Constante.Authentication.tokenKey)
 				viewModel.isLogged = false
 			}
 		}

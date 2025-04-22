@@ -5,15 +5,8 @@
 //  Created by Ordinateur elena on 22/03/2025.
 //
 
-//import Security
 import KeychainSwift
 import Foundation
-
-/*protocol KeychainServiceProtocol {
-	func storeToken(token: String, key: String)
-	func retrieveToken(key: String) -> String?
-	func removeToken(key: String)
-}*/
 
 //Gère le token en le cryptant
 class AuraKeychainService: ObservableObject {

@@ -14,7 +14,7 @@ class AuthenticationViewModel: ObservableObject {
 	//MARK: -Initialisation
 	init(repository: AuthenticationRepository, _ callback: @escaping () -> ()) {
 		self.repository = repository
-		self.onLoginSucceed = callback //callback : permet ds AppViewModel isLogged = True une fois connexion OK
+		self.onLoginSucceed = callback
 	}
 	
 	//MARK: -Outputs
@@ -50,13 +50,9 @@ class AuthenticationViewModel: ObservableObject {
 	func login() async {
 		do {
 			_ = try await repository.login(username: username, password: password)
-			print("login with \(username) and \(password)")
-			self.onLoginSucceed() //exécute la closure du callback
+			self.onLoginSucceed()
 		} catch let error as APIError {
 			errorMessage = error.errorDescription
-			print("Caught error: \(error)")
-			//print("Caught error: \(error.errorDescription)")
-			print("errorMessage: \(errorMessage ?? "Pas de message d'erreur")")
 			showAlert = true
 		} catch {
 			errorMessage = "Une erreur inconnue est survenue : \(error.localizedDescription)"
@@ -75,8 +71,8 @@ class AuthenticationViewModel: ObservableObject {
 		// criterias here : http://regexlib.com
 		let emailTest = NSPredicate(format: "SELF MATCHES %@","^([0-9a-zA-Z]([-.\\w]*[0-9a-zA-Z])*@(([0-9a-zA-Z])+([-\\w]*[0-9a-zA-Z])*\\.)+[a-zA-Z]{2,9})$" )
 		/*Caractères précédants le @: 1 caractère alphanumérique (chiffre ou lettre), tiret point et underscores ok si suivies d'un caractère alphanumérique
-		Caractères suivants le @: 1 ou plusieurs caractères alphanumériques et tirets ou underscores (domaine de l'email)
-		Caractères après le point : entre 2 et 9 lettres (domaine de premier niveau : .com, .org,...)*/
+		 Caractères suivants le @: 1 ou plusieurs caractères alphanumériques et tirets ou underscores (domaine de l'email)
+		 Caractères après le point : entre 2 et 9 lettres (domaine de premier niveau : .com, .org,...)*/
 		return emailTest.evaluate(with: username)
 	}
 	

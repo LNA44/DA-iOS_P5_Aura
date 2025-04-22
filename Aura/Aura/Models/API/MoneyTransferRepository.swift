@@ -6,6 +6,7 @@
 //
 
 import Foundation
+
 struct MoneyTransferRepository {
 	private let keychain: AuraKeychainService
 	private let APIService: AuraAPIService
@@ -27,13 +28,13 @@ struct MoneyTransferRepository {
 		
 		let jsonData = try APIService.serializeParameters(parameters: parameters)
 		var request = APIService.createRequest(parameters: parameters, jsonData: jsonData, endpoint: endpoint, method: .post)
+		
 		//Récupération du token
-		guard let token = keychain.getToken(key: K.MoneyTransfer.tokenKey) else {
+		guard let token = keychain.getToken(key: Constante.MoneyTransfer.tokenKey) else {
 			throw APIError.unauthorized
 		}
 		
 		request.setValue(token, forHTTPHeaderField: "token") //header
-		
-		_ = try await APIService.fetchAndDecode(AccountResponse.self, request: request, allowEmptyData: true) //créer struct vide pour le type? Car rep vide donc peu importe le décodage
+		_ = try await APIService.fetch(request: request, allowEmptyData: true)
 	}
 }

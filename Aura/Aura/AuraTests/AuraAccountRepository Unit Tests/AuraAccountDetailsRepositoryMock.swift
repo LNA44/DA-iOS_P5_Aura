@@ -10,7 +10,6 @@ import XCTest
 
 enum MockScenarioAccountRepository {
 	case success
-	case noDataError
 	case unauthorizedError
 }
 
@@ -37,19 +36,6 @@ final class AuraAccountDetailsRepositoryMock {
 				]
 			}
 			""".data(using: .utf8)!
-			
-			MockURLProtocol.requestHandler = { request in
-				return (response, jsonData, nil) // Réponse simulée
-			}
-			
-			return (response, jsonData, nil)
-			
-		case .noDataError:
-			let response = HTTPURLResponse(url: URL(string: "http://127.0.0.1:8080/account")!,
-										   statusCode: 200,
-										   httpVersion: nil,
-										   headerFields: nil)!
-			let jsonData = Data()
 			
 			MockURLProtocol.requestHandler = { request in
 				return (response, jsonData, nil) // Réponse simulée

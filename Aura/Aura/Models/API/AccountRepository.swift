@@ -6,6 +6,7 @@
 //
 
 import Foundation
+
 struct AccountRepository {
 	private let keychain: AuraKeychainService
 	private let APIService: AuraAPIService
@@ -20,7 +21,7 @@ struct AccountRepository {
 		var request = APIService.createRequest(jsonData: nil, endpoint: endpoint, method: .get)
 		
 		//Récupération du token
-		guard let token = keychain.getToken(key: K.Account.tokenKey) else {
+		guard let token = keychain.getToken(key: Constante.Account.tokenKey) else {
 			throw APIError.unauthorized
 		}
 		

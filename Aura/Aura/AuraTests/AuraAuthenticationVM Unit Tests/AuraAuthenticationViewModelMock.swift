@@ -52,7 +52,7 @@ struct AuraAuthenticationViewModelMock {
 				return (nil, nil, error) // Réponse simulée
 			}
 			
-			return (nil, nil, nil)
+			return (nil, nil, error)
 		}
 	}
 }

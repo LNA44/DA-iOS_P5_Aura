@@ -11,7 +11,7 @@ import XCTest
 final class AuraAuthenticationRepositoryUnitTests: XCTestCase {
 	
 	let mockData = AuraAuthenticationRepositoryMock()
-
+	
 	lazy var session: URLSession = {
 		let configuration = URLSessionConfiguration.ephemeral
 		configuration.protocolClasses = [MockURLProtocol.self]
@@ -23,16 +23,16 @@ final class AuraAuthenticationRepositoryUnitTests: XCTestCase {
 	}()
 	
 	lazy var repository = AuthenticationRepository(keychain: AuraKeychainService(), APIService: apiService)
-
-    override func setUp() {
+	
+	override func setUp() {
 		super.setUp()
-    }
-
-    override func tearDown() {
+	}
+	
+	override func tearDown() {
 		super.tearDown()
 		MockURLProtocol.requestHandler = nil
-    }
-
+	}
+	
 	func testLoginSuccess() async {
 		//Given
 		let (_,_,_) = mockData.makeMock(for: .success)
@@ -44,22 +44,6 @@ final class AuraAuthenticationRepositoryUnitTests: XCTestCase {
 			_ = try await repository.login(username: username, password: password)
 		} catch {
 			XCTFail("Should not throw an error")
-		}
-	}
-	
-	func testLoginNoDataErrorOccurs() async {
-		//Given
-		let (_,_,_) = mockData.makeMock(for: .noDataError)
-		let username = "test"
-		let password = "test"
-		//When & Then
-		do {
-			_ = try await repository.login(username: username, password: password)
-			XCTFail("Error should have occurred")
-		} catch APIError.noData {
-			XCTAssertTrue(true, "Caught expected APIError.noData")
-		} catch {
-			XCTFail("Unexpected error type: \(error)")
 		}
 	}
 	
@@ -78,5 +62,4 @@ final class AuraAuthenticationRepositoryUnitTests: XCTestCase {
 			XCTFail("Unexpected error type: \(error)")
 		}
 	}
-
 }

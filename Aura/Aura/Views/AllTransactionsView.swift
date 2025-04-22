@@ -19,7 +19,7 @@ struct AllTransactionsView: View {
 				
 				Text(viewModel.formattedAmount(value: viewModel.totalAmount))
 					.font(.system(size: 60, weight: .bold))
-					.foregroundColor(Color(hex: "#94A684")) // Using the green color you provided
+					.foregroundColor(Color(hex: "#94A684")) 
 				
 				Image(systemName: "eurosign.circle.fill")
 					.resizable()
@@ -59,5 +59,5 @@ struct AllTransactionsView: View {
 }
 
 #Preview {
-	AllTransactionsView(viewModel: AllTransactionsViewModel(repository: AccountRepository(keychain: AuraKeychainService(), APIService: AuraAPIService())))
+	AllTransactionsView(viewModel: AllTransactionsViewModel(repository: AccountRepository(keychain: AuraKeychainService())))
 }

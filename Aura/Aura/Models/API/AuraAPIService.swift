@@ -11,14 +11,13 @@ struct AuraAPIService {
 	
 	//MARK: -Private properties
 	private let session: URLSession
-
+	
 	//MARK: -Initialization
 	init(session: URLSession = .shared) {
 		self.session = session
 	}
 	
 	//MARK: -Enumerations
-	//endpoint
 	enum Path: String {
 		case login = "/auth"
 		case fetchAccountsDetails = "/account"
@@ -26,13 +25,13 @@ struct AuraAPIService {
 	}
 	
 	enum Method: String {
-			case get = "GET"
-			case post = "POST"
-		}
+		case get = "GET"
+		case post = "POST"
+	}
 	
 	//MARK: -Methods
 	func createEndpoint(path: Path) throws -> URL {
-		guard let baseURL = K.APIService.baseUrl else {
+		guard let baseURL = Constante.APIService.baseUrl else {
 			throw APIError.invalidURL
 		}
 		return baseURL.appendingPathComponent(path.rawValue)
@@ -72,7 +71,6 @@ struct AuraAPIService {
 		guard httpResponse.statusCode == 200 else {
 			throw APIError.httpError(statusCode: httpResponse.statusCode)
 		}
-		
 		return data
 	}
 	

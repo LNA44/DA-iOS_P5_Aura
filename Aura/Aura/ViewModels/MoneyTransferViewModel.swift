@@ -10,7 +10,6 @@ import Foundation
 class MoneyTransferViewModel: ObservableObject {
 	//MARK: -Private properties
 	private var repository: MoneyTransferRepository
-	//private var APIService = AuraAPIService()
 	
 	//MARK: -Initialisation
 	init(repository: MoneyTransferRepository) {
@@ -41,12 +40,12 @@ class MoneyTransferViewModel: ObservableObject {
 	
 	//MARK: -Inputs
 	@MainActor
-	func sendMoney() async { //utilisée qd on clique sur bouton envoyer argent
+	func sendMoney() async {
 		do {
 			convertAmount(amountString: amountString)
 			try await repository.transferMoney(recipient: recipient, amount: amount)
 			transferMessage = "Successfully transferred \(amount) to \(recipient)"
-			recipient = "" //remise à 0 après transfert
+			recipient = ""
 			amountString = ""
 			amount = Decimal(0.0)
 			return
@@ -63,8 +62,8 @@ class MoneyTransferViewModel: ObservableObject {
 		// criterias here : http://regexlib.com
 		let phoneRegex = "^(?:(?:\\+|00)33[\\s.-]{0,3}(?:\\(0\\)[\\s.-]{0,3})?|0)[1-9](?:[\\s.-]?\\d{2}){4}$"
 		/*commence par +, 00 ou 0, puis 33
-		séparateurs : espace, point ou tiret. De 0 à 3 séparateurs entre indicatif du pays et numéro
-		numéro : premier chiffre: de 1 à 9, par groupe de 2 chiffres, avec 4 occurrences*/
+		 séparateurs : espace, point ou tiret. De 0 à 3 séparateurs entre indicatif du pays et numéro
+		 numéro : premier chiffre: de 1 à 9, par groupe de 2 chiffres, avec 4 occurrences*/
 		let emailRegex = "^([0-9a-zA-Z]([-.\\w]*[0-9a-zA-Z])*@(([0-9a-zA-Z])+([-\\w]*[0-9a-zA-Z])*\\.)+[a-zA-Z]{2,9})$"
 		//idem que AuthenticationViewModel
 		let phoneTest = NSPredicate(format: "SELF MATCHES %@", phoneRegex)

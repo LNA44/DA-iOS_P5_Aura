@@ -10,7 +10,7 @@ import XCTest
 
 final class AuraTransferMoneyRepositoryUnitTests: XCTestCase {
 	let mockData = AuraTransferMoneyRepositoryMock()
-
+	
 	lazy var session: URLSession = {
 		let configuration = URLSessionConfiguration.ephemeral
 		configuration.protocolClasses = [MockURLProtocol.self]
@@ -25,15 +25,15 @@ final class AuraTransferMoneyRepositoryUnitTests: XCTestCase {
 	
 	let token = "921DBEEB-9A66-475D-BEFD-3071B8E91AA0"
 	
-    override func setUp()  {
+	override func setUp()  {
 		_ = AuraKeychainService().saveToken(token: token, key: "authToken")
-    }
-
-    override func tearDown()  {
+	}
+	
+	override func tearDown()  {
 		super.tearDown()
 		MockURLProtocol.requestHandler = nil
-    }
-
+	}
+	
 	func testTransferMoneySuccess() async {
 		//Given
 		let recipient = "r@gmail.com"
@@ -57,7 +57,7 @@ final class AuraTransferMoneyRepositoryUnitTests: XCTestCase {
 		let amount = Decimal(100)
 		
 		_ = mockData.makeMock(for: .unauthorizedError)
-
+		
 		//When & Then
 		do {
 			_ = try await repository.transferMoney(recipient: recipient, amount: amount)

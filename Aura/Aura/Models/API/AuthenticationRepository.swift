@@ -32,12 +32,11 @@ struct AuthenticationRepository {
 		guard let dict = dict else {
 			throw APIError.noData
 		}
-
+		
 		guard let token = dict["token"] else {
 			throw APIError.unauthorized
 		}
 		//Stockage du token
-		_ = keychain.saveToken(token: token, key: K.Authentication.tokenKey)
-		print("token = \(token)")
+		_ = keychain.saveToken(token: token, key: Constante.Authentication.tokenKey)
 	}
 }

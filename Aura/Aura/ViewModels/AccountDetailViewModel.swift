@@ -10,7 +10,6 @@ import Foundation
 class AccountDetailViewModel: ObservableObject {
 	//MARK: -Private properties
 	private let repository: AccountRepository
-	//private var APIService = AuraAPIService()
 	
 	//MARK: -Initialisation
 	init(repository: AccountRepository) {
@@ -25,25 +24,25 @@ class AccountDetailViewModel: ObservableObject {
 	@Published var showAlert: Bool = false
 	
 	var formatClosure: (NSDecimalNumber) -> String? = { number in
-			let formatter = NumberFormatter()
-			formatter.numberStyle = .decimal
-			formatter.minimumFractionDigits = 0
-			formatter.maximumFractionDigits = 2
-			formatter.locale = Locale(identifier: "fr_FR")
-			return formatter.string(from: number)
-		}
+		let formatter = NumberFormatter()
+		formatter.numberStyle = .decimal
+		formatter.minimumFractionDigits = 0
+		formatter.maximumFractionDigits = 2
+		formatter.locale = Locale(identifier: "fr_FR") /conventions régionales pour séparateur milliers et séparateur décimal 
+		return formatter.string(from: number)
+	}
 	
 	func formattedAmount(value: Decimal?) -> String {
-			guard let unwrappedValue = value else {
-				return "Invalid value"
-			}
-			
-			let nsNumber = NSDecimalNumber(decimal: unwrappedValue)
-			guard let formattedValue = formatClosure(nsNumber) else {
-				return "Formatting error"
-			}
-			return formattedValue
+		guard let unwrappedValue = value else {
+			return "Invalid value"
 		}
+		
+		let nsNumber = NSDecimalNumber(decimal: unwrappedValue) //nécessaire pour NumberFormatter()
+		guard let formattedValue = formatClosure(nsNumber) else {
+			return "Formatting error"
+		}
+		return formattedValue
+	}
 	
 	//MARK: -Inputs
 	@MainActor

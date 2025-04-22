@@ -6,7 +6,7 @@
 //
 
 import Foundation
-struct K {
+struct Constante {
 	struct APIService {
 		static var baseUrl =  URL(string: "http://127.0.0.1:8080")
 	}
