@@ -7,21 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F356CB372D9D2E3E00D41E39 /* SharedMocks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F356CB222D9D2E3E00D41E39 /* SharedMocks.framework */; };
-		F356CB382D9D2E3E00D41E39 /* SharedMocks.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F356CB222D9D2E3E00D41E39 /* SharedMocks.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F356CB432D9D2E6B00D41E39 /* SharedMocks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F356CB222D9D2E3E00D41E39 /* SharedMocks.framework */; };
 		F356CB442D9D2E6B00D41E39 /* SharedMocks.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F356CB222D9D2E3E00D41E39 /* SharedMocks.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		F37B9B332DAA970300F20FA3 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F37B9B322DAA970300F20FA3 /* KeychainSwift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		F356CB352D9D2E3E00D41E39 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 53D418702AC7099A0070ADB1 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = F356CB212D9D2E3E00D41E39;
-			remoteInfo = SharedMocks;
-		};
 		F356CB452D9D2E6B00D41E39 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 53D418702AC7099A0070ADB1 /* Project object */;
@@ -39,17 +29,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		F356CB3D2D9D2E3E00D41E39 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				F356CB382D9D2E3E00D41E39 /* SharedMocks.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		F356CB472D9D2E6B00D41E39 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -133,8 +112,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F37B9B332DAA970300F20FA3 /* KeychainSwift in Frameworks */,
-				F356CB372D9D2E3E00D41E39 /* SharedMocks.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -194,12 +171,10 @@
 				53D418742AC7099A0070ADB1 /* Sources */,
 				53D418752AC7099A0070ADB1 /* Frameworks */,
 				53D418762AC7099A0070ADB1 /* Resources */,
-				F356CB3D2D9D2E3E00D41E39 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				F356CB362D9D2E3E00D41E39 /* PBXTargetDependency */,
 			);
 			name = Aura;
 			productName = Aura;
@@ -281,7 +256,6 @@
 			);
 			mainGroup = 53D4186F2AC7099A0070ADB1;
 			packageReferences = (
-				F37B9B312DAA970300F20FA3 /* XCRemoteSwiftPackageReference "keychain-swift" */,
 			);
 			productRefGroup = 53D418792AC7099A0070ADB1 /* Products */;
 			projectDirPath = "";
@@ -343,11 +317,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		F356CB362D9D2E3E00D41E39 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = F356CB212D9D2E3E00D41E39 /* SharedMocks */;
-			targetProxy = F356CB352D9D2E3E00D41E39 /* PBXContainerItemProxy */;
-		};
 		F356CB462D9D2E6B00D41E39 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = F356CB212D9D2E3E00D41E39 /* SharedMocks */;
@@ -685,25 +654,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		F37B9B312DAA970300F20FA3 /* XCRemoteSwiftPackageReference "keychain-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/evgenyneu/keychain-swift";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 24.0.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		F37B9B322DAA970300F20FA3 /* KeychainSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F37B9B312DAA970300F20FA3 /* XCRemoteSwiftPackageReference "keychain-swift" */;
-			productName = KeychainSwift;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 53D418702AC7099A0070ADB1 /* Project object */;
 }

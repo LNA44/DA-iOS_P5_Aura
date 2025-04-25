@@ -73,7 +73,7 @@ struct MoneyTransferView: View {
 			self.endEditing(true)  // This will dismiss the keyboard when tapping outside
 		}
 		.alert(isPresented: $viewModel.showAlert) { //binding: fermer l'alerte quand utulisateur clique sur le bouton
-			Alert(title: Text("Erreur"), message: Text(viewModel.errorMessage ?? ""), dismissButton: .default(Text("OK")))
+			Alert(title: Text("Error"), message: Text(viewModel.errorMessage ?? ""), dismissButton: .default(Text("OK")))
 		}
 	}
 }

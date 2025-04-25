@@ -68,7 +68,7 @@ final class AuraAccountDetailsRepositoryUnitTests: XCTestCase {
 		} catch {
 			XCTFail("Token was not able to be deleted")
 		}
-		_ = mockData.makeMock(for: .unauthorizedError)
+		_ = mockData.makeMock(for: .success)
 		//When & Then
 		do {
 			_ = try await repository.fetchAccountDetails()

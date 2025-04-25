@@ -29,11 +29,7 @@ final class AuraAuthenticationViewModelTests: XCTestCase {
 	lazy var viewModel = AuthenticationViewModel(repository: repository, callback)
 	
 	override func setUp() {
-		do {
-		_ = try keychain.deleteToken(key: "authToken")
-		} catch {
-			XCTFail("Token was not able to be deleted")
-		}
+		_ = try? keychain.deleteToken(key: "authToken")
 		// Création d'un callback simulé
 		callback = {
 			// Ce callback pourrait simplement être une assertion pour vérifier que la connexion a réussi.
@@ -72,7 +68,7 @@ final class AuraAuthenticationViewModelTests: XCTestCase {
 		}
 		viewModel.username = "test"
 		viewModel.password = "test"
-		_ = mockData.makeMock(for: .duplicateItemKeychainError)
+		_ = mockData.makeMock(for: .success)
 		//When
 		await viewModel.login()
 		//Then

@@ -25,11 +25,11 @@ struct AuraAPIServiceMock {
 										   httpVersion: nil,
 										   headerFields: nil)!
 			let jsonData = """
-	 {
-	  "currentBalance": 100.0,
-	  "transactions": []
-	 }
-	 """.data(using: .utf8)!
+				 {
+				  "currentBalance": 100.0,
+				  "transactions": []
+				 }
+				 """.data(using: .utf8)!
 			
 			MockURLProtocol.requestHandler = { request in
 				return (response, jsonData, nil) // Réponse simulée
@@ -54,11 +54,11 @@ struct AuraAPIServiceMock {
 		case .serverError:
 			let response = URLResponse(url: URL(string: "http://127.0.0.1:8080/account")!, mimeType: nil, expectedContentLength: 0, textEncodingName: nil)
 			let jsonData = """
-	 {
-	  "currentBalance": 100.0,
-	  "transactions": []
-	 }
-	 """.data(using: .utf8)!
+				 {
+				  "currentBalance": 100.0,
+				  "transactions": []
+				 }
+				 """.data(using: .utf8)!
 			
 			MockURLProtocol.requestHandler = { request in
 				return (response, jsonData, nil) // Réponse simulée
@@ -72,11 +72,11 @@ struct AuraAPIServiceMock {
 										   httpVersion: nil,
 										   headerFields: nil)!
 			let data = """
-	{
-	 "currentBalance": 100.0,
-	 "transactions": []
-	}
-	""".data(using: .utf8)!
+				{
+				 "currentBalance": 100.0,
+				 "transactions": []
+				}
+				""".data(using: .utf8)!
 			MockURLProtocol.requestHandler = { request in
 				return (response, data, nil) // Réponse simulée
 			}

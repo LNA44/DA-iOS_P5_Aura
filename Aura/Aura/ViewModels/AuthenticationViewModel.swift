@@ -58,7 +58,7 @@ class AuthenticationViewModel: ObservableObject {
 			errorMessage = error.errorKeychainDescription
 			showAlert = true
 		} catch {
-			errorMessage = "Une erreur inconnue est survenue : \(error.localizedDescription)"
+			errorMessage = "Unknown error happened : \(error.localizedDescription)"
 			showAlert = true
 		}
 	}

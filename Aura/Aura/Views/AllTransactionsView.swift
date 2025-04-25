@@ -53,7 +53,7 @@ struct AllTransactionsView: View {
 			await viewModel.fetchTransactions()
 		}
 		.alert(isPresented: $viewModel.showAlert) {
-			Alert(title: Text("Erreur"), message: Text(viewModel.errorMessage ?? ""), dismissButton: .default(Text("OK")))
+			Alert(title: Text("Error"), message: Text(viewModel.errorMessage ?? ""), dismissButton: .default(Text("OK")))
 		}
 	}
 }

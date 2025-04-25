@@ -50,13 +50,6 @@ class AuraKeychainService: ObservableObject {
 		if status == errSecSuccess { // teste si l'élément existe déjà dans le keychain
 			throw KeychainError.duplicateItem
 		}
-			// Mise à jour de l'élément existant avec les nouveaux attributs
-			//let updateQuery: [String: Any] = [
-			//	kSecValueData as String: tokenData, // Nouvelles données du token
-				//kSecAttrLabel as String: label      // Le label reste le même
-			//]
-			// Update existing item
-			//let statusUpdate = SecItemUpdate(query as CFDictionary, updateQuery as CFDictionary) //maj de l'élément : qui a la clé de recherche query (les caractéristiques) et on y remplace les attributs pour updateQuery
 		
 		// Tente d'ajouter l'élément au Keychain
 			let addStatus: OSStatus = SecItemAdd(query as CFDictionary, nil)

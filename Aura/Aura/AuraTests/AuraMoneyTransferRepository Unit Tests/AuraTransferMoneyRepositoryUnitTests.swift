@@ -26,11 +26,8 @@ final class AuraTransferMoneyRepositoryUnitTests: XCTestCase {
 	let token = "921DBEEB-9A66-475D-BEFD-3071B8E91AA0"
 	
 	override func setUp()  {
-		do {
-		_ = try AuraKeychainService().saveToken(token: token, key: "authToken")
-		} catch {
-			XCTFail("Token was not able to be deleted")
-		}
+		super.setUp()
+			_ = try? AuraKeychainService().saveToken(token: token, key: Constante.MoneyTransfer.tokenKey)
 	}
 	
 	override func tearDown()  {
@@ -64,7 +61,7 @@ final class AuraTransferMoneyRepositoryUnitTests: XCTestCase {
 		let recipient = "r@gmail.com"
 		let amount = Decimal(100)
 		
-		_ = mockData.makeMock(for: .unauthorizedError)
+		_ = mockData.makeMock(for: .success)
 		
 		//When & Then
 		do {

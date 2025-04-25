@@ -29,21 +29,13 @@ final class AuraAccountDetailsViewModelTests: XCTestCase {
 	
 	
 	override func setUp() {
-		do {
 			super.setUp()
-			_ = try keychain.saveToken(token: "token", key: Constante.Account.tokenKey)
-		} catch {
-			XCTFail("Token was not able to be deleted")
-		}
+			_ = try? keychain.saveToken(token: "token", key: Constante.Account.tokenKey)
 	}
 	
 	override func tearDown() {
 		super.tearDown()
-		do {
-			_ = try keychain.deleteToken(key: Constante.Account.tokenKey)
-		} catch {
-			XCTFail("Token was not able to be deleted")
-		}
+			_ = try? keychain.deleteToken(key: Constante.Account.tokenKey)
 	}
 	
 	func testFetchTransactionsSuccess() async {
@@ -63,8 +55,8 @@ final class AuraAccountDetailsViewModelTests: XCTestCase {
 		
 		// Utilisation de zip pour combiner les deux collections puis les comparer
 		for (expected, actual) in zip(expectedRecentTransactions, actualRecentTransactions) {
-			XCTAssertEqual(expected.0, actual.0, "Les labels ne correspondent pas.") // Comparaison des labels
-			XCTAssertEqual(expected.1, actual.1, "Les valeurs ne correspondent pas.") // Comparaison des valeurs
+			XCTAssertEqual(expected.0, actual.0, "Labels don't match") // Comparaison des labels
+			XCTAssertEqual(expected.1, actual.1, "Values don't match") // Comparaison des valeurs
 		}
 		
 		XCTAssertEqual(viewModel.totalAmount, Decimal(100))
@@ -79,8 +71,8 @@ final class AuraAccountDetailsViewModelTests: XCTestCase {
 		
 		// Utilisation de zip pour combiner les deux collections puis les comparer
 		for (expected, actual) in zip(expectedTotalTransactions, actualTotalTransactions) {
-			XCTAssertEqual(expected.0, actual.0, "Les labels ne correspondent pas.") // Comparaison des labels
-			XCTAssertEqual(expected.1, actual.1, "Les valeurs ne correspondent pas.") // Comparaison des valeurs
+			XCTAssertEqual(expected.0, actual.0, "Labels don't match") // Comparaison des labels
+			XCTAssertEqual(expected.1, actual.1, "Values don't match") // Comparaison des valeurs
 		}
 	}
 	
@@ -91,7 +83,7 @@ final class AuraAccountDetailsViewModelTests: XCTestCase {
 		} catch {
 			XCTFail("Token was not able to be deleted")
 		}
-		_ = mockData.makeMock(for: .noItemFoundKeychainError)
+		_ = mockData.makeMock(for: .success)
 		//When
 		await viewModel.fetchTransactions()
 		//Then

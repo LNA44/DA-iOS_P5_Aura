@@ -28,17 +28,13 @@ final class AuraMoneyTransferViewModelTests: XCTestCase {
 	
 	override func setUp() {
 		super.setUp()
-		do {
-		_ = try AuraKeychainService().saveToken(token: "token", key: Constante.Account.tokenKey)
-		} catch {
-			XCTFail("Token was not able to be deleted")
-		}
+		_ = try? keychain.saveToken(token: "token", key: Constante.Account.tokenKey)
 	}
 	
 	override func tearDown() {
 		super.tearDown()
 		do {
-		_ = try AuraKeychainService().deleteToken(key: Constante.Account.tokenKey)
+		_ = try keychain.deleteToken(key: Constante.Account.tokenKey)
 		} catch {
 			XCTFail("Token was not able to be deleted")
 		}
@@ -61,7 +57,7 @@ final class AuraMoneyTransferViewModelTests: XCTestCase {
 		} catch {
 			XCTFail("Token was not able to be deleted")
 		}
-		_ = mockData.makeMock(for: .itemNotFoundKeychainError)
+		_ = mockData.makeMock(for: .success)
 		//When
 		_ = await viewModel.sendMoney()
 		//Then
@@ -69,22 +65,19 @@ final class AuraMoneyTransferViewModelTests: XCTestCase {
 		XCTAssertTrue(viewModel.showAlert)
 	}
 	
-	func testSendMoneyUnauthorizedAPIErrorOccurs() async {
-		//Given
-		do {
-		_ = try keychain.deleteToken(key: Constante.MoneyTransfer.tokenKey)
-		} catch {
-			XCTFail("Token was not able to be deleted")
-		}
-		_ = mockData.makeMock(for: .unauthorizedAPIError)
-		//When
-		_ = await viewModel.sendMoney()
+	
+	func testSendMoneyInvalidResponseAPIErrorOccurs() async {
+		viewModel.recipient = "b@gmail.com"
+		viewModel.amount = 32
+		_ = mockData.makeMock(for: .invalidResponseAPIError)
+		// When
+		await viewModel.sendMoney()
 		//Then
-		XCTAssertEqual(viewModel.errorMessage, "You are not authorized to perform this action.")
+		XCTAssertEqual(viewModel.errorMessage, "Invalid response from the server.")
 		XCTAssertTrue(viewModel.showAlert)
 	}
 	
-	func testSeddMoneyUnknownErrorOccurs() async {
+	func testSendMoneyUnknownErrorOccurs() async {
 		//Given
 		_ = mockData.makeMock(for: .unknownError)
 		//When

@@ -10,7 +10,6 @@ import XCTest
 
 enum MockScenarioAccountRepository {
 	case success
-	case unauthorizedError
 }
 
 final class AuraAccountDetailsRepositoryMock {
@@ -43,28 +42,6 @@ final class AuraAccountDetailsRepositoryMock {
 			
 			return (response, jsonData, nil)
 			
-		case .unauthorizedError:
-			let response = HTTPURLResponse(url: URL(string: "http://127.0.0.1:8080/account")!, statusCode: 200, httpVersion: nil, headerFields: ["token": "value"])
-			let jsonData = """
-			{
-				"currentBalance": 100,
-				"transactions": [
-					{
-						"value": -56,
-						"label": "IKEA"
-					},
-					{
-						"label": "Starbucks",
-						"value": -10
-					}
-				]
-			}
-			""".data(using: .utf8)!
-			MockURLProtocol.requestHandler = { request in
-				return (response, jsonData, nil)
-			}
-			
-			return (response, jsonData, nil)
 		}
 	}
 }

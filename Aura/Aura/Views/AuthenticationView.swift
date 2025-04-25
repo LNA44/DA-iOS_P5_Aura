@@ -61,7 +61,7 @@ struct AuthenticationView: View {
 			Alert(title: Text("Erreur"), message: Text(viewModel.errorMessage ?? ""), dismissButton: .default(Text("OK")))
 		}
 		.alert(isPresented: $appViewModel.showAlert) {
-			Alert(title: Text("Erreur"), message: Text(appViewModel.errorMessage ?? ""), dismissButton: .default(Text("OK")))
+			Alert(title: Text("Error"), message: Text(appViewModel.errorMessage ?? ""), dismissButton: .default(Text("OK")))
 		}
 	}
 }

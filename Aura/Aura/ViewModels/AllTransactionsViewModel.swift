@@ -55,7 +55,7 @@ class AllTransactionsViewModel: ObservableObject {
 			errorMessage = error.errorDescription
 			showAlert = true
 		} catch {
-			errorMessage = "Une erreur inconnue est survenue : \(error.localizedDescription)"
+			errorMessage = "Unknown error happened : \(error.localizedDescription)"
 			showAlert = true
 		}
 	}
