@@ -9,6 +9,7 @@ import SwiftUI
 
 struct AuthenticationView: View {
 	@ObservedObject var viewModel: AuthenticationViewModel
+	@EnvironmentObject var appViewModel: AppViewModel // Accéder à AppViewModel pour lancer alerte si prblm lors de la suppr du token
 	let gradientStart = Color(hex: "#94A684").opacity(0.7)
 	let gradientEnd = Color(hex: "#94A684").opacity(0.0) // Fades to transparent
 	
@@ -58,6 +59,9 @@ struct AuthenticationView: View {
 		}
 		.alert(isPresented: $viewModel.showAlert) {
 			Alert(title: Text("Erreur"), message: Text(viewModel.errorMessage ?? ""), dismissButton: .default(Text("OK")))
+		}
+		.alert(isPresented: $appViewModel.showAlert) {
+			Alert(title: Text("Erreur"), message: Text(appViewModel.errorMessage ?? ""), dismissButton: .default(Text("OK")))
 		}
 	}
 }

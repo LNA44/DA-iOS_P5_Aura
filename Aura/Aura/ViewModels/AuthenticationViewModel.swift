@@ -54,6 +54,9 @@ class AuthenticationViewModel: ObservableObject {
 		} catch let error as APIError {
 			errorMessage = error.errorDescription
 			showAlert = true
+		} catch let error as AuraKeychainService.KeychainError {
+			errorMessage = error.errorKeychainDescription
+			showAlert = true
 		} catch {
 			errorMessage = "Une erreur inconnue est survenue : \(error.localizedDescription)"
 			showAlert = true

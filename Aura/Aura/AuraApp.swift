@@ -9,12 +9,11 @@ import SwiftUI
 
 @main
 struct AuraApp: App {
-	@Environment(\.scenePhase) private var scenePhase  // Observe l'état de l'application (foreground, background, inactive)
+	@Environment(\.scenePhase) private var scenePhase  // Observe l'état de l'application (active, background, inactive)
 	@StateObject private var viewModel: AppViewModel
 	private let keychain = AuraKeychainService()
 	
 	init() {
-		_ = keychain.deleteToken(key: Constante.Authentication.tokenKey) //supprime les anciens tokens au lancement de l'app
 		let authenticationRepository = AuthenticationRepository(keychain: keychain)
 		let accountRepository = AccountRepository(keychain: keychain)
 		let moneyTransferRepository = MoneyTransferRepository(keychain: keychain)
@@ -45,12 +44,21 @@ struct AuraApp: App {
 			}
 			.accentColor(Color(hex: "#94A684"))
 			.animation(.easeInOut(duration: 0.5), value: UUID())
+			.environmentObject(viewModel)
 		}
 		.onChange(of: scenePhase) {
-			if scenePhase == .background {
-				// Supprime le token lorsque l'app passe en arrière-plan
-				_ = keychain.deleteToken(key: Constante.Authentication.tokenKey)
-				viewModel.isLogged = false
+			switch scenePhase {
+			case .background, .active:
+				do {
+					// Supprime le token lorsque l'app passe en arrière-plan ou se lance
+					_ = try keychain.deleteToken(key: Constante.Authentication.tokenKey)
+					viewModel.isLogged = false
+				} catch {
+					viewModel.showAlert = true
+					viewModel.errorMessage = "Erreur lors de la suppression du token : \(error)" //transmis à AuthenticationView pour afficher alerte
+				}
+			default:
+				break
 			}
 		}
 	}

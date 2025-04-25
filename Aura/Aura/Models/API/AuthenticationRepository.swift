@@ -37,6 +37,6 @@ struct AuthenticationRepository {
 			throw APIError.unauthorized
 		}
 		//Stockage du token
-		_ = keychain.saveToken(token: token, key: Constante.Authentication.tokenKey)
+		_ = try keychain.saveToken(token: token, key: Constante.Authentication.tokenKey)
 	}
 }

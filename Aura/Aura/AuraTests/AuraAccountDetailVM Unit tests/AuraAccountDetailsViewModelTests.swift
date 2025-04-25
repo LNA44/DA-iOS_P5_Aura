@@ -29,13 +29,21 @@ final class AuraAccountDetailsViewModelTests: XCTestCase {
 	
 	
 	override func setUp() {
-		super.setUp()
-		_ = AuraKeychainService().saveToken(token: "token", key: Constante.Account.tokenKey)
+		do {
+			super.setUp()
+			_ = try keychain.saveToken(token: "token", key: Constante.Account.tokenKey)
+		} catch {
+			XCTFail("Token was not able to be deleted")
+		}
 	}
 	
 	override func tearDown() {
 		super.tearDown()
-		_ = AuraKeychainService().deleteToken(key: Constante.Account.tokenKey)
+		do {
+			_ = try keychain.deleteToken(key: Constante.Account.tokenKey)
+		} catch {
+			XCTFail("Token was not able to be deleted")
+		}
 	}
 	
 	func testFetchTransactionsSuccess() async {
@@ -74,6 +82,21 @@ final class AuraAccountDetailsViewModelTests: XCTestCase {
 			XCTAssertEqual(expected.0, actual.0, "Les labels ne correspondent pas.") // Comparaison des labels
 			XCTAssertEqual(expected.1, actual.1, "Les valeurs ne correspondent pas.") // Comparaison des valeurs
 		}
+	}
+	
+	func testFetchAccountNoItemFoundKeychainErrorOccurs() async {
+		//Given
+		do {
+		_ = try keychain.deleteToken(key: Constante.Account.tokenKey)
+		} catch {
+			XCTFail("Token was not able to be deleted")
+		}
+		_ = mockData.makeMock(for: .noItemFoundKeychainError)
+		//When
+		await viewModel.fetchTransactions()
+		//Then
+		XCTAssertEqual(viewModel.errorMessage, "Item was not found")
+		XCTAssertTrue(viewModel.showAlert)
 	}
 	
 	func testFetchAccountNoDataAPIErrorOccurs() async {

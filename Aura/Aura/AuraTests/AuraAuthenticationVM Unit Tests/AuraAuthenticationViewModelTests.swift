@@ -29,7 +29,11 @@ final class AuraAuthenticationViewModelTests: XCTestCase {
 	lazy var viewModel = AuthenticationViewModel(repository: repository, callback)
 	
 	override func setUp() {
-		_ = keychain.deleteToken(key: "authToken")
+		do {
+		_ = try keychain.deleteToken(key: "authToken")
+		} catch {
+			XCTFail("Token was not able to be deleted")
+		}
 		// Création d'un callback simulé
 		callback = {
 			// Ce callback pourrait simplement être une assertion pour vérifier que la connexion a réussi.
@@ -51,11 +55,32 @@ final class AuraAuthenticationViewModelTests: XCTestCase {
 		await viewModel.login()
 		//Then
 		XCTAssertNil(viewModel.errorMessage)
-		let token = keychain.getToken(key: Constante.Authentication.tokenKey)
-		XCTAssertEqual(token, "93D2C537-FA4A-448C-90A9-6058CF26DB29")
+		do {
+		let token = try keychain.getToken(key: Constante.Authentication.tokenKey)
+			XCTAssertEqual(token, "93D2C537-FA4A-448C-90A9-6058CF26DB29")
+		} catch {
+			XCTFail("Token was noy able to be deleted")
+		}
 	}
 	
-	func testLoginDecodingErrorOccurs() async {
+	func testLoginDuplicateItemErrorOccurs() async {
+		//Given
+		do {
+			_ = try keychain.saveToken(token: "93D2C537-FA4A-448C-90A9-6058CF26DB29", key: Constante.Authentication.tokenKey)
+		} catch {
+			XCTFail("Token was not able to be added")
+		}
+		viewModel.username = "test"
+		viewModel.password = "test"
+		_ = mockData.makeMock(for: .duplicateItemKeychainError)
+		//When
+		await viewModel.login()
+		//Then
+		XCTAssertEqual(viewModel.errorMessage, "Item already exists")
+		XCTAssertTrue(viewModel.showAlert)
+	}
+	
+	func testLoginDecodingAPIErrorOccurs() async {
 		viewModel.username = "test"
 		viewModel.password = "test"
 		_ = mockData.makeMock(for: .decodingAPIError)

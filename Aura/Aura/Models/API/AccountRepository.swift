@@ -21,11 +21,11 @@ struct AccountRepository {
 		var request = APIService.createRequest(jsonData: nil, endpoint: endpoint, method: .get)
 		
 		//Récupération du token
-		guard let token = keychain.getToken(key: Constante.Account.tokenKey) else {
+		guard let token = try keychain.getToken(key: Constante.Account.tokenKey) else {
 			throw APIError.unauthorized
 		}
 		
-		request.setValue(token, forHTTPHeaderField: "token") //header
+		request.setValue(token, forHTTPHeaderField: "token")
 		
 		let accountResponse = try await APIService.fetchAndDecode(AccountResponse.self, request: request)
 		

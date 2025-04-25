@@ -49,6 +49,9 @@ class MoneyTransferViewModel: ObservableObject {
 			amountString = ""
 			amount = Decimal(0.0)
 			return
+		} catch let error as AuraKeychainService.KeychainError {
+			errorMessage = error.errorKeychainDescription
+			showAlert = true
 		} catch let error as APIError {
 			errorMessage = error.errorDescription
 			showAlert = true

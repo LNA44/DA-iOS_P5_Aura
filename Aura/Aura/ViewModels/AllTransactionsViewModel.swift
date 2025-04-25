@@ -48,6 +48,9 @@ class AllTransactionsViewModel: ObservableObject {
 			let (totalAmount,totalTransactions) = try await repository.fetchAccountDetails()
 			self.totalAmount = totalAmount
 			self.totalTransactions = totalTransactions
+		} catch let error as AuraKeychainService.KeychainError {
+			errorMessage = error.errorKeychainDescription
+			showAlert = true
 		} catch let error as APIError {
 			errorMessage = error.errorDescription
 			showAlert = true

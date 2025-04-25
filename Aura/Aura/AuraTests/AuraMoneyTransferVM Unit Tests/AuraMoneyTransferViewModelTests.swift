@@ -28,12 +28,20 @@ final class AuraMoneyTransferViewModelTests: XCTestCase {
 	
 	override func setUp() {
 		super.setUp()
-		_ = AuraKeychainService().saveToken(token: "token", key: Constante.Account.tokenKey)
+		do {
+		_ = try AuraKeychainService().saveToken(token: "token", key: Constante.Account.tokenKey)
+		} catch {
+			XCTFail("Token was not able to be deleted")
+		}
 	}
 	
 	override func tearDown() {
 		super.tearDown()
-		_ = AuraKeychainService().deleteToken(key: Constante.Account.tokenKey)
+		do {
+		_ = try AuraKeychainService().deleteToken(key: Constante.Account.tokenKey)
+		} catch {
+			XCTFail("Token was not able to be deleted")
+		}
 	}
 	
 	func testSendMoneySuccess() async {
@@ -46,10 +54,28 @@ final class AuraMoneyTransferViewModelTests: XCTestCase {
 		XCTAssertEqual(viewModel.errorMessage, "")
 	}
 	
+	func testSendMoneyItemNotFoundKeychainErrorOccurs() async {
+		//Given
+		do {
+		_ = try keychain.deleteToken(key: Constante.MoneyTransfer.tokenKey)
+		} catch {
+			XCTFail("Token was not able to be deleted")
+		}
+		_ = mockData.makeMock(for: .itemNotFoundKeychainError)
+		//When
+		_ = await viewModel.sendMoney()
+		//Then
+		XCTAssertEqual(viewModel.errorMessage, "Item was not found")
+		XCTAssertTrue(viewModel.showAlert)
+	}
+	
 	func testSendMoneyUnauthorizedAPIErrorOccurs() async {
 		//Given
-		_ = keychain.deleteToken(key: Constante.MoneyTransfer.tokenKey)
-		
+		do {
+		_ = try keychain.deleteToken(key: Constante.MoneyTransfer.tokenKey)
+		} catch {
+			XCTFail("Token was not able to be deleted")
+		}
 		_ = mockData.makeMock(for: .unauthorizedAPIError)
 		//When
 		_ = await viewModel.sendMoney()

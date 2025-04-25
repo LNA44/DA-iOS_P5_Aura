@@ -27,13 +27,21 @@ final class AuraAccountDetailsRepositoryUnitTests: XCTestCase {
 	
 	override func setUp() {
 		super.setUp()
-		_ = AuraKeychainService().saveToken(token: token, key: Constante.Account.tokenKey)
+		do {
+			_ = try AuraKeychainService().saveToken(token: token, key: Constante.Account.tokenKey)
+		} catch {
+			XCTFail("Token was not able to be saved")
+		}
 	}
 	
 	override func tearDown() {
 		super.tearDown()
 		MockURLProtocol.requestHandler = nil
-		_ = AuraKeychainService().deleteToken(key: Constante.Account.tokenKey)
+		do {
+			_ = try AuraKeychainService().deleteToken(key: Constante.Account.tokenKey)
+		} catch {
+			XCTFail("Token was not able to be deleted")
+		}
 	}
 	
 	func testFetchAccountDetailsSuccess() async {
@@ -55,7 +63,11 @@ final class AuraAccountDetailsRepositoryUnitTests: XCTestCase {
 	
 	func testFetchAccountDetailsUnauthorizedErrorOccurs() async {
 		//Given
-		_ = AuraKeychainService().deleteToken(key: "authToken")
+		do {
+			_ = try AuraKeychainService().deleteToken(key: "authToken")
+		} catch {
+			XCTFail("Token was not able to be deleted")
+		}
 		_ = mockData.makeMock(for: .unauthorizedError)
 		//When & Then
 		do {

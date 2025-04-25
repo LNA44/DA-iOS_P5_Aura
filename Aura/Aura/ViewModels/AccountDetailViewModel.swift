@@ -28,7 +28,7 @@ class AccountDetailViewModel: ObservableObject {
 		formatter.numberStyle = .decimal
 		formatter.minimumFractionDigits = 0
 		formatter.maximumFractionDigits = 2
-		formatter.locale = Locale(identifier: "fr_FR") /conventions régionales pour séparateur milliers et séparateur décimal 
+		formatter.locale = Locale(identifier: "fr_FR") //conventions régionales pour séparateur milliers et séparateur décimal
 		return formatter.string(from: number)
 	}
 	
@@ -53,6 +53,9 @@ class AccountDetailViewModel: ObservableObject {
 			self.totalTransactions = totalTransactions
 			let recentTransactions = Array(totalTransactions.reversed().prefix(3)) //récupère les 3 dernières transactions
 			self.recentTransactions = recentTransactions
+		} catch let error as AuraKeychainService.KeychainError {
+			errorMessage = error.errorKeychainDescription
+			showAlert = true
 		} catch let error as APIError {
 			errorMessage = error.errorDescription
 			showAlert = true

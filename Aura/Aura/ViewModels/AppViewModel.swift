@@ -14,7 +14,7 @@ class AppViewModel: ObservableObject {
 	private let accountRepository: AccountRepository
 	private let moneyTransferRepository: MoneyTransferRepository
 	
-	//MARK: - Initialisation
+	//MARK: -Initialisation
 	init(authenticationRepository: AuthenticationRepository, accountRepository: AccountRepository, moneyTransferRepository: MoneyTransferRepository) {
 		self.authenticationRepository = authenticationRepository
 		self.accountRepository = accountRepository
@@ -22,7 +22,11 @@ class AppViewModel: ObservableObject {
 		isLogged = false
 	}
 	
-	//MARK: - Computed properties
+	//MARK: -Outputs
+	@Published var errorMessage: String?
+	@Published var showAlert: Bool = false
+	
+	//MARK: -Computed properties
 	var authenticationViewModel: AuthenticationViewModel {
 		return AuthenticationViewModel(repository: authenticationRepository) { [weak self] in
 			self?.isLogged = true
