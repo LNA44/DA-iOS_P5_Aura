@@ -28,7 +28,7 @@ enum APIError: LocalizedError, Equatable {
 			return "HTTP error: \(statusCode)"
 		case .noData:
 			return "No data received from the server."
-		case .unauthorized: //token manquant ou invalide
+		case .unauthorized: 
 			return "You are not authorized to perform this action."
 		case .decodingError:
 			return "Decoding error."

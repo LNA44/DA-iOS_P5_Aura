@@ -22,7 +22,7 @@ struct AccountRepository {
 		
 		//Récupération du token
 		guard let token = try keychain.getToken(key: Constante.Account.tokenKey) else {
-			throw APIError.unauthorized
+			throw AuraKeychainService.KeychainError.itemNotFound
 		}
 		
 		request.setValue(token, forHTTPHeaderField: "token")

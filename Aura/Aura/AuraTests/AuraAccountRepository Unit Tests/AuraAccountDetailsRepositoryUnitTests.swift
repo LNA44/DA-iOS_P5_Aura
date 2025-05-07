@@ -63,18 +63,13 @@ final class AuraAccountDetailsRepositoryUnitTests: XCTestCase {
 	
 	func testFetchAccountDetailsUnauthorizedErrorOccurs() async {
 		//Given
-		do {
-			_ = try AuraKeychainService().deleteToken(key: "authToken")
-		} catch {
-			XCTFail("Token was not able to be deleted")
-		}
 		_ = mockData.makeMock(for: .success)
 		//When & Then
 		do {
 			_ = try await repository.fetchAccountDetails()
 			XCTFail("An error should be thrown")
-		} catch APIError.unauthorized {
-			XCTAssertTrue(true, "Caught expected APIError.unauthorized")
+		} catch AuraKeychainService.KeychainError.itemNotFound {
+			XCTAssertTrue(true, "Caught expected AuraKeychainService.KeychainError.itemNotFound")
 		} catch {
 			XCTFail("Unexpected error type: \(error)")
 		}
