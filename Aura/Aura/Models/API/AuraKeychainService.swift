@@ -45,7 +45,7 @@ class AuraKeychainService: ObservableObject {
 
 		// Tente de récupérer l'élément du Keychain
 		var existingItem: CFTypeRef?
-		let status: OSStatus = SecItemCopyMatching(query as CFDictionary, &existingItem) //Ajoute les éléments du dico au keychain
+		let status: OSStatus = SecItemCopyMatching(query as CFDictionary, &existingItem)
 		
 		if status == errSecSuccess { // teste si l'élément existe déjà dans le keychain
 			throw KeychainError.duplicateItem
