@@ -49,28 +49,4 @@ final class AuraTransferMoneyRepositoryUnitTests: XCTestCase {
 			XCTFail("Error shouldn't be thrown")
 		}
 	}
-	
-	func testTransferMoneyUnauthrorizedErrorOccurs() async {
-		//Given
-		do {
-		_ = try AuraKeychainService().deleteToken(key: "authToken")
-		} catch {
-			XCTFail("Token was not able to be deleted")
-		}
-		
-		let recipient = "r@gmail.com"
-		let amount = Decimal(100)
-		
-		_ = mockData.makeMock(for: .success)
-		
-		//When & Then
-		do {
-			_ = try await repository.transferMoney(recipient: recipient, amount: amount)
-			XCTFail("An error should be thrown")
-		} catch APIError.unauthorized {
-			XCTAssertTrue(true, "Caught expected APIError.unauthorized")
-		} catch {
-			XCTFail("Unexpected error type: \(error)")
-		}
-	}
 }

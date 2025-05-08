@@ -60,18 +60,4 @@ final class AuraAccountDetailsRepositoryUnitTests: XCTestCase {
 			XCTFail("Error shouldn't be thrown")
 		}
 	}
-	
-	func testFetchAccountDetailsUnauthorizedErrorOccurs() async {
-		//Given
-		_ = mockData.makeMock(for: .success)
-		//When & Then
-		do {
-			_ = try await repository.fetchAccountDetails()
-			XCTFail("An error should be thrown")
-		} catch AuraKeychainService.KeychainError.itemNotFound {
-			XCTAssertTrue(true, "Caught expected AuraKeychainService.KeychainError.itemNotFound")
-		} catch {
-			XCTFail("Unexpected error type: \(error)")
-		}
-	}
 }

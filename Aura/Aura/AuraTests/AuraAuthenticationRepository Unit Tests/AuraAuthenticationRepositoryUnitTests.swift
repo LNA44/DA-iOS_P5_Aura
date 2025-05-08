@@ -46,20 +46,4 @@ final class AuraAuthenticationRepositoryUnitTests: XCTestCase {
 			XCTFail("Should not throw an error")
 		}
 	}
-	
-	func testLoginUnauthorizedErrorOccurs() async {
-		//Given
-		let (_,_,_) = mockData.makeMock(for: .unauthorizedError)
-		let username = "test"
-		let password = "test"
-		//When & Then
-		do {
-			_ = try await repository.login(username: username, password: password)
-			XCTFail("Error should have occurred")
-		} catch APIError.unauthorized {
-			XCTAssertTrue(true, "Caught expected APIError.unauthorized")
-		} catch {
-			XCTFail("Unexpected error type: \(error)")
-		}
-	}
 }

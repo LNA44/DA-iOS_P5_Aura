@@ -21,9 +21,7 @@ struct AccountRepository {
 		var request = APIService.createRequest(jsonData: nil, endpoint: endpoint, method: .get)
 		
 		//Récupération du token
-		guard let token = try keychain.getToken(key: Constante.Account.tokenKey) else {
-			throw AuraKeychainService.KeychainError.itemNotFound
-		}
+		let token = try keychain.getToken(key: Constante.Account.tokenKey) 
 		
 		request.setValue(token, forHTTPHeaderField: "token")
 		

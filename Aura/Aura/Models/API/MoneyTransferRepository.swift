@@ -30,9 +30,7 @@ struct MoneyTransferRepository {
 		var request = APIService.createRequest(parameters: parameters, jsonData: jsonData, endpoint: endpoint, method: .post)
 		
 		//Récupération du token
-		guard let token = try keychain.getToken(key: Constante.MoneyTransfer.tokenKey) else {
-			throw APIError.unauthorized
-		}
+		let token = try keychain.getToken(key: Constante.MoneyTransfer.tokenKey)
 		
 		request.setValue(token, forHTTPHeaderField: "token") //header
 		_ = try await APIService.fetch(request: request, allowEmptyData: true)
